@@ -18,8 +18,11 @@ export const useSignIn = () => {
         }
     };
 
+    const handleClickSignUp = () => navigate('/signUp')
+
     return {
         onSubmit,
-        loading
+        loading,
+        handleClickSignUo: handleClickSignUp
     }
 }

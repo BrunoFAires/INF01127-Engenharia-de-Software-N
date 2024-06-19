@@ -1,43 +1,20 @@
 import './App.css';
-import {Route, Routes, useNavigate} from "react-router-dom";
+import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import {SignUp} from "./pages/SignUp";
 import {SignIn} from "./pages/SignIn";
+import {ProtectedRoute} from "./components/ProtectedRoute/ProtectedRoute";
+import React from "react";
+import {Home} from "./pages/Home";
 
 function App() {
-    const navigate = useNavigate()
-/*    useEffect(() => {
-        getCurrentUser().then(user => {
-            console.log(user)
-            if (user) {
-                navigate('/')
-            } else {
-                navigate('/signUp')
-            }
-        })
-        // supabase.auth.onAuthStateChange((_event, session) => {
-        //     if (session) {
-        //         navigate('/home', {replace: true})
-        //     } else {
-        //         console.log("no user");
-        //         navigate('/signin', {replace: true})
-        //     }
-        // });
-    }, []);*/
 
-    return <Routes>
-        <Route
-            key=''
-            path='/signUp'
-            exact
-            element={<SignUp/>}
-        />
-        <Route
-            key=''
-            path='/signIn'
-            exact
-            element={<SignIn/>}
-        />
-    </Routes>
+    const router = createBrowserRouter([
+        {path: "/", element: <ProtectedRoute component={Home}/>},
+        {path: "/signUp", element: <SignUp/>},
+        {path: "/signin", element: <SignIn/>},
+    ]);
+
+    return <RouterProvider router={router}/>
 }
 
 export default App;

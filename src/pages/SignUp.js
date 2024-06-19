@@ -1,36 +1,26 @@
 import {useSignUp} from "../hooks/useSignUp";
 import {Button, Col, Form, Input, Layout, Row} from "antd";
 import {Content} from "antd/es/layout/layout";
-import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import {EyeInvisibleOutlined, EyeTwoTone} from '@ant-design/icons';
 
 export const SignUp = () => {
     const {loading, onSubmit} = useSignUp()
-    const onFinish = (values) => {
-        console.log('Success:', values);
-    };
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
 
     return <Layout>
         <Content>
             <Row
                 justify="center"
                 align="middle"
-                style={{minHeight: '100vh', background: '#ffffff'}}
+
             >
-                <Col xs={24} md={24}
-                     style={{background: '#e6f7ff', minHeight: '100vh', display: 'flex', flexDirection: 'column'}}>
+                <Col xs={24} md={24} className={'min-h-[100vh] flex'}>
                     <Row style={{flex: 1}}>
-                        <Col xs={24} xl={16} justify={'center'} align="center"
-                             style={{background: '#bae7ff', padding: '24px'}}>
-                            <Col md={16}
-                                 style={{
-                                     minHeight: '100vh',
-                                     display: 'flex',
-                                     alignItems: 'center'
-                                 }}>
+                        <Col xs={24} xl={16} justify={'center'} align="center" className={'bg-[#bae7ff] px-12'}>
+                            <Col md={12}
+                                 className={'min-h-[100%] flex-col content-center space-y-5'}>
+                                <p className={'text-2xl'}>Para continuar preencha as seguintes informações:</p>
                                 <Form
+                                    className={'space-y-4'}
                                     labelCol={{
                                         span: 3,
                                     }}
@@ -44,7 +34,7 @@ export const SignUp = () => {
                                     style={{width: '100%'}}
                                 >
                                     <Form.Item
-                                        label="Nome"
+                                        className={'m-0'}
                                         name="name"
                                         rules={[
                                             {
@@ -53,10 +43,9 @@ export const SignUp = () => {
                                             },
                                         ]}
                                     >
-                                        <Input/>
+                                        <Input size={'large'} placeholder={'Nome'}/>
                                     </Form.Item>
                                     <Form.Item
-                                        label="Sobrenome"
                                         name="surname"
                                         rules={[
                                             {
@@ -65,10 +54,9 @@ export const SignUp = () => {
                                             },
                                         ]}
                                     >
-                                        <Input/>
+                                        <Input size={'large'} placeholder={'Sobrenome'}/>
                                     </Form.Item>
                                     <Form.Item
-                                        label="E-mail"
                                         name="email"
                                         rules={[
                                             {
@@ -81,10 +69,9 @@ export const SignUp = () => {
                                             },
                                         ]}
                                     >
-                                        <Input/>
+                                        <Input size={'large'} placeholder={'E-mail'}/>
                                     </Form.Item>
                                     <Form.Item
-                                        label="Senha"
                                         name="password"
                                         rules={[
                                             {
@@ -97,17 +84,20 @@ export const SignUp = () => {
                                             },
                                         ]}
                                     >
-                                        <Input.Password type="password" iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}/>
+                                        <Input.Password size={'large'} placeholder={'Senha'} type="password"
+                                                        iconRender={(visible) => (visible ? <EyeTwoTone/> :
+                                                            <EyeInvisibleOutlined/>)}/>
                                     </Form.Item>
                                     <Form.Item>
-                                        <Button loading={loading} type="primary" htmlType="submit">
-                                            Submit
+                                        <Button className={'w-1/2'} size={'large'} loading={loading} type="primary"
+                                                htmlType="submit">
+                                            Cadastrar
                                         </Button>
                                     </Form.Item>
                                 </Form>
                             </Col>
                         </Col>
-                        <Col sm={24} xl={8} style={{background: '#91d5ff', padding: '24px'}}>
+                        <Col sm={24} xl={8} className={'bg-[#91d5ff] px-12'}>
 
                         </Col>
                     </Row>
