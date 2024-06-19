@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "./static/css/main.7188d05c.css",
-    "main.js": "./static/js/main.f496c851.js",
-    "static/js/952.122de622.chunk.js": "./static/js/952.122de622.chunk.js",
-    "static/js/453.159e8410.chunk.js": "./static/js/453.159e8410.chunk.js",
-    "index.html": "./index.html",
-    "main.7188d05c.css.map": "./static/css/main.7188d05c.css.map",
-    "main.f496c851.js.map": "./static/js/main.f496c851.js.map",
-    "952.122de622.chunk.js.map": "./static/js/952.122de622.chunk.js.map",
-    "453.159e8410.chunk.js.map": "./static/js/453.159e8410.chunk.js.map"
+    "main.css": "/INF01127-Engenharia-de-Software-N/static/css/main.7188d05c.css",
+    "main.js": "/INF01127-Engenharia-de-Software-N/static/js/main.058264db.js",
+    "static/js/952.122de622.chunk.js": "/INF01127-Engenharia-de-Software-N/static/js/952.122de622.chunk.js",
+    "static/js/453.159e8410.chunk.js": "/INF01127-Engenharia-de-Software-N/static/js/453.159e8410.chunk.js",
+    "index.html": "/INF01127-Engenharia-de-Software-N/index.html",
+    "main.7188d05c.css.map": "/INF01127-Engenharia-de-Software-N/static/css/main.7188d05c.css.map",
+    "main.058264db.js.map": "/INF01127-Engenharia-de-Software-N/static/js/main.058264db.js.map",
+    "952.122de622.chunk.js.map": "/INF01127-Engenharia-de-Software-N/static/js/952.122de622.chunk.js.map",
+    "453.159e8410.chunk.js.map": "/INF01127-Engenharia-de-Software-N/static/js/453.159e8410.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.7188d05c.css",
-    "static/js/main.f496c851.js"
+    "static/js/main.058264db.js"
   ]
 }
