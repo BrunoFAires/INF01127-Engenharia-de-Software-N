@@ -14,6 +14,7 @@ export const createAccount = async (data) => {
     })
 }
 
+
 export const signIn = async (password, email) => {
     return await supabase.auth.signInWithPassword({password: password, email: email})
 }

@@ -5,6 +5,8 @@ import {SignIn} from "./pages/SignIn";
 import {ProtectedRoute} from "./components/ProtectedRoute/ProtectedRoute";
 import React from "react";
 import {Home} from "./pages/Home";
+import {Decks} from "./pages/Decks";
+import {NewDeck} from "./pages/NewDeck";
 
 function App() {
 
@@ -12,6 +14,8 @@ function App() {
         {path: "/", element: <ProtectedRoute component={Home}/>},
         {path: "/signUp", element: <SignUp/>},
         {path: "/signin", element: <SignIn/>},
+        {path: "/decks", element: <Decks/>},
+        {path: "/newDeck", element: <NewDeck/>},
     ]);
 
     return <RouterProvider router={router}/>

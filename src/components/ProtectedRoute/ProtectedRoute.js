@@ -8,8 +8,6 @@ export const ProtectedRoute = ({component: Component, ...rest}) => {
 
     useEffect(() => {
         getCurrentUser().then(result => {
-            console.log(result)
-            console.log(Boolean(result))
             setIsAuthenticated(Boolean(result))
         }).finally(() => {
                 setLoading(false)
