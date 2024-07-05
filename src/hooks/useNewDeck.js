@@ -6,6 +6,7 @@ export const useNewDeck = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [searchCardTitle, setSearchCardTitle] = useState()
     const [apiResponse, setApiResponse] = useState()
+    const [loading, setLoading] = useState(false)
     const deck = new Deck()
 
     const showModal = () => {
@@ -18,6 +19,7 @@ export const useNewDeck = () => {
 
     const handleCancel = () => {
         setIsModalOpen(false);
+        setApiResponse(null)
     };
 
     const handleChangeTitle = (data) => {
@@ -29,8 +31,10 @@ export const useNewDeck = () => {
     }
 
     const searchCard = async () => {
+        setLoading(true)
         const result = await findByName(searchCardTitle)
         setApiResponse(result)
+        setLoading(false)
     }
 
     return {
@@ -41,6 +45,8 @@ export const useNewDeck = () => {
         isModalOpen,
         handleCancel,
         setSearchCardTitle,
-        searchCard
+        searchCard,
+        apiResponse,
+        loading
     }
 }

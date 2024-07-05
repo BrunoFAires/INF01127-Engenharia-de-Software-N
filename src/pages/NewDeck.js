@@ -1,14 +1,28 @@
-import {Button, Col, Form, Input, Layout, Modal, Row} from 'antd';
+import {Button, Card, Col, Form, Input, Layout, Modal, Pagination, Row} from 'antd';
 import {AppHeader, Header} from "../components/header";
 import {EyeInvisibleOutlined, EyeTwoTone} from "@ant-design/icons";
 import TextArea from "antd/es/input/TextArea";
 import {useNewDeck} from "../hooks/useNewDeck";
+import Meta from "antd/es/card/Meta";
 
 const {Content, Footer} = Layout;
 
 
 export const NewDeck = () => {
-    const {handleChangeTitle, handleChangeDescription, showModal, handleOk, isModalOpen, handleCancel, setSearchCardTitle, searchCard} = useNewDeck()
+    const {
+        handleChangeTitle,
+        handleChangeDescription,
+        showModal,
+        handleOk,
+        isModalOpen,
+        handleCancel,
+        setSearchCardTitle,
+        searchCard,
+        apiResponse,
+        loading
+    } = useNewDeck()
+
+    console.log(apiResponse)
 
     return <Layout>
         <AppHeader/>
@@ -29,13 +43,34 @@ export const NewDeck = () => {
                         Salvar
                     </Button>
                 </Row>
-                <Modal title="Pesquisar carta" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}
-                       okText={'Adicionar'} cancelText={'Cancelar'}>
-                    <Col className={'space-y-3'}>
-                        <Input onChange={data => {setSearchCardTitle(data.target.value)}} size={'large'} placeholder={'Nome'}/>
-                        <Button onClick={searchCard} className={'w-1/2'} size={'large'} loading={false} type="primary">
-                            Pesquisar
-                        </Button>
+                <Modal title="Pesquisar carta" loading={loading} open={isModalOpen} onOk={handleOk}
+                       onCancel={handleCancel}
+                       okText={'Adicionar'} cancelText={'Cancelar'} width={'80%'}>
+                    <Col>
+                        <Col md={8} className={'space-y-3 mb-3'}>
+                            <Input onChange={data => {
+                                setSearchCardTitle(data.target.value)
+                            }} size={'large'} placeholder={'Nome'}/>
+                            <Button onClick={searchCard} className={'w-1/2'} size={'large'} loading={false}
+                                    type="primary">
+                                Pesquisar
+                            </Button>
+                        </Col>
+                        <Row className={'flex space-x-3 space-y-3 justify-center'}>
+                            {apiResponse && apiResponse.data.map(it =>
+                                <Card
+                                    hoverable
+                                    style={{width: 240}}
+                                    cover={<img alt="example"
+                                                src={it.images.large}/>}
+                                    onClick={() => {
+                                        console.log(it)
+                                    }}
+                                >
+                                </Card>
+                            )}
+                        </Row>
+                        <Pagination defaultCurrent={1} total={50} />
                     </Col>
                 </Modal>
             </Col>
