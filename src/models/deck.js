@@ -21,11 +21,46 @@ export class Deck {
         }
     }
 
-    addCard(card){
-        this.cards.push(card)
+    setTitle(title) {
+        this.title = title
     }
 
-    removeCard(card){
-        this.cards = this.cards.filter(it => it.id !== card.id)
+    setDescription(description) {
+        this.description = description
+    }
+
+    addCard(card) {
+        this.cards.push(card)
+
+        return this
+    }
+
+    removeCard(id) {
+        const index = this.cards.findIndex(it => it.id === id);
+
+        if (index !== -1) {
+            this.cards.splice(index, 1);
+        }
+    }
+
+    hasCard(id) {
+        console.log('a')
+        console.log(id)
+        return this.cards.filter(it => it.id === id).length > 0
+    }
+
+    totalCard(id) {
+        return this.cards.filter(it => it.id === id).length
+    }
+
+    groupedCardsById() {
+        const seen = new Set();
+        return this.cards.filter(item => {
+            if (!seen.has(item.id)) {
+                seen.add(item.id);
+                return true;
+            }
+            return false;
+        });
     }
 }
