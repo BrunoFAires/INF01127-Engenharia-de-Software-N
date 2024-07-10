@@ -1,6 +1,7 @@
 {
   "name": "mag",
   "version": "0.1.0",
+  "homepage": "https://brunofaires.github.io/INF01127-Engenharia-de-Software-N",
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^5.3.7",
