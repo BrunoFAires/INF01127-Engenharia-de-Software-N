@@ -1,18 +1,41 @@
-import { useEffect, useState } from "react";
-import { findByName } from "../service/pokemonClient";
-import { Deck } from "../models/deck";
-import { Card } from "../models/card";
+import {useEffect, useState} from "react";
+import {findByName} from "../service/pokemonClient";
+import {Deck} from "../models/deck";
+import {Card} from "../models/card";
+import {insertDeck, updateDeck} from "../service/deckService";
+import {useLocation, useNavigate} from "react-router-dom";
 
-export const useNewDeck = () => {
+export const useDeck = ({currentUser}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [searchCardTitle, setSearchCardTitle] = useState();
     const [apiResponse, setApiResponse] = useState();
-    const [deck] = useState(new Deck());
+    const [deck] = useState(new Deck(null, null, null, 0, currentUser, []));
     const [loading, setLoading] = useState(false);
     const [totalPages, setTotalPages] = useState();
     const [actualPage, setActualPage] = useState(1);
     const [update, setUpdate] = useState(false);
+    const [isValidForm, setIsValidForm] = useState(false)
+    const [cardsToRemove, setCardsToRemove] = useState([])
     const pageItems = 10;
+    const navigate = useNavigate()
+    const {state} = useLocation();
+    const deckToEdit = state?.deckToEdit
+
+    useEffect(() => {
+        if (deckToEdit) {
+            deck.fromObject(deckToEdit)
+            console.log(deck)
+        }
+    }, [deckToEdit]);
+
+
+    useEffect(() => {
+        const validForm = deck.title
+            && deck.description
+            && deck.cards.length > 0
+        setIsValidForm(validForm)
+    }, [update]);
+
 
     const showModal = () => {
         setIsModalOpen(true);
@@ -27,6 +50,7 @@ export const useNewDeck = () => {
         setSearchCardTitle(null);
         setTotalPages(null);
         setApiResponse(null);
+        setActualPage(1)
     };
 
     const handleChangeTitle = (data) => {
@@ -57,18 +81,27 @@ export const useNewDeck = () => {
     }, [actualPage]);
 
     const handleAddCard = (selectedCard) => {
-        const card = new Card(selectedCard.id, selectedCard.name, selectedCard.flavorText, selectedCard.images.large, deck);
+        const card = new Card(null, selectedCard.id, selectedCard.name, selectedCard.flavorText, selectedCard.images.large, selectedCard.artist, selectedCard.rarity, selectedCard.type, deck);
         deck.addCard(card);
+        console.log(deck)
         setUpdate(!update);
     };
 
-    const handleRemoveCard = (id) => {
-        deck.removeCard(id)
+    const handleRemoveCard = (card, removeCard) => {
+        const cardId = card.card_id ? card.card_id : card.id
+        deck.removeCard(cardId)
+        if(deck.id && removeCard){
+            setCardsToRemove([...cardsToRemove, card.id])
+        }
         setUpdate(!update);
     }
 
     const handleSubmit = () => {
-        console.log(deck);
+        if (deck.id) {
+            updateDeck(deck, cardsToRemove).then(navigate('/decks'))
+        }else{
+            insertDeck(deck).then(_ => navigate('/decks'))
+        }
     };
 
 
@@ -90,7 +123,8 @@ export const useNewDeck = () => {
         handleAddCard,
         handleRemoveCard,
         handleSubmit,
-        deck,
+        deck: deck,
+        isValidForm
     };
 };
 

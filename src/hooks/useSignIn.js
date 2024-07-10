@@ -11,10 +11,10 @@ export const useSignIn = () => {
             setLoading(true)
             const response = await signIn(data.password, data.email)
             if (response?.data?.user) {
-                navigate('../', {replace: true})
+                navigate('/')
             }
-        } finally {
-            setLoading(false)
+        } catch (e) {
+            console.log(e)
         }
     };
 
@@ -23,6 +23,6 @@ export const useSignIn = () => {
     return {
         onSubmit,
         loading,
-        handleClickSignUo: handleClickSignUp
+        handleClickSignUp
     }
 }

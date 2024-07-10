@@ -2,20 +2,19 @@ import React, {useEffect, useState} from 'react';
 import {Navigate,} from 'react-router-dom';
 import {getCurrentUser} from "../../service/authService";
 
-export const ProtectedRoute = ({component: Component, ...rest}) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [loading, setLoading] = useState(true);
+export const ProtectedRoute = ({children, user}) => {
+    const [currentUser, setCurrentUser] = useState(user)
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        getCurrentUser().then(result => {
-            setIsAuthenticated(Boolean(result))
-        }).finally(() => {
-                setLoading(false)
-            }
-        )
-    }, []);
+        getCurrentUser().then(user => {
+            setCurrentUser(user)
+        }).finally(_ => {
+            setLoading(false)
+        })
 
-    return loading ? <></> : (isAuthenticated ? <Component {...rest} /> : <Navigate to="/signin" replace/>);
+    }, []);
+    return loading ? <></> : (currentUser ? children : <Navigate to="/signin" replace/>)
 
 };
 

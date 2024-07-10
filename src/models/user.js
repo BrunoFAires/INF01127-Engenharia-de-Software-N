@@ -1,10 +1,9 @@
 import {Profile} from "./profile";
 
 export class User {
-    constructor(id, email, password, name, surname, admin, seller) {
+    constructor(id, email, name, surname, admin, seller) {
         this.id = id;
         this.email = email;
-        this.password = password;
         this.profile = new Profile(id, name, surname, admin, seller)
     }
 

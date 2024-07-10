@@ -1,13 +1,13 @@
 import {Button, Card, Col, Input, InputNumber, Layout, Modal, Pagination, Row, Space} from 'antd';
 import {AppHeader, Header} from "../components/header";
 import TextArea from "antd/es/input/TextArea";
-import {useNewDeck} from "../hooks/useNewDeck";
+import {useDeck} from "../hooks/useDeck";
 import {Counter} from "../components/counter";
 
 const {Content, Footer} = Layout;
 
 
-export const NewDeck = () => {
+export const Deck = ({currentUser}) => {
     const {
         handleChangeTitle,
         searchCardTitle,
@@ -27,14 +27,15 @@ export const NewDeck = () => {
         handleRemoveCard,
         handleSubmit,
         deck,
-    } = useNewDeck()
+        isValidForm
+    } = useDeck({currentUser})
 
     return <Layout className={'min-h-[100vh]'}>
         <AppHeader/>
         <Content className={'px-[48px]'}>
             <Col md={12} className='mx-auto space-y-3 mt-3'>
-                <Input onChange={handleChangeTitle} size={'large'} placeholder={'Título'}/>
-                <TextArea onChange={handleChangeDescription} size={'large'} placeholder={'Descrição'}
+                <Input value={deck.title} onChange={handleChangeTitle} size={'large'} placeholder={'Título'}/>
+                <TextArea value={deck.description} onChange={handleChangeDescription} size={'large'} placeholder={'Descrição'}
                           autoSize={{minRows: 3, maxRows: 3}}/>
                 <Row justify={'end'}>
                     <Button onClick={showModal} className={''} size={'large'} loading={false} type="primary"
@@ -42,18 +43,18 @@ export const NewDeck = () => {
                         Adicionar carta
                     </Button>
                 </Row>
-                <Row className={'space-x-3 flex flex-row justify-center'} md={12}>
+                <Row className={'space-x-3 space-y-3 flex flex-row justify-center'} md={12}>
                     {deck.groupedCardsById().map(it => <Card
                         style={{width: 240}}
                         cover={<img alt="example"
                                     src={it.image}/>}
-                    ><Counter total={deck.totalCard(it.id)}
+                    ><Counter total={deck.totalCard(it.card_id)}
                               handleDecrement={() => {
-                                  handleRemoveCard(it.id)
+                                  handleRemoveCard(it, true)
                               }}/></Card>)}
                 </Row>
                 <Row justify={'center'}>
-                    <Button className={'w-1/2'} size={'large'} loading={false} type="primary" onClick={handleSubmit}>
+                    <Button disabled={!isValidForm} className={'w-1/2'} size={'large'} loading={false} type="primary" onClick={handleSubmit}>
                         Salvar
                     </Button>
                 </Row>
@@ -78,15 +79,13 @@ export const NewDeck = () => {
                                     cover={<img alt="example"
                                                 src={it.images.large}/>}
                                     onClick={() => {
-                                        console.log(it.id)
-                                        console.log(deck)
                                     }}
                                 >
                                     <Counter total={deck.totalCard(it.id)} handleIncrement={() => {
                                         handleAddCard(it)
                                     }}
                                              handleDecrement={() => {
-                                                 handleRemoveCard(it.id)
+                                                 handleRemoveCard(it)
                                              }}/>
                                 </Card>
                             )}

@@ -1,10 +1,13 @@
+import {Card} from "./card";
+
 export class Deck {
-    constructor(title, description, user) {
+    constructor(id, title, description, rating, user, cards) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.user = user;
-        this.rating = 0
-        this.cards = []
+        this.rating = rating
+        this.cards = cards.map(it => new Card(it.id, it.card_id, it.name, it.description, it.image, it.artist, it.rarity, it.type, this))
     }
 
 
@@ -14,6 +17,7 @@ export class Deck {
 
     toSupabaseInstance() {
         return {
+            id: this.id,
             title: this.title,
             description: this.description,
             rating: this.rating,
@@ -36,7 +40,7 @@ export class Deck {
     }
 
     removeCard(id) {
-        const index = this.cards.findIndex(it => it.id === id);
+        const index = this.cards.findIndex(it => it.card_id === id);
 
         if (index !== -1) {
             this.cards.splice(index, 1);
@@ -44,23 +48,30 @@ export class Deck {
     }
 
     hasCard(id) {
-        console.log('a')
-        console.log(id)
         return this.cards.filter(it => it.id === id).length > 0
     }
 
     totalCard(id) {
-        return this.cards.filter(it => it.id === id).length
+        return this.cards.filter(it => it.card_id === id).length
     }
 
     groupedCardsById() {
         const seen = new Set();
         return this.cards.filter(item => {
-            if (!seen.has(item.id)) {
-                seen.add(item.id);
+            if (!seen.has(item.card_id)) {
+                seen.add(item.card_id);
                 return true;
             }
             return false;
         });
+    }
+
+    fromObject(deck){
+        this.id = deck.id
+        this.title = deck.title;
+        this.description = deck.description;
+        this.user = deck.user;
+        this.rating = deck.rating
+        this.cards = deck.cards.map(it => new Card(it.id, it.card_id, it.name, it.description, it.image, it.artist, it.rarity, it.type, this))
     }
 }

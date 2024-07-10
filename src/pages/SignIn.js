@@ -1,9 +1,12 @@
-import {Button, Col, Form, Input, Layout, Row} from "antd";
+import {Button, Col, Form, Input, Layout, Row, theme} from "antd";
 import {Content} from "antd/es/layout/layout";
 import {useSignIn} from "../hooks/useSignIn";
 
 export const SignIn = () => {
-    const {loading, onSubmit, handleClickSignUo} = useSignIn()
+    const {loading, onSubmit, handleClickSignUp} = useSignIn()
+    const {
+        token: {colorPrimary},
+    } = theme.useToken();
 
     return <Layout>
         <Content>
@@ -14,7 +17,7 @@ export const SignIn = () => {
                 <Col xs={24} md={24}
                      className={'min-h-[100vh] flex'}>
                     <Row style={{flex: 1}}>
-                        <Col xs={24} xl={16} justify={'center'} align="center" className={'bg-[#bae7ff] px-12'}>
+                        <Col xs={24} xl={16} justify={'center'} align="center" className={'px-12'} style={{background: colorPrimary}}>
                             <Col md={12}
                                  className={'min-h-[100%] flex-col content-center space-y-5'}>
                                 <p className={'text-2xl'}>Olá. Seja bem-vindo!</p>
@@ -56,13 +59,13 @@ export const SignIn = () => {
                                         <Input placeholder={'Senha'} size='large' type="password"/>
                                     </Form.Item>
                                     <Form.Item>
-                                        <Button className={'w-1/2'} size={'large'} loading={loading} type="primary"
+                                        <Button className={'w-1/2'} size={'large'} loading={loading}
                                                 htmlType="submit">
                                             Entrar
                                         </Button>
                                     </Form.Item>
                                     <Form.Item>
-                                        <Button className={'w-1/2'} size={'large'} type="primary" onClick={() => handleClickSignUo()}>
+                                        <Button className={'w-1/2'} size={'large'} onClick={() => handleClickSignUp()}>
                                             Cadastre-se
                                         </Button>
                                     </Form.Item>

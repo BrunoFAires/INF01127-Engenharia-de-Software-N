@@ -14,25 +14,12 @@ export const Home = () => {
         .from('profile')
         .select()
         .then(result => {
-            console.log(result)
         })
 
-    return <Layout>
+    return <Layout className={'min-h-[100vh]'}>
         <AppHeader/>
-        <Content style={{padding: '0 48px'}}>
-            <div
-                style={{
-                    padding: 24,
-                    minHeight: 380,
-                    background: colorBgContainer,
-                    borderRadius: borderRadiusLG,
-                }}
-            >
-                Content
-            </div>
+        <Content className={'px-[48px] mt-6 shadow-[#b6b6b6] shadow-xl'}>
+
         </Content>
-        <Footer style={{textAlign: 'center'}}>
-            Ant Design ©{new Date().getFullYear()} Created by Ant UED
-        </Footer>
     </Layout>
 }

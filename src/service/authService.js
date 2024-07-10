@@ -24,6 +24,11 @@ export const getCurrentUser = async () => {
     if (!result) {
         return null
     }
-    return new User(result.id, result.email, null, result.user_metadata.name, result.user_metadata.surname, result.user_metadata.admin, result.user_metadata.seller)
+    return new User(result.id, result.email, result.user_metadata.name, result.user_metadata.surname, result.user_metadata.admin, result.user_metadata.seller)
 
+}
+
+export const alterUser = (data) => {
+    supabase.from('profile').update({seller: data.seller, admin: data.admin}).eq('id', data.id)
+    supabase.from('deck').select().eq('user_id', data.id)
 }
