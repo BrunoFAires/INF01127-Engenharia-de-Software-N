@@ -1,5 +1,5 @@
 import './App.css';
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import {HashRouter, Route, Routes} from "react-router-dom";
 import {SignUp} from "./pages/SignUp";
 import {SignIn} from "./pages/SignIn";
 import {ProtectedRoute} from "./components/ProtectedRoute/ProtectedRoute";
@@ -22,7 +22,7 @@ function App() {
 
     }, []);
 
-    return loading ? <></> : <BrowserRouter>
+    return loading ? <></> : <HashRouter>
         <Routes>
             <Route
                 path="/"
@@ -51,7 +51,7 @@ function App() {
             <Route path="/signUp" element={<SignUp/>}/>
             <Route path="/signin" element={<SignIn/>}/>
         </Routes>
-    </BrowserRouter>
+    </HashRouter>
 }
 
 export default App;
