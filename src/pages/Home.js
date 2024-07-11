@@ -1,14 +1,11 @@
-import {Breadcrumb, Layout, Menu, theme} from 'antd';
-import {AppHeader, Header} from "../components/header";
+import {Layout} from 'antd';
+import {AppHeader} from "../components/header";
 import {supabase} from "../service/supabaseClient";
 
-const {Content, Footer} = Layout;
+const {Content} = Layout;
 
 
 export const Home = () => {
-    const {
-        token: {colorBgContainer, borderRadiusLG},
-    } = theme.useToken();
 
     supabase
         .from('profile')

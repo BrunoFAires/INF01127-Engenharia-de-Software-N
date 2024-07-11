@@ -8,5 +8,10 @@ export const menu = [
         label: 'Meus Baralhos',
         route: '/decks',
         key: 'decks'
+    },
+    {
+        label: 'Sair',
+        route: '/logout',
+        key: 'logout'
     }
 ]

@@ -1,12 +1,9 @@
-import {Button, Col, Form, Input, Layout, Row, theme} from "antd";
+import {Button, Col, Form, Image, Input, Layout, Row} from "antd";
 import {Content} from "antd/es/layout/layout";
 import {useSignIn} from "../hooks/useSignIn";
 
 export const SignIn = () => {
     const {loading, onSubmit, handleClickSignUp} = useSignIn()
-    const {
-        token: {colorPrimary},
-    } = theme.useToken();
 
     return <Layout>
         <Content>
@@ -17,10 +14,11 @@ export const SignIn = () => {
                 <Col xs={24} md={24}
                      className={'min-h-[100vh] flex'}>
                     <Row style={{flex: 1}}>
-                        <Col xs={24} xl={16} justify={'center'} align="center" className={'px-12'} style={{background: colorPrimary}}>
-                            <Col md={12}
-                                 className={'min-h-[100%] flex-col content-center space-y-5'}>
-                                <p className={'text-2xl'}>Olá. Seja bem-vindo!</p>
+                        <Col xs={24} justify={'center'} align="center" className={'px-12 bg-[#3e3c63]'}>
+                            <Col md={8}
+                                 className={'min-h-[100%] flex-col content-center space-y-5 '}>
+                                <Image preview={false}  src={process.env.PUBLIC_URL + '/logo.png'}/>
+                                <p className={'text-2xl text-white'}>Olá. Seja bem-vindo!</p>
                                 <Form
                                     className={'space-y-4'}
                                     labelCol={{
@@ -71,9 +69,6 @@ export const SignIn = () => {
                                     </Form.Item>
                                 </Form>
                             </Col>
-                        </Col>
-                        <Col sm={24} xl={8} className={'bg-[#91d5ff] px-12'}>
-
                         </Col>
                     </Row>
                 </Col>

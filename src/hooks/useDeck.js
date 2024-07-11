@@ -98,9 +98,9 @@ export const useDeck = ({currentUser}) => {
 
     const handleSubmit = () => {
         if (deck.id) {
-            updateDeck(deck, cardsToRemove).then(navigate('/decks'))
+            updateDeck(deck, cardsToRemove).then(navigate('/decks', {replace: true}))
         }else{
-            insertDeck(deck).then(_ => navigate('/decks'))
+            insertDeck(deck).then(navigate('/decks', {replace: true}))
         }
     };
 

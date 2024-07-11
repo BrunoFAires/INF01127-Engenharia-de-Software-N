@@ -1,5 +1,5 @@
 import {useSignUp} from "../hooks/useSignUp";
-import {Button, Col, Form, Input, Layout, Row} from "antd";
+import {Button, Col, Form, Image, Input, Layout, Row} from "antd";
 import {Content} from "antd/es/layout/layout";
 import {EyeInvisibleOutlined, EyeTwoTone} from '@ant-design/icons';
 
@@ -15,10 +15,11 @@ export const SignUp = () => {
             >
                 <Col xs={24} md={24} className={'min-h-[100vh] flex'}>
                     <Row style={{flex: 1}}>
-                        <Col xs={24} xl={16} justify={'center'} align="center" className={'bg-[#bae7ff] px-12'}>
-                            <Col md={12}
+                        <Col xs={24} justify={'center'} align="center" className={'px-12 bg-[#3e3c63]'}>
+                            <Col md={8}
                                  className={'min-h-[100%] flex-col content-center space-y-5'}>
-                                <p className={'text-2xl'}>Para continuar preencha as seguintes informações:</p>
+                                <Image preview={false}  src={process.env.PUBLIC_URL + '/logo.png'}/>
+                                <p className={'text-2xl text-white'}>Para continuar preencha as seguintes informações:</p>
                                 <Form
                                     className={'space-y-4'}
                                     labelCol={{
@@ -89,16 +90,13 @@ export const SignUp = () => {
                                                             <EyeInvisibleOutlined/>)}/>
                                     </Form.Item>
                                     <Form.Item>
-                                        <Button className={'w-1/2'} size={'large'} loading={loading} type="primary"
+                                        <Button className={'w-1/2'} size={'large'} loading={loading}
                                                 htmlType="submit">
                                             Cadastrar
                                         </Button>
                                     </Form.Item>
                                 </Form>
                             </Col>
-                        </Col>
-                        <Col sm={24} xl={8} className={'bg-[#91d5ff] px-12'}>
-
                         </Col>
                     </Row>
                 </Col>

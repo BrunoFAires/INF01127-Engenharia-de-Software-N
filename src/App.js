@@ -8,6 +8,7 @@ import {Home} from "./pages/Home";
 import {Decks} from "./pages/Decks";
 import {Deck} from "./pages/Deck";
 import {getCurrentUser} from "./service/authService";
+import {Logout} from "./pages/Logout";
 
 function App() {
     const [currentUser, setCurrentUser] = useState()
@@ -50,6 +51,12 @@ function App() {
             />
             <Route path="/signUp" element={<SignUp/>}/>
             <Route path="/signin" element={<SignIn/>}/>
+            <Route
+                path="/logout"
+                element={
+                    <Logout />
+                }
+            />
         </Routes>
     </HashRouter>
 }

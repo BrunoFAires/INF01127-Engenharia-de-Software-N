@@ -3,9 +3,11 @@ import {useEffect, useState} from "react";
 import * as deckService from "../service/deckService";
 import {myDecks} from "../service/deckService";
 import {Deck} from "../models/deck";
+import {getCurrentUser} from "../service/authService";
 
 export const useMyDecks = ({currentUser}) => {
     const [decks, setDecks] = useState([])
+    const [user, setUser] = useState(currentUser)
     const navigate = useNavigate()
     const [showDeleteModal, setShowDeleteModal] = useState(false)
     const [deckToDelete, setDeckToDelete] = useState()
@@ -14,6 +16,13 @@ export const useMyDecks = ({currentUser}) => {
     const handleOnEdit = (deck) => {
         navigate('/deck', {state: {deckToEdit: deck}})
     }
+
+    useEffect(() => {
+        if(!user){
+            console.log(getCurrentUser())
+            setUser(getCurrentUser())
+        }
+    }, [user]);
 
     const handleDeleteDeck = (deck) => {
         setShowDeleteModal(true)
