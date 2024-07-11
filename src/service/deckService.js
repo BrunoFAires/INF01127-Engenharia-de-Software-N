@@ -16,7 +16,6 @@ export const updateDeck = async (deck, cardsToRemove) => {
 }
 
 export const myDecks = async (user) => {
-    console.log(user)
     return supabase.from('deck').select('*, card(*)').eq('user_id', user.id);
 }
 

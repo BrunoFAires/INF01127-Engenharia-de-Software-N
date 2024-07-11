@@ -3,25 +3,15 @@ import {HashRouter, Route, Routes} from "react-router-dom";
 import {SignUp} from "./pages/SignUp";
 import {SignIn} from "./pages/SignIn";
 import {ProtectedRoute} from "./components/ProtectedRoute/ProtectedRoute";
-import React, {useEffect, useState} from "react";
+import React from "react";
 import {Home} from "./pages/Home";
 import {Decks} from "./pages/Decks";
 import {Deck} from "./pages/Deck";
-import {getCurrentUser} from "./service/authService";
 import {Logout} from "./pages/Logout";
+import {useAuthHook} from "./hooks/useAuthHook";
 
 function App() {
-    const [currentUser, setCurrentUser] = useState()
-    const [loading, setLoading] = useState(true)
-
-    useEffect(() => {
-        getCurrentUser().then(user => {
-            setCurrentUser(user)
-        }).finally(_ => {
-            setLoading(false)
-        })
-
-    }, []);
+    const {loading, currentUser} = useAuthHook();
 
     return loading ? <></> : <HashRouter>
         <Routes>

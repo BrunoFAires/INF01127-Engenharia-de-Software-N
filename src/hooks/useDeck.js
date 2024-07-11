@@ -24,7 +24,6 @@ export const useDeck = ({currentUser}) => {
     useEffect(() => {
         if (deckToEdit) {
             deck.fromObject(deckToEdit)
-            console.log(deck)
         }
     }, [deckToEdit]);
 
@@ -83,7 +82,6 @@ export const useDeck = ({currentUser}) => {
     const handleAddCard = (selectedCard) => {
         const card = new Card(null, selectedCard.id, selectedCard.name, selectedCard.flavorText, selectedCard.images.large, selectedCard.artist, selectedCard.rarity, selectedCard.type, deck);
         deck.addCard(card);
-        console.log(deck)
         setUpdate(!update);
     };
 
