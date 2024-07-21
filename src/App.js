@@ -7,6 +7,7 @@ import React from "react";
 import {Home} from "./pages/Home";
 import {Decks} from "./pages/Decks";
 import {Deck} from "./pages/Deck";
+import {Ads} from "./pages/Ads";
 import {Logout} from "./pages/Logout";
 import {useAuthHook} from "./hooks/useAuthHook";
 import {Community} from "./pages/Community";
@@ -54,6 +55,14 @@ function App() {
                 element={
                     <ProtectedRoute user={currentUser}>
                         <Post/>
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/my-ads"
+                element={
+                    <ProtectedRoute user={currentUser}>
+                        <Ads currentUser={currentUser}/>
                     </ProtectedRoute>
                 }
             />
