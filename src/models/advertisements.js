@@ -1,7 +1,7 @@
 import { Card } from "./card";
 
 export class Advertisements {
-    constructor(id, title, description, quantity, status, createdAt, price, card, seller) {
+    constructor(id, title, description, quantity, status, createdAt, price, card, seller, sale) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -9,8 +9,9 @@ export class Advertisements {
         this.status = status;
         this.createdAt = createdAt;
         this.price = price;
-        this.card = new Card(card.id, card.card_id, card.name, card.description, card.image, card.artist, card.rarity, card.type, this);
+        this.card = card ? new Card(card.id, card.card_id, card.name, card.description, card.image, card.artist, card.rarity, card.type, this) : null;
         this.seller = seller;
+        this.sale = sale;
     }
 
     toSupabaseInstance() {
@@ -22,8 +23,8 @@ export class Advertisements {
             status: this.status,
             created_at: this.createdAt,
             price: this.price,
-            card_id: this.card.id,
-            seller_id: this.seller.id,
+            seller: this.seller ? this.seller.id : null,
+            sale: this.sale,
         };
     }
 
@@ -43,6 +44,10 @@ export class Advertisements {
         this.status = status;
     }
 
+    setSale(sale) {
+        this.sale = sale;
+    }
+
     setPrice(price) {
         this.price = price;
     }
@@ -59,7 +64,7 @@ export class Advertisements {
         this.status = anuncio.status;
         this.createdAt = anuncio.created_at;
         this.price = anuncio.price;
-        this.card = new Card(anuncio.card.id, anuncio.card.card_id, anuncio.card.name, anuncio.card.description, anuncio.card.image, anuncio.card.artist, anuncio.card.rarity, anuncio.card.type, this);
+        this.card = anuncio.card ? new Card(anuncio.card.id, anuncio.card.card_id, anuncio.card.name, anuncio.card.description, anuncio.card.image, anuncio.card.artist, anuncio.card.rarity, anuncio.card.type) : null;
         this.seller = anuncio.seller;
     }
 }

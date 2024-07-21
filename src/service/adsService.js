@@ -1,64 +1,56 @@
 import { supabase } from "./supabaseClient";
 
-// Função para inserir um novo anúncio
 export const insertAnuncio = async (anuncio) => {
-    const { data, error } = await supabase
-        .from('advertisements')
-        .insert(anuncio.toSupabaseInstance());
-
-    if (error) {
-        console.error("Error inserting anuncio: ", error);
-        throw error;
-    }
-
-    return data;
+    await supabase.rpc('add_asd_with_card', {
+        anuncio: anuncio.toSupabaseInstance(),
+        card: anuncio.card.toSupabaseInstance()
+    });
 }
 
-// Função para atualizar um anúncio existente
 export const updateAnuncio = async (anuncio) => {
-    const { data, error } = await supabase
-        .from('advertisements')
-        .update(anuncio.toSupabaseInstance())
-        .eq('id', anuncio.id);
-
-    if (error) {
-        console.error("Error updating anuncio: ", error);
-        throw error;
-    }
-
-    return data;
+    await supabase.rpc('add_asd_with_card', {
+        anuncio: anuncio.toSupabaseInstance(),
+        card: anuncio.card.toSupabaseInstance()
+    });
 }
 
-// Função para obter os anúncios do usuário
 export const myAnuncios = async (user) => {
-    const { data, error } = await supabase
-        .from('advertisements')
-        .select('*, card(*)')
-        .eq('seller', user.id);
+    try {
+        const { data, error } = await supabase.from('advertisements').select('*, card(*)').eq('seller', user.id)
 
-    if (error) {
-        console.error("Error fetching anuncios: ", error);
+        if (error) {
+            console.error("Error fetching anuncios: ", error);
+            throw error;
+        }
+
+        return data;
+    } catch (error) {
+        console.error("Error in myAnuncios function: ", error);
         throw error;
     }
-
-    return data;
 }
 
 export const deleteAnuncio = async (anuncio) => {
     if (!anuncio.id) {
+        console.error("Anuncio ID is required for deletion.");
         return;
     }
 
-    const { data, error } = await supabase
-        .from('advertisements')
-        .delete()
-        .eq('seller', anuncio.seller.id)
-        .eq('id', anuncio.id);
+    try {
+        const { data, error } = await supabase
+            .from('advertisements')
+            .delete()
+            .eq('seller', anuncio.seller.id)
+            .eq('id', anuncio.id);
 
-    if (error) {
-        console.error("Error deleting anuncio: ", error);
+        if (error) {
+            console.error("Error deleting anuncio: ", error);
+            throw error;
+        }
+
+        return data;
+    } catch (error) {
+        console.error("Error in deleteAnuncio function: ", error);
         throw error;
     }
-
-    return data;
 }

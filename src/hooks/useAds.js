@@ -6,132 +6,150 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Card } from "../models/card";
 
 export const useAds = ({ currentUser }) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [searchCardTitle, setSearchCardTitle] = useState('');
-    const [apiResponse, setApiResponse] = useState([]);
-    const [anuncio] = useState(new Advertisements(null, '', '', 1, 0, null, 0, {}, currentUser));
-    const [loading, setLoading] = useState(false);
-    const [totalPages, setTotalPages] = useState(0);
-    const [actualPage, setActualPage] = useState(1);
-    const [update, setUpdate] = useState(false);
-    const [isValidForm, setIsValidForm] = useState(false);
-    const navigate = useNavigate();
-    const { state } = useLocation();
-    const anuncioToEdit = state?.anuncioToEdit;
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchCardTitle, setSearchCardTitle] = useState('');
+  const [apiResponse, setApiResponse] = useState([]);
+  const [anuncio] = useState(new Advertisements(null, '', '', 1, 1, null, null, {}, currentUser, true));
+  const [update, setUpdate] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [totalPages, setTotalPages] = useState(0);
+  const [actualPage, setActualPage] = useState(1);
+  const [isValidForm, setIsValidForm] = useState(false);
+  const navigate = useNavigate();
+  const { state } = useLocation();
+  const anuncioToEdit = state?.anuncioToEdit;
 
-    useEffect(() => {
-        if (anuncioToEdit) {
-            anuncio.fromObject(anuncioToEdit);
-        }
-    }, [anuncioToEdit]);
+  useEffect(() => {
+    if (anuncioToEdit) {
+      const anuncioObj = new Advertisements();
+      anuncioObj.fromObject(anuncioToEdit);
+    }
+  }, [anuncioToEdit]);
 
-    useEffect(() => {
-        const validForm = anuncio.title
-            && anuncio.description
-            && anuncio.quantity > 0
-            && anuncio.price > 0
-            && anuncio.card.id;
-        setIsValidForm(validForm);
-    }, [update]);
+  useEffect(() => {
+    const validForm = anuncio.title && anuncio.description && anuncio.quantity > 0 && anuncio.price > 0;
+    setIsValidForm(validForm);
+  }, [anuncio]);
 
-    const showModal = () => {
-        setIsModalOpen(true);
-    };
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
 
-    const handleOk = () => {
-        setIsModalOpen(false);
-    };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
 
-    const handleCancel = () => {
-        setIsModalOpen(false);
-        setSearchCardTitle('');
-        setTotalPages(0);
-        setApiResponse([]);
-        setActualPage(1);
-    };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+    setSearchCardTitle('');
+    setTotalPages(0);
+    setApiResponse([]);
+    setActualPage(1);
+  };
 
-    const handleChangeTitle = (e) => {
-        anuncio.setTitle(e.target.value);
-        setUpdate(!update);
-    };
+  const handleChangeTitle = (data) => {
+    anuncio.setTitle(data.target.value);
+    setUpdate(!update);
+  };
 
-    const handleChangeDescription = (e) => {
-        anuncio.setDescription(e.target.value);
-        setUpdate(!update);
-    };
+  const handleChangeDescription = (data) => {
+    anuncio.setDescription(data.target.value);
+    setUpdate(!update);
+  };
 
-    const handleChangeAdType = (value) => {
-        anuncio.setStatus(value);
-        setUpdate(!update);
-    };
+  const handleChangeAdType = (value) => {
+    anuncio.setStatus(value);
+    setUpdate(!update);
+  };
 
-    const handleChangeQuantity = (value) => {
-        anuncio.setQuantity(value);
-        setUpdate(!update);
-    };
+  const handleChangeSale = (value) => {
+    anuncio.setSale(value);
+    setUpdate(!update);
+  };
 
-    const handleChangePrice = (value) => {
-        anuncio.setPrice(value);
-        setUpdate(!update);
-    };
+  const handleChangeQuantity = (value) => {
+    anuncio.setQuantity(value);
+    setUpdate(!update);
+  };
 
-    const searchCard = async () => {
-        if (!searchCardTitle) return;
-        setLoading(true);
-        const result = await findByName(searchCardTitle, actualPage);
-        setApiResponse(result?.data || []);
-        const total = Math.ceil(result?.totalCount / 10);
-        setTotalPages(total);
-        setLoading(false);
-    };
+  const handleChangePrice = (value) => {
+    anuncio.setPrice(value);
+    setUpdate(!update);
+  };
 
-    useEffect(() => {
-        if (searchCardTitle) {
-            searchCard();
-        }
-    }, [actualPage]);
+  const searchCard = async () => {
+    if (!searchCardTitle) return;
+    setLoading(true);
+    const result = await findByName(searchCardTitle, actualPage);
+    setApiResponse(result?.data || []);
+    const total = Math.ceil(result?.totalCount / 10);
+    setTotalPages(total);
+    setLoading(false);
+  };
 
-    const handleAddCard = (selectedCard) => {
-        const card = new Card(selectedCard.id, selectedCard.card_id, selectedCard.name, selectedCard.description, selectedCard.image, selectedCard.artist, selectedCard.rarity, selectedCard.type, anuncio);
-        anuncio.setCard(card);
-        setUpdate(!update);
-    };
+  useEffect(() => {
+    if (searchCardTitle) {
+      searchCard();
+    }
+  }, [actualPage]);
 
-    const handleRemoveCard = () => {
-        anuncio.setCard({});
-        setUpdate(!update);
-    };
+  const handleAddCard = (selectedCard) => {
+    const card = new Card(
+      null,
+      selectedCard.id,
+      selectedCard.name,
+      selectedCard.description,
+      selectedCard.images.large,
+      selectedCard.artist,
+      selectedCard.rarity,
+      selectedCard.type,
+    );
 
-    const handleSubmit = () => {
-        if (anuncio.id) {
-            updateAnuncio(anuncio).then(() => navigate('/my-ads', { replace: true }));
-        } else {
-            insertAnuncio(anuncio).then(() => navigate('/my-ads', { replace: true }));
-        }
-    };
+    anuncio.setCard(card);
+    setUpdate(!update);
+  };
 
-    return {
-        handleChangeTitle,
-        searchCardTitle,
-        handleChangeDescription,
-        handleChangeAdType,
-        handleChangeQuantity,
-        handleChangePrice,
-        showModal,
-        handleOk,
-        isModalOpen,
-        handleCancel,
-        setSearchCardTitle,
-        searchCard,
-        apiResponse,
-        loading,
-        totalPages,
-        setActualPage,
-        actualPage,
-        handleAddCard,
-        handleRemoveCard,
-        handleSubmit,
-        anuncio,
-        isValidForm
-    };
+  const handleRemoveCard = () => {
+    anuncio.setCard(null);
+    setUpdate(!update);
+  };
+
+  const handleSubmit = async () => {
+    try {
+      if (anuncio.id) {
+        await updateAnuncio(anuncio);
+      } else {
+        await insertAnuncio(anuncio);
+      }
+    } catch (error) {
+      console.error('Error submitting anuncio:', error);
+      throw error;
+    }
+  };
+
+  return {
+    handleChangeTitle,
+    searchCardTitle,
+    handleChangeDescription,
+    handleChangeAdType,
+    handleChangeSale,
+    handleChangeQuantity,
+    handleChangePrice,
+    showModal,
+    handleOk,
+    isModalOpen,
+    handleCancel,
+    setSearchCardTitle,
+    searchCard,
+    apiResponse,
+    loading,
+    totalPages,
+    setActualPage,
+    actualPage,
+    handleAddCard,
+    handleRemoveCard,
+    handleSubmit,
+    anuncio,
+    isValidForm
+  };
 };
