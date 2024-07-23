@@ -9,6 +9,7 @@ import {Decks} from "./pages/Decks";
 import {Deck} from "./pages/Deck";
 import {Logout} from "./pages/Logout";
 import {useAuthHook} from "./hooks/useAuthHook";
+import { Order } from './pages/Order';
 
 function App() {
     const {loading, currentUser} = useAuthHook();
@@ -36,6 +37,14 @@ function App() {
                 element={
                     <ProtectedRoute user={currentUser}>
                         <Deck currentUser={currentUser}/>
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/order"
+                element={
+                    <ProtectedRoute user={currentUser}>
+                        <Order/>
                     </ProtectedRoute>
                 }
             />

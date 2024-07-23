@@ -13,5 +13,10 @@ export const menu = [
         label: 'Sair',
         route: '/logout',
         key: 'logout'
+    },
+    {
+        label: 'Pedido',
+        route: '/order',
+        key: 'order'
     }
 ]
