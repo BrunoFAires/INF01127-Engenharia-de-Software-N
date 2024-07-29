@@ -33,6 +33,10 @@ export class Deck {
         this.description = description
     }
 
+    setUser(user){
+        this.user = user
+    }
+
     addCard(card) {
         this.cards.push(card)
 

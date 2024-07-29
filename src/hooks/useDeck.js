@@ -4,12 +4,13 @@ import {Deck} from "../models/deck";
 import {Card} from "../models/card";
 import {insertDeck, updateDeck} from "../service/deckService";
 import {useLocation, useNavigate} from "react-router-dom";
+import {useAuthHook} from "./useAuthHook";
 
-export const useDeck = ({currentUser}) => {
+export const useDeck = ({user}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [searchCardTitle, setSearchCardTitle] = useState();
     const [apiResponse, setApiResponse] = useState();
-    const [deck] = useState(new Deck(null, null, null, 0, currentUser, []));
+    const [deck] = useState(new Deck(null, null, null, 0, user, []));
     const [loading, setLoading] = useState(false);
     const [totalPages, setTotalPages] = useState();
     const [actualPage, setActualPage] = useState(1);
@@ -20,6 +21,12 @@ export const useDeck = ({currentUser}) => {
     const navigate = useNavigate()
     const {state} = useLocation();
     const deckToEdit = state?.deckToEdit
+    const {currentUser} = useAuthHook()
+
+    useEffect(() => {
+        if (currentUser)
+            deck.setUser(currentUser)
+    }, [currentUser]);
 
     useEffect(() => {
         if (deckToEdit) {
@@ -88,7 +95,7 @@ export const useDeck = ({currentUser}) => {
     const handleRemoveCard = (card, removeCard) => {
         const cardId = card.card_id ? card.card_id : card.id
         deck.removeCard(cardId)
-        if(deck.id && removeCard){
+        if (deck.id && removeCard) {
             setCardsToRemove([...cardsToRemove, card.id])
         }
         setUpdate(!update);
@@ -97,7 +104,7 @@ export const useDeck = ({currentUser}) => {
     const handleSubmit = () => {
         if (deck.id) {
             updateDeck(deck, cardsToRemove).then(navigate('/decks', {replace: true}))
-        }else{
+        } else {
             insertDeck(deck).then(navigate('/decks', {replace: true}))
         }
     };
