@@ -6,7 +6,6 @@ export const useAuthHook = () => {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        console.log('a')
         getCurrentUser().then(user => {
             setCurrentUser(user)
         }).finally(_ => {

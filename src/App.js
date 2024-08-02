@@ -10,7 +10,6 @@ import {Deck} from "./pages/Deck";
 import {Logout} from "./pages/Logout";
 import {useAuthHook} from "./hooks/useAuthHook";
 import {Community} from "./pages/Community";
-import {NewPost} from "./pages/NewPost";
 
 function App() {
     const {loading, currentUser} = useAuthHook();
@@ -46,14 +45,6 @@ function App() {
                 element={
                     <ProtectedRoute user={currentUser}>
                         <Community currentUser={currentUser}/>
-                    </ProtectedRoute>
-                }
-            />
-            <Route
-                path="/newpost"
-                element={
-                    <ProtectedRoute user={currentUser}>
-                        <NewPost currentUser={currentUser}/>
                     </ProtectedRoute>
                 }
             />

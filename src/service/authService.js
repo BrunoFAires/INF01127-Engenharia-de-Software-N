@@ -27,7 +27,6 @@ export const getCurrentUser = async () => {
         return null
     }
     return new User(result.id, result.email, result.user_metadata.name, result.user_metadata.surname, result.user_metadata.admin, result.user_metadata.seller)
-    localStorage.setItem()
 }
 
 export const alterUser = (data) => {
