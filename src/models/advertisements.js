@@ -28,6 +28,10 @@ export class Advertisements {
         };
     }
 
+    setId(id) {
+        this.id = id
+    }
+
     setTitle(title) {
         this.title = title;
     }

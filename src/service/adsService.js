@@ -16,7 +16,7 @@ export const updateAnuncio = async (anuncio) => {
 
 export const myAnuncios = async (user) => {
     try {
-        const { data, error } = await supabase.from('advertisements').select('*, card(*)').eq('seller', user.id)
+        const { data, error } = await supabase.from('advertisements').select('*, card(*)').eq('seller', user.id);
 
         if (error) {
             console.error("Error fetching anuncios: ", error);
@@ -30,18 +30,12 @@ export const myAnuncios = async (user) => {
     }
 }
 
-export const deleteAnuncio = async (anuncio) => {
-    if (!anuncio.id) {
-        console.error("Anuncio ID is required for deletion.");
-        return;
-    }
-
+export const deleteAnuncio = async (anuncioId) => {
     try {
         const { data, error } = await supabase
             .from('advertisements')
-            .delete()
-            .eq('seller', anuncio.seller.id)
-            .eq('id', anuncio.id);
+            .update({ status: 0 })
+            .eq('id', anuncioId);
 
         if (error) {
             console.error("Error deleting anuncio: ", error);

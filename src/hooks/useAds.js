@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { findByName } from "../service/pokemonClient";
 import { Advertisements } from "../models/advertisements";
-import { insertAnuncio, updateAnuncio } from "../service/adsService";
+import { insertAnuncio, updateAnuncio, deleteAnuncio } from "../service/adsService";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Card } from "../models/card";
 

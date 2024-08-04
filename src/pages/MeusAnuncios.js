@@ -3,7 +3,7 @@ import { Button, Card, Col, Layout, Row, Typography, Modal, message, Select, Inp
 import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { AppHeader } from '../components/header';
 import { useAds } from '../hooks/useAds';
-import { myAnuncios } from '../service/adsService';
+import { myAnuncios, deleteAnuncio } from '../service/adsService';
 
 const { Title, Text } = Typography;
 const { Content } = Layout;
@@ -55,8 +55,15 @@ export const MeusAnuncios = ({ currentUser }) => {
     setLoading(false);
   };
 
-  const handleEdit = (id) => {
-    // Lógica para editar anúncio
+  const handleEdit = (ads) => {
+    anuncio.setId(ads.id)
+    anuncio.setTitle(ads.title);
+    anuncio.setDescription(ads.description);
+    anuncio.setSale(ads.sale);
+    anuncio.setQuantity(ads.quantity);
+    anuncio.setPrice(ads.price);
+    anuncio.setCard(ads.card);
+    setIsAddAdModalOpen(true);
   };
 
   const handleRemove = (id) => {
@@ -64,7 +71,7 @@ export const MeusAnuncios = ({ currentUser }) => {
       title: 'Tem certeza que deseja remover este anúncio?',
       onOk: async () => {
         try {
-          // Lógica para remover anúncio
+          await deleteAnuncio(id);
           message.success('Anúncio removido com sucesso');
           fetchAnuncios();
         } catch (error) {
@@ -83,7 +90,7 @@ export const MeusAnuncios = ({ currentUser }) => {
     try {
       await handleSubmit();
       message.success('Anúncio publicado com sucesso');
-      fetchAnuncios();  // Atualiza a lista de anúncios
+      fetchAnuncios();
       setIsAddAdModalOpen(false);
     } catch (error) {
       message.error('Falha ao publicar anúncio');
@@ -115,7 +122,7 @@ export const MeusAnuncios = ({ currentUser }) => {
                 <Card
                   cover={<img alt={anuncio.title} src={anuncio.card.image} />}
                   actions={[
-                    <EditOutlined key="edit" onClick={() => handleEdit(anuncio.id)} />,
+                    <EditOutlined key="edit" onClick={() => handleEdit(anuncio)} />,
                     <DeleteOutlined key="delete" onClick={() => handleRemove(anuncio.id)} />,
                   ]}
                 >
