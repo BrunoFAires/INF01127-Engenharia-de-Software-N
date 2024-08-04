@@ -36,6 +36,7 @@ export const MeusAnuncios = ({ currentUser }) => {
     handleRemoveCard,
     handleSubmit,
     anuncio,
+    resetAnuncio,
   } = useAds({ currentUser });
 
   const isSelectedCard = (cardId) => anuncio.card && anuncio.card.card_id === cardId;
@@ -56,7 +57,7 @@ export const MeusAnuncios = ({ currentUser }) => {
   };
 
   const handleEdit = (ads) => {
-    anuncio.setId(ads.id)
+    anuncio.setId(ads.id);
     anuncio.setTitle(ads.title);
     anuncio.setDescription(ads.description);
     anuncio.setSale(ads.sale);
@@ -75,7 +76,6 @@ export const MeusAnuncios = ({ currentUser }) => {
           message.success('Anúncio removido com sucesso');
           fetchAnuncios();
         } catch (error) {
-          console.error('Failed to remove anuncio:', error);
           message.error('Falha ao remover anúncio');
         }
       },
@@ -83,6 +83,7 @@ export const MeusAnuncios = ({ currentUser }) => {
   };
 
   const showAddAdModal = () => {
+    resetAnuncio();
     setIsAddAdModalOpen(true);
   };
 
@@ -118,7 +119,7 @@ export const MeusAnuncios = ({ currentUser }) => {
         ) : (
           <Row gutter={[16, 16]} style={{ marginTop: '24px' }}>
             {anuncios.map(anuncio => (
-              <Col xs={24} sm={12} md={8} lg={6} key={anuncio.id}>
+              <Col xs={24} sm={12} md={8} lg={6} xl={4} key={anuncio.id}>
                 <Card
                   cover={<img alt={anuncio.title} src={anuncio.card.image} />}
                   actions={[
@@ -129,11 +130,11 @@ export const MeusAnuncios = ({ currentUser }) => {
                   <Card.Meta
                     title={anuncio.title}
                     description={(
-                      <div>
+                      <div class="mt-2">
                         <Text>{anuncio.description}</Text>
-                        <div><Text strong>Preço: </Text>R$ {anuncio.price}</div>
-                        <div><Text strong>Quantidade: </Text>{anuncio.quantity}</div>
-                        <div><Text strong>Status: </Text>{anuncio.status === 1 ? 'Ativo' : 'Inativo'}</div>
+                        <div class="mt-2"><Text strong class="text-gray-600">Preço: </Text><Text class="text-black">R$ {anuncio.price}</Text></div>
+                        <div class="mt-1"><Text strong class="text-gray-600">Quantidade: </Text><Text class="text-black">{anuncio.quantity}</Text></div>
+                        <div class="mt-1"><Text strong class="text-gray-600">Status: </Text><Text class={`${anuncio.status === 1 ? 'text-green-500' : 'text-red-500'}`}>{anuncio.status === 1 ? 'Ativo' : 'Inativo'}</Text></div>
                       </div>
                     )}
                   />
@@ -147,7 +148,7 @@ export const MeusAnuncios = ({ currentUser }) => {
           open={isAddAdModalOpen}
           onOk={handleAddAdModalOk}
           onCancel={handleAddAdModalCancel}
-          width={'80%'}
+          width={'40%'}
         >
           <Form layout="vertical">
             <Form.Item label="Título">
@@ -180,7 +181,7 @@ export const MeusAnuncios = ({ currentUser }) => {
                 />
               )}
             </Row>
-            <Modal title="Pesquisar Carta" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} okText={'Adiconar'} cancelText={'Cancelar'} width={'80%'}>
+            <Modal title="Pesquisar Carta" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} okText={'Adicionar'} cancelText={'Cancelar'} width={'80%'}>
               <Col>
                 <Col md={8} className={'space-y-3 mb-3'}>
                   <Input value={searchCardTitle} onChange={data => { setSearchCardTitle(data.target.value) }} size={'large'} placeholder={'Name'} />

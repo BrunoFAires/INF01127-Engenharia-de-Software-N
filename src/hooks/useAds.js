@@ -9,13 +9,12 @@ export const useAds = ({ currentUser }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchCardTitle, setSearchCardTitle] = useState('');
   const [apiResponse, setApiResponse] = useState([]);
-  const [anuncio] = useState(new Advertisements(null, '', '', 1, 1, null, null, {}, currentUser, true));
+  const [anuncio, setAnuncio] = useState(new Advertisements(null, '', '', 1, 1, null, null, {}, currentUser, true));
   const [update, setUpdate] = useState(false);
   const [loading, setLoading] = useState(false);
   const [totalPages, setTotalPages] = useState(0);
   const [actualPage, setActualPage] = useState(1);
   const [isValidForm, setIsValidForm] = useState(false);
-  const navigate = useNavigate();
   const { state } = useLocation();
   const anuncioToEdit = state?.anuncioToEdit;
 
@@ -23,6 +22,7 @@ export const useAds = ({ currentUser }) => {
     if (anuncioToEdit) {
       const anuncioObj = new Advertisements();
       anuncioObj.fromObject(anuncioToEdit);
+      setAnuncio(anuncioObj);
     }
   }, [anuncioToEdit]);
 
@@ -30,6 +30,10 @@ export const useAds = ({ currentUser }) => {
     const validForm = anuncio.title && anuncio.description && anuncio.quantity > 0 && anuncio.price > 0;
     setIsValidForm(validForm);
   }, [anuncio]);
+
+  const resetAnuncio = () => {
+    setAnuncio(new Advertisements(null, '', '', 1, 1, null, null, {}, currentUser, true));
+  };
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -150,6 +154,7 @@ export const useAds = ({ currentUser }) => {
     handleRemoveCard,
     handleSubmit,
     anuncio,
+    resetAnuncio,
     isValidForm
   };
 };
