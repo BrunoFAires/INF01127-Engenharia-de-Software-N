@@ -90,7 +90,7 @@ export const Community = () => {
                               autoSize={{minRows: 5, maxRows: 5}}/>
                     <Row justify={" w-full mt-3"} className='space-x-3 items-center'>
                         {selectedDeck && selectedDeck.cards.slice(0, 5).map(it => {
-                            return <img src={it.image} className={'w-[50px]'}/>
+                            return <img src={it.image} className={'w-[50px]'} alt=''/>
                         })}
                         {selectedDeck && selectedDeck.cards.length > 5 ? <p className='pl-2'>...</p> : ''}
                     </Row>
@@ -162,7 +162,7 @@ export const Community = () => {
                                             <p className='pb-3'>{it.text}</p>
                                             <Row className=''>{
                                                 it.cardPost?.slice(0, 5)?.map(it => {
-                                                    return <img className='w-[100px] pl-2 pb-2' src={it.image}/>
+                                                    return <img className='w-[100px] pl-2 pb-2' src={it.image} alt=''/>
                                                 })
                                             }</Row>
                                         </>}
