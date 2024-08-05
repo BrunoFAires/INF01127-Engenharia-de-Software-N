@@ -1,17 +1,22 @@
 import {useEffect, useState} from "react";
 import {Post} from "../models/post";
 import {useAuthHook} from "./useAuthHook";
-import {addNewPost, findPostByLikes, countTotalPosts, reactPost} from "../service/communityService";
+import {addNewPost, findPostByLikes, countTotalPosts, reactPost, deletePost} from "../service/communityService";
+import {useNavigate} from "react-router-dom";
+import * as deckService from "../service/deckService";
 
 export const useCommunity = () => {
     const [post] = useState(new Post(null, null, null, null, null, null, null, null))
-    const {currentUser, loading: loadingUser} = useAuthHook()
+    const {currentUser} = useAuthHook()
     const [posts, setPosts] = useState([])
     const [loading, setLoading] = useState(true)
     const [update, setUpdate] = useState(false);
     const [actualPage, setActualPage] = useState(0)
     const [totalPosts, setTotalPosts] = useState()
     const [hasMoreData, setHasMoreData] = useState(true)
+    const [postToDelete, setPostToDelete] = useState()
+    const [showDeleteModal, setShowDeleteModal] = useState(false)
+    const navigate = useNavigate()
 
     const loadMoreData = () => {
         if (!totalPosts)
@@ -37,11 +42,11 @@ export const useCommunity = () => {
 
     useEffect(() => {
         loadMoreData()
-    }, [totalPosts]);
+    }, [totalPosts]); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         post.setUser(currentUser)
-    }, [currentUser]);
+    }, [currentUser]); // eslint-disable-line react-hooks/exhaustive-deps
 
 
     const handleChangePostText = (event) => {
@@ -52,6 +57,9 @@ export const useCommunity = () => {
     const handleSubmitPost = () => {
         addNewPost(post, currentUser).then(newPost => {
             setPosts([...posts, newPost])
+        }).finally(_ => {
+            post.setText('')
+            setUpdate(!update)
         })
     }
 
@@ -70,14 +78,41 @@ export const useCommunity = () => {
         })
     }
 
+    const handleDeletePost = (post) => {
+        setShowDeleteModal(true)
+        setPostToDelete(post)
+    }
+
+    const handleConfirmeDelete = async () => {
+        await deletePost(postToDelete)
+        const newPosts = posts.filter(it => it.id !== postToDelete.id)
+        setPosts(newPosts)
+        setTotalPosts(totalPosts - 1)
+        setShowDeleteModal(false)
+        setPostToDelete(null)
+    }
+
+    const handleCancel = () => {
+        setPostToDelete(null)
+        setShowDeleteModal(false)
+    }
+
     return {
         loading,
         posts,
+        post,
         handleChangePostText,
         handleSubmitPost,
         handleLikePost,
         handleDislikePost,
         loadMoreData,
-        hasMoreData
+        hasMoreData,
+        navigate,
+        currentUser,
+        showDeleteModal,
+        handleDeletePost,
+        handleConfirmeDelete,
+        handleCancel,
+        update
     }
 }

@@ -1,8 +1,7 @@
-import {Avatar, Button, Card, Col, Divider, Form, Layout, List, Row, Skeleton, Upload} from 'antd';
+import {Avatar, Button, Card, Col, Form, Layout, List, Modal, Row, Skeleton, Upload} from 'antd';
 import {AppHeader} from "../components/header";
 import React from "react";
 import {CommentOutlined, DislikeOutlined, LikeOutlined, UploadOutlined} from "@ant-design/icons";
-import {useNavigate} from "react-router-dom";
 import TextArea from "antd/es/input/TextArea";
 import {useCommunity} from "../hooks/useCommunity";
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -13,16 +12,21 @@ const {Content} = Layout;
 
 
 export const Community = () => {
-    const navigate = useNavigate()
     const {
         posts,
-        loading,
+        post,
         handleChangePostText,
         handleSubmitPost,
         handleLikePost,
         handleDislikePost,
         loadMoreData,
-        hasMoreData
+        hasMoreData,
+        navigate,
+        currentUser,
+        showDeleteModal,
+        handleDeletePost,
+        handleConfirmeDelete,
+        handleCancel
     } = useCommunity()
 
 
@@ -39,47 +43,27 @@ export const Community = () => {
 
     return <Layout className={'min-h-[100vh]'}>
         <AppHeader/>
+        <Modal title="Deletar baralho" open={showDeleteModal} onOk={handleConfirmeDelete}
+               onCancel={handleCancel}
+               okText={'Confirmar'} cancelText={'Cancelar'}>
+            <p>Você tem certeza que deseja excluir essa publicação? A ação não pode ser revertida.</p>
+        </Modal>
         <Content className={'px-[48px] mt-6 shadow-[#b6b6b6] shadow-xl'}>
 
             <Col className='flex flex-col space-y-3 items-center'>
-                <Form
-                    className={'space-y-4 w-1/2'}
-                    labelCol={{
-                        span: 3,
-                    }}
-                    labelAlign={'left'}
-                    name="basic"
-                    initialValues={{
-                        remember: true,
-                    }}
-                    onFinish={handleSubmitPost}
-                    autoComplete="true"
-                    style={{width: '100%'}}
-                >
-                    <Form.Item
-                        className={'m-0'}
-                        name="text"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Este campo é obrigatório',
-                            },
-                        ]}
-                    >
-                        <TextArea value={''} onChange={handleChangePostText} size={'large'} placeholder={'Descrição'}
-                                  autoSize={{minRows: 5, maxRows: 5}}/>
-                    </Form.Item>
-                    <Form.Item>
-                        <Row justify={"end"} className='space-x-3'>
-                            <Upload {...props}>
+                <Row className='w-1/2'>
+                    <TextArea value={post.text} onChange={handleChangePostText} size={'large'}
+                              placeholder={'Digite o que você está pensando...'}
+                              autoSize={{minRows: 5, maxRows: 5}}/>
+                    <Row justify={"end w-full mt-3"} className='space-x-3'>
+                        {/*<Upload {...props}>
                                 <Button size={'large'} icon={<UploadOutlined/>}>Adicionar imagem</Button>
-                            </Upload>
-                            <Button className={''} size={'large'} loading={false}
-                                    htmlType="submit">
-                                Publicar
-                            </Button></Row>
-                    </Form.Item>
-                </Form>
+                            </Upload>*/}
+                        <Button onClick={handleSubmitPost} disabled={!post.text} className={''} size={'large'} loading={false}
+                                htmlType="submit">
+                            Publicar
+                        </Button></Row>
+                </Row>
                 <div className={'w-1/2'}>
                     <InfiniteScroll
                         dataLength={posts.length}
@@ -98,18 +82,20 @@ export const Community = () => {
                                                                       key="ellipsis" onClick={() => {
                                     handleLikePost(it)
                                 }}/> {it.likes}</div>
-                                const totalDislikes = <div><DislikeOutlined className={`${it.disliked ? 'text-[#08c]' : ''}`}
-                                                                      key="ellipsis" onClick={() => {
+                                const totalDislikes = <div><DislikeOutlined
+                                    className={`${it.disliked ? 'text-[#08c]' : ''}`}
+                                    key="ellipsis" onClick={() => {
                                     handleDislikePost(it)
                                 }}/> {it.dislikes}</div>
                                 const totalComments = <div><CommentOutlined key="ellipsis"/> {it.comments}</div>
                                 return <Card
                                     key={index}
                                     className={'w-full flex-shrink-0  mb-5'}
-                                    hoverable
-
-                                    onClick={() => {
-                                    }}
+                                    extra={it.user.id === currentUser.id &&
+                                        <div className='hover:cursor-pointer'
+                                             onClick={() => {
+                                                 handleDeletePost(it)
+                                             }}>Excluir</div>}
                                     actions={[
                                         totalLikes,
                                         totalDislikes,
@@ -117,6 +103,9 @@ export const Community = () => {
                                     ]}
                                 >
                                     <Meta
+                                        onClick={() => {
+                                            navigate(`/post/${it.id}`)
+                                        }}
                                         avatar={<Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=8"/>}
                                         title={it.user.profile?.name}
                                         description={it.text}

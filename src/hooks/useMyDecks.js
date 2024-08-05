@@ -48,7 +48,7 @@ export const useMyDecks = () => {
             setDecks(decks)
             setLoading(false)
         })
-    }, [loadingUser]);
+    }, [loadingUser]); // eslint-disable-line react-hooks/exhaustive-deps
 
 
     return {

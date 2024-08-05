@@ -1,10 +1,10 @@
-import {Button, Card, Col, Input, InputNumber, Layout, Modal, Pagination, Row, Space} from 'antd';
-import {AppHeader, Header} from "../components/header";
+import {Button, Card, Col, Input, Layout, Modal, Pagination, Row} from 'antd';
+import {AppHeader} from "../components/header";
 import TextArea from "antd/es/input/TextArea";
 import {useDeck} from "../hooks/useDeck";
 import {Counter} from "../components/counter";
 
-const {Content, Footer} = Layout;
+const {Content} = Layout;
 
 
 export const Deck = ({currentUser}) => {
@@ -35,7 +35,8 @@ export const Deck = ({currentUser}) => {
         <Content className={'px-[48px]'}>
             <Col md={12} className='mx-auto space-y-3 mt-3'>
                 <Input value={deck.title} onChange={handleChangeTitle} size={'large'} placeholder={'Título'}/>
-                <TextArea value={deck.description} onChange={handleChangeDescription} size={'large'} placeholder={'Descrição'}
+                <TextArea value={deck.description} onChange={handleChangeDescription} size={'large'}
+                          placeholder={'Descrição'}
                           autoSize={{minRows: 3, maxRows: 3}}/>
                 <Row justify={'end'}>
                     <Button onClick={showModal} className={''} size={'large'} loading={false} type="primary"
@@ -54,7 +55,8 @@ export const Deck = ({currentUser}) => {
                               }}/></Card>)}
                 </Row>
                 <Row justify={'center'}>
-                    <Button disabled={!isValidForm} className={'w-1/2'} size={'large'} loading={false} type="primary" onClick={handleSubmit}>
+                    <Button disabled={!isValidForm} className={'w-1/2'} size={'large'} loading={false} type="primary"
+                            onClick={handleSubmit}>
                         Salvar
                     </Button>
                 </Row>

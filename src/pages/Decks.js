@@ -1,10 +1,9 @@
-import {Button, Card, Col, Input, Layout, List, Modal, Pagination, Row, Skeleton} from 'antd';
-import {AppHeader, Header} from "../components/header";
+import {Button, Layout, List, Modal, Row, Skeleton} from 'antd';
+import {AppHeader} from "../components/header";
 import {useMyDecks} from "../hooks/useMyDecks";
 import React from "react";
-import {Counter} from "../components/counter";
 
-const {Content, Footer} = Layout;
+const {Content} = Layout;
 
 
 export const Decks = ({currentUser}) => {
@@ -37,7 +36,9 @@ export const Decks = ({currentUser}) => {
                 locale={{emptyText: 'Sem baralhos'}}
                 renderItem={(item) => (
                     <List.Item
-                        actions={[<a key="list-loadmore-edit" onClick={() => handleOnEdit(item)}>Editar</a>, <a key="list-loadmore-more" onClick={() => handleDeleteDeck(item)}>Excluir</a>]}
+                        actions={[<div className='hover:cursor-pointer' key="list-loadmore-edit"
+                                       onClick={() => handleOnEdit(item)}>Editar</div>,
+                            <div className='hover:cursor-pointer' key="list-loadmore-more" onClick={() => handleDeleteDeck(item)}>Excluir</div>]}
                     >
                         <Skeleton title loading={item.loading} active>
                             <List.Item.Meta

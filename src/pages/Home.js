@@ -1,7 +1,6 @@
-import {Button, Card, Layout, List, Row} from 'antd';
+import {Button, Card, Layout, Row} from 'antd';
 import {AppHeader} from "../components/header";
 import {supabase} from "../service/supabaseClient";
-import {Counter} from "../components/counter";
 import React from "react";
 
 const {Content} = Layout;

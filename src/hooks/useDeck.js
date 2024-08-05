@@ -26,13 +26,13 @@ export const useDeck = ({user}) => {
     useEffect(() => {
         if (currentUser)
             deck.setUser(currentUser)
-    }, [currentUser]);
+    }, [currentUser]); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         if (deckToEdit) {
             deck.fromObject(deckToEdit)
         }
-    }, [deckToEdit]);
+    }, [deckToEdit]); // eslint-disable-line react-hooks/exhaustive-deps
 
 
     useEffect(() => {
@@ -40,7 +40,7 @@ export const useDeck = ({user}) => {
             && deck.description
             && deck.cards.length > 0
         setIsValidForm(validForm)
-    }, [update]);
+    }, [update]); // eslint-disable-line react-hooks/exhaustive-deps
 
 
     const showModal = () => {
@@ -84,7 +84,7 @@ export const useDeck = ({user}) => {
         searchCard().then().finally(() => {
             setLoading(false);
         });
-    }, [actualPage]);
+    }, [actualPage]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleAddCard = (selectedCard) => {
         const card = new Card(null, selectedCard.id, selectedCard.name, selectedCard.flavorText, selectedCard.images.large, selectedCard.artist, selectedCard.rarity, selectedCard.type, deck);

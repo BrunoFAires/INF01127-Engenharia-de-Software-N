@@ -1,6 +1,5 @@
 import {User} from "../models/user";
 import {supabase} from "./supabaseClient";
-import {options} from "axios";
 
 export const createAccount = async (data) => {
     return await supabase.auth.signUp({
