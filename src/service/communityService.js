@@ -4,23 +4,26 @@ import {User} from "../models/user";
 import {getCurrentUser} from "./authService";
 import {Comment} from "../models/comment";
 import {Profile} from "../models/profile";
+import {CardPost} from "../models/cardPost";
 
-export const addNewPost = async (post, currentUser) => {
-    const result = await supabase.from('post')
-        .insert(post.toSupabaseInstance())
-        .select();
+export const addNewPost = async (post, cardIds, currentUser) => {
+    try {
+        const result = await supabase.rpc('add_post', {
+            post: post.toSupabaseInstance(),
+            cardids: cardIds || []
+        });
 
-    if(result.error){
-        throw 'Erro ao realizar publicação'
+        return new Post(result.data.id, result.data.text, result.data.imagePath, 0, 0, 0, false, false, currentUser)
+    } catch (error) {
+        console.error('Error calling add_post:', error);
+        throw error;
     }
-
-    return new Post(result.data[0].id, result.data[0].text, result.data[0]?.imagePath, 0, 0, 0, false, false, currentUser)
 }
 
 export const findPostByLikes = async (i) => {
     const posts = await supabase
         .from('post')
-        .select('*, profile(*)')
+        .select('*, profile(*), card_post(*, card(*))')
         .order('likes', {ascending: false})
         .range(i * 10, 9 + (i * 10))
 
@@ -35,9 +38,19 @@ export const findPostByLikes = async (i) => {
     return posts.data.map(it => {
         const liked = likedPosts.data && !!likedPosts.data.some(l => l.isLike && l.postId === it.id)
         const disliked = likedPosts.data && !!likedPosts.data.some(l => !l.isLike && l.postId === it.id)
-        return new Post(it.id, it.text, it.imagePath, it.likes, it.dislikes, it.comments, liked, disliked,
+        const cardPosts = []
+
+        const post = new Post(it.id, it.text, it.imagePath, it.likes, it.dislikes, it.comments, liked, disliked,
             new User(it.profile.id, '', it.profile.name, it.profile.surname, it.profile.admin, it.profile.seller))
 
+        it.card_post.forEach(it => {
+            const cadPost = new CardPost(it.id, it.card.card_id, it.card.name, it.card.description, it.card.image, it.card.artist, it.card.rarity, it.card.type, post)
+            cardPosts.push(cadPost)
+        })
+
+        post.setCardPost(cardPosts)
+
+        return post
     })
 }
 
@@ -68,7 +81,7 @@ export const commentsByPost = async (post) => {
 export const findPostById = async (postId) => {
     const result = await supabase
         .from('post')
-        .select('*, profile(*)')
+        .select('*, profile(*), card_post(*, card(*))')
         .eq('id', postId)
 
     if (!result.data)
@@ -81,9 +94,19 @@ export const findPostById = async (postId) => {
     const liked = likedPosts.data && !!likedPosts.data.some(l => l.isLike && l.postId === result.data[0].id)
     const disliked = likedPosts.data && !!likedPosts.data.some(l => !l.isLike && l.postId === result.data[0].id)
 
-    return new Post(result.data[0].id, result.data[0].text, result.data[0].imagePath, result.data[0].likes, result.data[0].dislikes, result.data[0].comments, liked, disliked,
+    const cardPosts = []
+
+    const post = new Post(result.data[0].id, result.data[0].text, result.data[0].imagePath, result.data[0].likes, result.data[0].dislikes, result.data[0].comments, liked, disliked,
         new User(result.data[0].profile.id, '', result.data[0].profile.name, result.data[0].profile.surname, result.data[0].profile.admin, result.data[0].profile.seller))
 
+    result.data[0].card_post.forEach(it => {
+        const cadPost = new CardPost(it.id, it.card.card_id, it.card.name, it.card.description, it.card.image, it.card.artist, it.card.rarity, it.card.type, post)
+        cardPosts.push(cadPost)
+    })
+
+    post.setCardPost(cardPosts)
+
+    return post
 }
 
 export const deletePost = async (post) => {
@@ -100,6 +123,7 @@ export const deleteComment = async (comment) => {
     await supabase
         .rpc('remove_comment', {commentid: comment.id, postid: comment.post.id}).then(result => {
             if (result.error)
+                // eslint-disable-next-line no-throw-literal
                 throw "Erro ao remover o comentário"
         })
 }
@@ -108,6 +132,7 @@ export const addComment = async (comment) => {
     return await supabase
         .rpc('add_comment', {commentdata: comment.toSupabaseInstance()}).then(result => {
             if (result.error)
+                // eslint-disable-next-line no-throw-literal
                 throw "Erro ao submeter o comentário"
             return result.data
         })

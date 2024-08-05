@@ -26,22 +26,29 @@ export const Community = () => {
         showDeleteModal,
         handleDeletePost,
         handleConfirmeDelete,
-        handleCancel
+        handleCancel,
+        handleSelectDeckToPublish,
+        handleSelectDeck,
+        handleRemoveSelectedDeck,
+        showDecksModal,
+        handleCancelDeckSelection,
+        decks,
+        selectedDeck
     } = useCommunity()
 
 
-/*
-    const props = {
-        accept: "image/png, image/jpeg",
-        multiple: false,
-        maxCount: 1,
-        onChange({file, fileList}) {
-            if (file.status !== 'uploading') {
-                console.log(file, fileList);
-            }
-        },
-    };
-*/
+    /*
+        const props = {
+            accept: "image/png, image/jpeg",
+            multiple: false,
+            maxCount: 1,
+            onChange({file, fileList}) {
+                if (file.status !== 'uploading') {
+                    console.log(file, fileList);
+                }
+            },
+        };
+    */
 
     return <Layout className={'min-h-[100vh]'}>
         <AppHeader/>
@@ -50,6 +57,30 @@ export const Community = () => {
                okText={'Confirmar'} cancelText={'Cancelar'}>
             <p>Você tem certeza que deseja excluir essa publicação? A ação não pode ser revertida.</p>
         </Modal>
+        <Modal title="Publicar baralho" open={showDecksModal} onOk={handleConfirmeDelete}
+               onCancel={handleCancelDeckSelection}
+               okText={'Confirmar'} cancelText={'Cancelar'}>
+            <List
+                className="demo-loadmore-list"
+                itemLayout="horizontal"
+                dataSource={decks}
+                locale={{emptyText: 'Sem baralhos'}}
+                renderItem={(item) => (
+                    <List.Item
+                        actions={[<div className='hover:cursor-pointer' key="list-loadmore-edit"
+                                       onClick={() => handleSelectDeck(item)}>Selecionar</div>,
+                        ]}
+                    >
+                        <Skeleton title loading={item.loading} active>
+                            <List.Item.Meta
+
+                                description={item.title}
+                            />
+                        </Skeleton>
+                    </List.Item>
+                )}
+            />
+        </Modal>
         <Content className={'px-[48px] mt-6 shadow-[#b6b6b6] shadow-xl'}>
 
             <Col className='flex flex-col space-y-3 items-center'>
@@ -57,11 +88,28 @@ export const Community = () => {
                     <TextArea value={post.text} onChange={handleChangePostText} size={'large'}
                               placeholder={'Digite o que você está pensando...'}
                               autoSize={{minRows: 5, maxRows: 5}}/>
+                    <Row justify={" w-full mt-3"} className='space-x-3 items-center'>
+                        {selectedDeck && selectedDeck.cards.slice(0, 5).map(it => {
+                            return <img src={it.image} className={'w-[50px]'}/>
+                        })}
+                        {selectedDeck && selectedDeck.cards.length > 5 ? <p className='pl-2'>...</p> : ''}
+                    </Row>
                     <Row justify={"end w-full mt-3"} className='space-x-3'>
                         {/*<Upload {...props}>
                                 <Button size={'large'} icon={<UploadOutlined/>}>Adicionar imagem</Button>
                             </Upload>*/}
-                        <Button onClick={handleSubmitPost} disabled={!post.text} className={''} size={'large'} loading={false}
+                        {!selectedDeck ?
+                            <Button onClick={handleSelectDeckToPublish} className={''} size={'large'} loading={false}
+                                    htmlType="submit">
+                                Selecionar baralho
+                            </Button> :
+                            <Button onClick={handleRemoveSelectedDeck} className={''} size={'large'} loading={false}
+                                    htmlType="submit">
+                                Remover baralho
+                            </Button>}
+
+                        <Button onClick={handleSubmitPost} disabled={!post.text} className={''} size={'large'}
+                                loading={false}
                                 htmlType="submit">
                             Publicar
                         </Button></Row>
@@ -110,7 +158,14 @@ export const Community = () => {
                                         }}
                                         avatar={<Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=8"/>}
                                         title={it.user.profile?.name}
-                                        description={it.text}
+                                        description={<>
+                                            <p className='pb-3'>{it.text}</p>
+                                            <Row className=''>{
+                                                it.cardPost?.slice(0, 5)?.map(it => {
+                                                    return <img className='w-[100px] pl-2 pb-2' src={it.image}/>
+                                                })
+                                            }</Row>
+                                        </>}
                                     />
                                 </Card>
                             }}

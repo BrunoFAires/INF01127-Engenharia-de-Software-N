@@ -1,5 +1,5 @@
 export class Post {
-    constructor(id, text, imagePath, likes, dislikes, comments, liked, disliked, user) {
+    constructor(id, text, imagePath, likes, dislikes, comments, liked, disliked, user, cardPost) {
         this.id = id;
         this.text = text;
         this.imagePath = imagePath;
@@ -9,6 +9,7 @@ export class Post {
         this.user = user
         this.liked = liked
         this.disliked = disliked
+        this.cardPost = cardPost || []
     }
 
     setText = (text) => {
@@ -58,6 +59,10 @@ export class Post {
 
     setUser = (user) => {
         this.user = user
+    }
+
+    setCardPost = (cardPost) => {
+        cardPost.forEach(post => {this.cardPost.push(post)})
     }
 
     toSupabaseInstance() {

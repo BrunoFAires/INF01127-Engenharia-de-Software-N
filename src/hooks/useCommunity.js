@@ -4,6 +4,8 @@ import {useAuthHook} from "./useAuthHook";
 import {addNewPost, countTotalPosts, deletePost, findPostByLikes, reactPost} from "../service/communityService";
 import {useNavigate} from "react-router-dom";
 import {message} from "antd";
+import {myDecks} from "../service/deckService";
+import {Deck} from "../models/deck";
 
 export const useCommunity = () => {
     const [post] = useState(new Post(null, null, null, null, null, null, null, null))
@@ -16,6 +18,9 @@ export const useCommunity = () => {
     const [hasMoreData, setHasMoreData] = useState(true)
     const [postToDelete, setPostToDelete] = useState()
     const [showDeleteModal, setShowDeleteModal] = useState(false)
+    const [showDecksModal, setShowDecksModal] = useState(false)
+    const [decks, setDecks] = useState([])
+    const [selectedDeck, setSelectedDeck] = useState()
     const navigate = useNavigate()
 
     const loadMoreData = () => {
@@ -56,11 +61,14 @@ export const useCommunity = () => {
 
     const handleSubmitPost = () => {
         try {
-            addNewPost(post, currentUser).then(newPost => {
+            const cardIds = selectedDeck?.cards.map((card) => card.id)
+
+            addNewPost(post, cardIds, currentUser).then(newPost => {
                 setPosts([...posts, newPost])
             }).finally(_ => {
                 post.setText('')
                 setUpdate(!update)
+                setSelectedDeck(null)
                 message.success('Publicação enviada com sucesso')
             })
         } catch (e) {
@@ -102,6 +110,32 @@ export const useCommunity = () => {
         setShowDeleteModal(false)
     }
 
+    const handleCancelDeckSelection = () => {
+        setDecks([])
+        setSelectedDeck(null)
+        setShowDecksModal(false)
+    }
+
+    const handleSelectDeckToPublish = () => {
+        myDecks(currentUser).then(result => {
+            result.data.forEach(deckResult => {
+                const deck = new Deck(deckResult.id, deckResult.title, deckResult.description, deckResult.rating, currentUser, deckResult.card_deck)
+                decks.push(deck)
+            })
+        }).finally(() => {
+            setShowDecksModal(true)
+        })
+    }
+
+    const handleSelectDeck = (deck) => {
+        setSelectedDeck(deck)
+        setShowDecksModal(false)
+    }
+
+    const handleRemoveSelectedDeck = () => {
+        setSelectedDeck(null)
+    }
+
     return {
         loading,
         posts,
@@ -118,6 +152,13 @@ export const useCommunity = () => {
         handleDeletePost,
         handleConfirmeDelete,
         handleCancel,
-        update
+        handleSelectDeckToPublish,
+        handleSelectDeck,
+        handleRemoveSelectedDeck,
+        showDecksModal,
+        handleCancelDeckSelection,
+        update,
+        decks,
+        selectedDeck
     }
 }

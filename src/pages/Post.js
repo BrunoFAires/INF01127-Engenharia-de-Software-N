@@ -1,5 +1,5 @@
 import Meta from "antd/es/card/Meta";
-import {Avatar, Button, Card, Col, Layout, Modal, Row} from "antd";
+import {Avatar, Button, Card, Col, Image, Layout, Modal, Row} from "antd";
 import React from "react";
 import {useCommunity} from "../hooks/useCommunity";
 import {CommentOutlined, DislikeOutlined, LikeOutlined} from "@ant-design/icons";
@@ -57,7 +57,14 @@ export const Post = () => {
                     <Meta
                         avatar={<Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=8"/>}
                         title={post?.user?.profile?.name}
-                        description={post?.text}
+                        description={<>
+                            <p className='pb-3'>{post?.text}</p>
+                            <Row className=''>{
+                                post?.cardPost?.map(it => {
+                                    return <Image className='w-[100px] pl-2 pb-2' src={it.image}/>
+                                })
+                            }</Row>
+                        </>}
                     />
                 </Card>
                 <Row className="w-1/2">
