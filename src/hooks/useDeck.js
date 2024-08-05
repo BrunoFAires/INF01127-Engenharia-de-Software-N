@@ -1,9 +1,9 @@
 import {useEffect, useState} from "react";
 import {findByName} from "../service/pokemonClient";
 import {Deck} from "../models/deck";
-import {Card} from "../models/card";
 import {insertDeck, updateDeck} from "../service/deckService";
 import {useLocation, useNavigate} from "react-router-dom";
+import {CardDeck} from "../models/cardDeck";
 import {useAuthHook} from "./useAuthHook";
 
 export const useDeck = ({user}) => {
@@ -87,7 +87,7 @@ export const useDeck = ({user}) => {
     }, [actualPage]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleAddCard = (selectedCard) => {
-        const card = new Card(null, selectedCard.id, selectedCard.name, selectedCard.flavorText, selectedCard.images.large, selectedCard.artist, selectedCard.rarity, selectedCard.type, deck);
+        const card = new CardDeck(null, selectedCard.id, selectedCard.name, selectedCard.flavorText, selectedCard.images.large, selectedCard.artist, selectedCard.rarity, selectedCard.type, deck);
         deck.addCard(card);
         setUpdate(!update);
     };

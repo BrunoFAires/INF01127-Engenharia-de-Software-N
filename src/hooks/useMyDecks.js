@@ -41,7 +41,7 @@ export const useMyDecks = () => {
             return
         myDecks(currentUser).then(it => {
             it.data.forEach(deckResult => {
-                const deck = new Deck(deckResult.id, deckResult.title, deckResult.description, deckResult.rating, currentUser, deckResult.card)
+                const deck = new Deck(deckResult.id, deckResult.title, deckResult.description, deckResult.rating, currentUser, deckResult.card_deck)
                 decks.push(deck)
             })
 

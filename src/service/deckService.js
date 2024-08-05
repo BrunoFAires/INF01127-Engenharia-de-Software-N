@@ -1,6 +1,7 @@
 import {supabase} from "./supabaseClient";
 
 export const insertDeck = async (deck) => {
+    console.log(deck.cards.map(it => it.toSupabaseInstance()))
     await supabase.rpc('add_deck_with_cards', {
         deck: deck.toSupabaseInstance(),
         cards: deck.cards.map(it => it.toSupabaseInstance())
@@ -16,7 +17,7 @@ export const updateDeck = async (deck, cardsToRemove) => {
 }
 
 export const myDecks = async (user) => {
-    return supabase.from('deck').select('*, card(*)').eq('user_id', user.id);
+    return supabase.from('deck').select('*, card_deck(*, card(*))').eq('user_id', user.id);
 }
 
 export const deleteDeck = async (deck) => {
