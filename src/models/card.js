@@ -1,5 +1,5 @@
 export class Card {
-    constructor(id, card_id, name, description, image, artist, rarity, type, deck) {
+    constructor(id, card_id, name, description, image, artist, rarity, type) {
         this.id = id;
         this.card_id = card_id;
         this.name = name;
@@ -8,7 +8,6 @@ export class Card {
         this.artist = artist;
         this.rarity = rarity;
         this.type = type;
-        this.deck = deck;
     }
 
     toSupabaseInstance() {
