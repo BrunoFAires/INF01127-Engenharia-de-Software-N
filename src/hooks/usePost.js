@@ -1,15 +1,14 @@
 import {useEffect, useState} from "react";
-import {addComment, commentsByPost, deleteComment, deletePost, findPostById} from "../service/communityService";
+import {addComment, commentsByPost, deleteComment, findPostById} from "../service/communityService";
 import {useParams} from "react-router-dom";
 import {Comment} from "../models/comment";
-import {getCurrentUser} from "../service/authService";
 import {useAuthHook} from "./useAuthHook";
 
 export const usePost = () => {
     const [loading, setLoading] = useState(true)
     const [comments, setComments] = useState([])
     const [post, setPost] = useState()
-    const [comment, setComment] = useState(new Comment(null, null, 0, null, null, null))
+    const [comment] = useState(new Comment(null, null, 0, null, null, null))
     const [commentToDelete, setCommentToDelete] = useState()
     const [showDeleteModal, setShowDeleteModal] = useState(false)
     const [update, setUpdate] = useState(false)
@@ -24,12 +23,12 @@ export const usePost = () => {
                 setComments(comments)
             }).finally(_ => setLoading(false))
         })
-    }, [postId]);
+    }, [postId]); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         comment.setProfile(currentUser?.profile)
         setUpdate(!update)
-    }, [currentUser]);
+    }, [currentUser]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleChangeCommentText = (event) => {
         comment.setText(event.target.value)

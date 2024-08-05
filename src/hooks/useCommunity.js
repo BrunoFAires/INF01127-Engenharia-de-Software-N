@@ -1,9 +1,8 @@
 import {useEffect, useState} from "react";
 import {Post} from "../models/post";
 import {useAuthHook} from "./useAuthHook";
-import {addNewPost, findPostByLikes, countTotalPosts, reactPost, deletePost} from "../service/communityService";
+import {addNewPost, countTotalPosts, deletePost, findPostByLikes, reactPost} from "../service/communityService";
 import {useNavigate} from "react-router-dom";
-import * as deckService from "../service/deckService";
 
 export const useCommunity = () => {
     const [post] = useState(new Post(null, null, null, null, null, null, null, null))

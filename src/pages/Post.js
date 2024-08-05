@@ -1,5 +1,5 @@
 import Meta from "antd/es/card/Meta";
-import {Avatar, Button, Card, Col, Form, Layout, Modal, Row} from "antd";
+import {Avatar, Button, Card, Col, Layout, Modal, Row} from "antd";
 import React from "react";
 import {useCommunity} from "../hooks/useCommunity";
 import {CommentOutlined, DislikeOutlined, LikeOutlined} from "@ant-design/icons";
@@ -11,7 +11,6 @@ import TextArea from "antd/es/input/TextArea";
 export const Post = () => {
     const {handleLikePost, handleDislikePost} = useCommunity()
     const {
-        loading,
         post,
         comments,
         comment,

@@ -1,7 +1,7 @@
-import {Avatar, Button, Card, Col, Form, Layout, List, Modal, Row, Skeleton, Upload} from 'antd';
+import {Avatar, Button, Card, Col, Layout, List, Modal, Row, Skeleton} from 'antd';
 import {AppHeader} from "../components/header";
 import React from "react";
-import {CommentOutlined, DislikeOutlined, LikeOutlined, UploadOutlined} from "@ant-design/icons";
+import {CommentOutlined, DislikeOutlined, LikeOutlined} from "@ant-design/icons";
 import TextArea from "antd/es/input/TextArea";
 import {useCommunity} from "../hooks/useCommunity";
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -30,6 +30,7 @@ export const Community = () => {
     } = useCommunity()
 
 
+/*
     const props = {
         accept: "image/png, image/jpeg",
         multiple: false,
@@ -40,6 +41,7 @@ export const Community = () => {
             }
         },
     };
+*/
 
     return <Layout className={'min-h-[100vh]'}>
         <AppHeader/>

@@ -1,7 +1,6 @@
 import {supabase} from "./supabaseClient";
 
 export const insertDeck = async (deck) => {
-    console.log(deck.cards.map(it => it.toSupabaseInstance()))
     await supabase.rpc('add_deck_with_cards', {
         deck: deck.toSupabaseInstance(),
         cards: deck.cards.map(it => it.toSupabaseInstance())
