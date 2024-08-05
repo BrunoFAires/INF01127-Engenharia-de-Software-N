@@ -3,6 +3,7 @@ import {Post} from "../models/post";
 import {useAuthHook} from "./useAuthHook";
 import {addNewPost, countTotalPosts, deletePost, findPostByLikes, reactPost} from "../service/communityService";
 import {useNavigate} from "react-router-dom";
+import {message} from "antd";
 
 export const useCommunity = () => {
     const [post] = useState(new Post(null, null, null, null, null, null, null, null))
@@ -54,12 +55,17 @@ export const useCommunity = () => {
     }
 
     const handleSubmitPost = () => {
-        addNewPost(post, currentUser).then(newPost => {
-            setPosts([...posts, newPost])
-        }).finally(_ => {
-            post.setText('')
-            setUpdate(!update)
-        })
+        try {
+            addNewPost(post, currentUser).then(newPost => {
+                setPosts([...posts, newPost])
+            }).finally(_ => {
+                post.setText('')
+                setUpdate(!update)
+                message.success('Publicação enviada com sucesso')
+            })
+        } catch (e) {
+            message.error(e)
+        }
     }
 
     const handleLikePost = (post) => {

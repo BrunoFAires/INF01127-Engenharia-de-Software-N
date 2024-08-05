@@ -10,6 +10,10 @@ export const addNewPost = async (post, currentUser) => {
         .insert(post.toSupabaseInstance())
         .select();
 
+    if(result.error){
+        throw 'Erro ao realizar publicação'
+    }
+
     return new Post(result.data[0].id, result.data[0].text, result.data[0]?.imagePath, 0, 0, 0, false, false, currentUser)
 }
 
@@ -83,21 +87,29 @@ export const findPostById = async (postId) => {
 }
 
 export const deletePost = async (post) => {
-    if(!post.id){
+    if (!post.id) {
         return
     }
     return supabase.from('post').delete().eq('id', post.id)
 }
 
 export const deleteComment = async (comment) => {
-    if(!comment.id){
+    if (!comment.id) {
         return
     }
-    return supabase.from('comment').delete().eq('id', comment.id)
+    await supabase
+        .rpc('remove_comment', {commentid: comment.id, postid: comment.post.id}).then(result => {
+            if (result.error)
+                throw "Erro ao remover o comentário"
+        })
 }
 
 export const addComment = async (comment) => {
-    await supabase
-        .from('comment')
-        .insert(comment.toSupabaseInstance())
+    return await supabase
+        .rpc('add_comment', {commentdata: comment.toSupabaseInstance()}).then(result => {
+            if (result.error)
+                throw "Erro ao submeter o comentário"
+            return result.data
+        })
+
 }

@@ -11,6 +11,9 @@ export class Comment {
     setText(text) {
         this.text = text;
     }
+    setId(id) {
+        this.id = id;
+    }
 
     setProfile(profile) {
         this.profile = profile

@@ -3,6 +3,7 @@ import {addComment, commentsByPost, deleteComment, findPostById} from "../servic
 import {useParams} from "react-router-dom";
 import {Comment} from "../models/comment";
 import {useAuthHook} from "./useAuthHook";
+import {message} from 'antd';
 
 export const usePost = () => {
     const [loading, setLoading] = useState(true)
@@ -33,14 +34,21 @@ export const usePost = () => {
     const handleChangeCommentText = (event) => {
         comment.setText(event.target.value)
         setUpdate(!update)
-        console.log(comment)
     }
 
     const handleAddComment = async () => {
-        await addComment(comment)
-        setComments([...comments, comment])
-        comment.setText('')
-        setUpdate(!update)
+        try {
+            const newCommentId = await addComment(comment)
+            const newComment = new Comment(newCommentId, comment.text, 0, Date.now(), comment.profile, comment.post)
+            setComments([...comments, newComment])
+            post.addComment()
+            comment.setText('')
+            comment.setId(null)
+            setUpdate(!update)
+            message.success('Comentário adicionado com sucesso')
+        } catch (e) {
+            message.error(e)
+        }
     }
 
     const handleDeleteComment = (comment) => {
@@ -49,11 +57,17 @@ export const usePost = () => {
     }
 
     const handleConfirmeDelete = async () => {
-        await deleteComment(commentToDelete)
-        const newComments = comments.filter(it => it.id !== commentToDelete.id)
-        setComments(newComments)
-        setShowDeleteModal(false)
-        setCommentToDelete(null)
+        try {
+            await deleteComment(commentToDelete)
+            const newComments = comments.filter(it => it.id !== commentToDelete.id)
+            setComments(newComments)
+            setShowDeleteModal(false)
+            setCommentToDelete(null)
+            post.removeComment()
+            message.success('Comentário removido com sucesso')
+        } catch (e) {
+            message.error(e)
+        }
     }
 
     const handleCancel = () => {
