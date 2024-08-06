@@ -10,6 +10,11 @@ export const menu = [
         key: 'decks'
     },
     {
+        label: 'Meus Anúncios',
+        route: '/my-ads',
+        key: 'my-ads'
+    },
+    {
         label: 'Sair',
         route: '/logout',
         key: 'logout'
