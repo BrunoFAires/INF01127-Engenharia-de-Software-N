@@ -14,9 +14,4 @@ export const menu = [
         route: '/logout',
         key: 'logout'
     },
-    {
-        label: 'Pedido',
-        route: '/order',
-        key: 'order'
-    }
 ]

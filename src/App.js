@@ -9,7 +9,7 @@ import {Decks} from "./pages/Decks";
 import {Deck} from "./pages/Deck";
 import {Logout} from "./pages/Logout";
 import {useAuthHook} from "./hooks/useAuthHook";
-import { Order } from './pages/Order';
+import { Marketplace } from './pages/Marketplace';
 
 function App() {
     const {loading, currentUser} = useAuthHook();
@@ -41,10 +41,10 @@ function App() {
                 }
             />
             <Route
-                path="/order"
+                path="/marketplace/:id"
                 element={
                     <ProtectedRoute user={currentUser}>
-                        <Order/>
+                        <Marketplace/>
                     </ProtectedRoute>
                 }
             />
