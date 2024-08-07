@@ -1,4 +1,4 @@
-import { Col, Layout, Row, Skeleton, Typography } from 'antd';
+import { Layout, Skeleton, Typography } from 'antd';
 import React from 'react';
 import ContentSection from '../components/ContentSection';
 import { AppHeader } from '../components/header';
@@ -10,8 +10,6 @@ const { Title } = Typography;
 export const Order = () => {
     const { pendingOrders, completedOrders, loading, error, confirmDelivery, ratePlayers } = useOrders();
 
-    
-
     return (
         <Layout className="min-h-[100vh]">
             <AppHeader />
@@ -20,24 +18,20 @@ export const Order = () => {
                 {loading && <Skeleton active />}
                 {error && <p>{error}</p>}
                 {!loading && !error && (
-                    <Row gutter={16}>
-                        <Col span={12}>
-                            <ContentSection
-                                title="Pedidos Pendentes"
-                                orders={pendingOrders}
-                                emptyText="Nenhum pedido pendente"
-                                onConfirm={confirmDelivery}
-                            />
-                        </Col>
-                        <Col span={12}>
-                            <ContentSection
-                                title="Pedidos Finalizados"
-                                orders={completedOrders}
-                                emptyText="Nenhum pedido finalizado"
-                                onRate={ratePlayers}
-                            />
-                        </Col>
-                    </Row>
+                    <>
+                        <ContentSection
+                            title="Pedidos Pendentes"
+                            orders={pendingOrders}
+                            emptyText="Nenhum pedido pendente"
+                            onConfirm={confirmDelivery}
+                        />
+                        <ContentSection
+                            title="Pedidos Finalizados"
+                            orders={completedOrders}
+                            emptyText="Nenhum pedido finalizado"
+                            onRate={ratePlayers}
+                        />
+                    </>
                 )}
             </Content>
         </Layout>
