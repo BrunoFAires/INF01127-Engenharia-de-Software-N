@@ -1,8 +1,7 @@
-import {Button, Card, Col, Input, Layout, List, Modal, Pagination, Row, Skeleton} from 'antd';
-import {AppHeader, Header} from "../components/header";
-import {useMyDecks} from "../hooks/useMyDecks";
+import { Button, Layout, List, Modal, Row, Skeleton } from 'antd';
 import React from "react";
-import {Counter} from "../components/counter";
+import { AppHeader } from "../components/header";
+import { useMyDecks } from "../hooks/useMyDecks";
 
 const {Content, Footer} = Layout;
 

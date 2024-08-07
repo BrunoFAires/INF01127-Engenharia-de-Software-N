@@ -1,14 +1,15 @@
-import './App.css';
-import {HashRouter, Route, Routes} from "react-router-dom";
-import {SignUp} from "./pages/SignUp";
-import {SignIn} from "./pages/SignIn";
-import {ProtectedRoute} from "./components/ProtectedRoute/ProtectedRoute";
 import React from "react";
-import {Home} from "./pages/Home";
-import {Decks} from "./pages/Decks";
-import {Deck} from "./pages/Deck";
-import {Logout} from "./pages/Logout";
-import {useAuthHook} from "./hooks/useAuthHook";
+import { HashRouter, Route, Routes } from "react-router-dom";
+import './App.css';
+import { ProtectedRoute } from "./components/ProtectedRoute/ProtectedRoute";
+import { useAuthHook } from "./hooks/useAuthHook";
+import { Deck } from "./pages/Deck";
+import { Decks } from "./pages/Decks";
+import { Home } from "./pages/Home";
+import { Logout } from "./pages/Logout";
+import { Order } from "./pages/Order";
+import { SignIn } from "./pages/SignIn";
+import { SignUp } from "./pages/SignUp";
 
 function App() {
     const {loading, currentUser} = useAuthHook();
@@ -36,6 +37,14 @@ function App() {
                 element={
                     <ProtectedRoute user={currentUser}>
                         <Deck currentUser={currentUser}/>
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/order"
+                element={
+                    <ProtectedRoute user={currentUser}>
+                        <Order currentUser={currentUser}/>
                     </ProtectedRoute>
                 }
             />

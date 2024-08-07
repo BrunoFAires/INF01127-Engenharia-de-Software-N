@@ -1,4 +1,4 @@
-import {supabase} from "./supabaseClient";
+import { supabase } from "./supabaseClient";
 
 export const insertDeck = async (deck) => {
     await supabase.rpc('add_deck_with_cards', {
