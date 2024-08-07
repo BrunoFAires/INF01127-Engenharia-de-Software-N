@@ -123,6 +123,7 @@ export const useOrders = () => {
     };
 
     const   ratePlayers = async (User, RatingGrade, orderId) => {
+        console.log("testando",User,RatingGrade,orderId)
         try {
             await RatePlayers (User,RatingGrade, orderId);
             const order = completedOrders.find(it => it.id === orderId)

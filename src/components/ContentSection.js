@@ -12,7 +12,6 @@ const ContentSection = ({ title, orders, emptyText, onConfirm, onRate }) => {
             [orderId]: value
         }));
     };
-
     return (
         <>
             <Title level={3}>{title}</Title>
