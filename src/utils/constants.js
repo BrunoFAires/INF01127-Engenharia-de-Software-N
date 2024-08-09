@@ -10,6 +10,11 @@ export const menu = [
         key: 'decks'
     },
     {
+        label: 'Comunidade',
+        route: '/community',
+        key: 'logout'
+    },
+    {
         label: 'Meus Anúncios',
         route: '/my-ads',
         key: 'my-ads'

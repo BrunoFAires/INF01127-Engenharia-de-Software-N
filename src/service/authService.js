@@ -25,7 +25,20 @@ export const getCurrentUser = async () => {
     if (!result) {
         return null
     }
-    return new User(result.id, result.email, result.user_metadata.name, result.user_metadata.surname, result.user_metadata.admin, result.user_metadata.seller)
+
+    const resultProfile = await supabase
+        .from('profile')
+        .select('*')
+        .eq('id', result.id)
+        .single()
+
+    const {error, data} = resultProfile
+
+    if (error) {
+        throw 'Erro ao buscar o perfil.'
+    }
+
+    return new User(result.id, result.email, data.name, data.surname, data.admin, data.seller)
 }
 
 export const alterUser = (data) => {
