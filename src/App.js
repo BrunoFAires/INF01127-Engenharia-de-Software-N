@@ -12,6 +12,7 @@ import {Logout} from "./pages/Logout";
 import {useAuthHook} from "./hooks/useAuthHook";
 import {Community} from "./pages/Community";
 import {Post} from "./pages/Post";
+import {Profile} from "./pages/Profile";
 
 function App() {
     const {loading, currentUser} = useAuthHook();
@@ -63,6 +64,14 @@ function App() {
                 element={
                     <ProtectedRoute user={currentUser}>
                         <MeusAnuncios currentUser={currentUser}/>
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/profile"
+                element={
+                    <ProtectedRoute user={currentUser}>
+                        <Profile/>
                     </ProtectedRoute>
                 }
             />

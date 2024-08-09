@@ -20,6 +20,11 @@ export const menu = [
         key: 'my-ads'
     },
     {
+        label: 'Perfil',
+        route: '/profile',
+        key: 'profile'
+    },
+    {
         label: 'Sair',
         route: '/logout',
         key: 'logout'

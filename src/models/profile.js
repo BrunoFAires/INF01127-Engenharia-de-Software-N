@@ -7,6 +7,30 @@ export class Profile {
         this.seller = seller;
     }
 
+    setName(name){
+        this.name = name
+    }
+
+    setSurname(name){
+        this.surname = name
+    }
+
+    getName(){
+        return this.name
+    }
+
+    getSurnameName(){
+        return this.name
+    }
+
+    setSeller(seller){
+        this.seller = seller
+    }
+
+    getSeller(){
+        return this.seller
+    }
+
     get isAdmin() {
         return this.admin
     }
@@ -20,7 +44,6 @@ export class Profile {
         return {
             name: this.name,
             surname: this.surname,
-            admin: this.admin,
             seller: this.seller
         }
     }

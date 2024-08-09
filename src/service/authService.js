@@ -14,7 +14,37 @@ export const createAccount = async (data) => {
     })
 }
 
+export const updateProfile = async (user, isProfileTypeChanged) => {
 
+    if (isProfileTypeChanged) {
+        const result = await supabase
+            .from('advertisements')
+            .select('*', {count: 'exact', head: true})
+            .eq('seller', user.id)
+            .single()
+        const {error, count} = result
+        if (error) {
+            throw 'Ocorreu um erro ao processar a solicitação'
+        }
+
+        if(count > 0){
+            throw 'Você ainda possui anuncios ativos.\n Exclua-os antes de tentar mudar o tipo do seu perfil.'
+        }
+
+    }
+
+    const result = await supabase
+        .from('profile')
+        .update(user.profile.toSupabaseInstance())
+        .eq('id', user.id)
+    const {error} = result
+    if (error) {
+        throw 'Ocorreu um erro ao processar a solicitação'
+    }
+
+    return new User(user.id, user.email, user.profile.name, user.profile.surname, user.profile.admin, user.profile.seller)
+
+}
 
 export const signIn = async (password, email) => {
     return await supabase.auth.signInWithPassword({password: password, email: email})
