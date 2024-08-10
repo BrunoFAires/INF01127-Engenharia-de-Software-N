@@ -10,22 +10,22 @@ const { Content } = Layout;
 export const Order = () => {
   const { pendingOrders, completedOrders, loading, error, confirmDelivery, ratePlayers, currentUser } = useOrders();
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
-  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [selectedOrderUserId, setSelectedOrderUserId] = useState(null);
 
   const [isRateConfirmModalOpen, setIsRateConfirmModalOpen] = useState(false); 
   const [selectedRating, setSelectedRating] = useState(null); 
   const [selectedSeller, setSelectedSeller] = useState(null); 
   const [selectedAd_Id, setSelectedAd_Id] = useState(null); 
 
-  const showConfirmModal = (orderId) => {
+  const showConfirmModal = (orderUserId) => {
 
-    setSelectedOrder(orderId);
+    setSelectedOrderUserId(orderUserId);
     setIsConfirmModalOpen(true);
   };
 
   const handleConfirmModalOk = async () => {
     try {
-      await confirmDelivery(selectedOrder);
+      await confirmDelivery(selectedOrderUserId);
       message.success('Pedido confirmado com sucesso');
       setIsConfirmModalOpen(false);
     } catch (error) {

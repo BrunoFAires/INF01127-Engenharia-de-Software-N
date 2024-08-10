@@ -11,6 +11,8 @@ const {Content} = Layout;
 export const Home = () => {
     const {loading, posts, advertisements, navigate} = useHome()
 
+    supabase.from('order').select('*, order_user(*, advertisements(*))').then((response) => console.log(response))
+
     return <Layout className={'min-h-[100vh]'}>
         <AppHeader/>
         <Content className={'px-[48px] mt-6 shadow-[#b6b6b6] shadow-xl'}>

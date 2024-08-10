@@ -7,7 +7,7 @@ export class Order {
         this.created_at = created_at;
         this.finished_at= finished_at;
         this.approved= approved
-        this.order_user = order_user.map(it => new Order_User(it.id, it.order_id,it.user_id, it.advertisement_id, it.finished, it.quantity, it.evaluated))
+        this.order_user = order_user.map(it => new Order_User(it.id, it.order_id, it.profile, it.advertisements, it.finished, it.quantity, it.evaluated, it.approved))
     }
     deliveredOrder(){
         this.order_user[0].finished = true;

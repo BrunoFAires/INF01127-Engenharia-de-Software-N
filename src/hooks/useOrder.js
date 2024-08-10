@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from "react-router-dom";
-import { Order } from "../models/order";
-import { CompletedOrders2, ConfirmDelivery, PendingOrders2, RatePlayers } from "../service/orderService";
-import { useAuthHook } from "./useAuthHook";
+import {useEffect, useRef, useState} from 'react';
+import {useNavigate} from "react-router-dom";
+import {Order} from "../models/order";
+import {CompletedOrders2, ConfirmDelivery, PendingOrders2, RatePlayers} from "../service/orderService";
+import {useAuthHook} from "./useAuthHook";
 
 export const useOrders = () => {
     const [pendingOrders, setPendingOrders] = useState([]);
@@ -10,7 +10,7 @@ export const useOrders = () => {
     const [evaluatedOrders, setEvaluatedOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const { loading: loadingUser, currentUser } = useAuthHook();
+    const {loading: loadingUser, currentUser} = useAuthHook();
     const navigate = useNavigate();
     const orderIdRef = useRef(new Set());
     const [updateCompletedOrders, setUpdateCompletedOrders] = useState(false);
@@ -28,7 +28,7 @@ export const useOrders = () => {
 
             try {
                 const pendingOrders1 = [];
-                const { data, error } = await PendingOrders2(currentUser);
+                const {data, error} = await PendingOrders2(currentUser);
                 if (error) {
                     console.error("Error fetching pending orders:", error);
                     throw error;
@@ -59,7 +59,6 @@ export const useOrders = () => {
     }, [currentUser]);
 
 
-
     useEffect(() => {
         const fetchCompletedOrders = async () => {
             if (loadingUser) {
@@ -73,7 +72,7 @@ export const useOrders = () => {
 
             try {
                 const completedOrders = [];
-                const { data, error } = await CompletedOrders2(currentUser);
+                const {data, error} = await CompletedOrders2(currentUser);
                 if (error) {
                     console.error("Error fetching pending orders:", error);
                     throw error;
@@ -101,30 +100,31 @@ export const useOrders = () => {
         fetchCompletedOrders();
     }, [currentUser, loadingUser]);
 
-    
 
-    const confirmDelivery = async (orderId) => {
+    const confirmDelivery = async (orderUserId) => {
         try {
-            const order = pendingOrders.find(it => it.id === orderId)
-            order.deliveredOrder()
-            const newPendingOrders = pendingOrders.filter(it => it.id !== orderId)
-            setPendingOrders(newPendingOrders)
-            setCompletedOrders([...completedOrders, order])
-            await ConfirmDelivery(orderId, currentUser.id);
+            await ConfirmDelivery(orderUserId, currentUser).then(() => {
+                const order = pendingOrders.find(it => it.order_user.find(it => it.id === orderUserId))
+                order.deliveredOrder()
+                const newPendingOrders = pendingOrders.filter(it => it.id !== order.id)
+                setPendingOrders(newPendingOrders)
+                setCompletedOrders([...completedOrders, order])
+            });
         } catch (error) {
             console.error("Error confirming delivery:", error);
         }
     };
 
-    const   ratePlayers = async (User, RatingGrade, orderId) => {
+    const ratePlayers = async (User, RatingGrade, orderId) => {
         try {
             //await RatePlayers (User,RatingGrade, orderId);
             const order = completedOrders.find(it => it.id === orderId)
             order.evaluatedOrder()
-            await RatePlayers (User,RatingGrade, orderId, currentUser);
+            await RatePlayers(User, RatingGrade, orderId, currentUser);
         } catch (error) {
             console.error("Error rating players", error);
-        }}
+        }
+    }
 
     return {
         pendingOrders,
@@ -138,3 +138,4 @@ export const useOrders = () => {
         orderId: orderIdRef.current
     };
 };
+
