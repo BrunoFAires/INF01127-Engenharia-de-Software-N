@@ -54,9 +54,6 @@ export class Post {
         this.comments--
     }
 
-    //TODO Sistematica para compartilhar um baralho(criar uma tabela chamada card_post que relaciona as cartas de um baralho a uma publicação)
-    //  Sistematica para realizar comentários nas publicações.(nova rota, com um novo campo e carregando os comentários da publicação)
-
     setUser = (user) => {
         this.user = user
     }
