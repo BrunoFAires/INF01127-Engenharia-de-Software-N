@@ -1,42 +1,156 @@
-import {Avatar, Button, Card, Layout, Row, Spin} from 'antd';
 import {AppHeader} from "../components/header";
-import {supabase} from "../service/supabaseClient";
-import React from "react";
 import {useHome} from "../hooks/useHome";
 import Meta from "antd/es/card/Meta";
+import {Avatar, Button, Card, Layout, Row, Spin, Col, Input, Select, Pagination, Typography, Form} from 'antd';
+import React, { useState, useEffect } from "react";
+import { fetchAnuncios, fetchTotalAnuncios } from '../service/adsService';
 
 const {Content} = Layout;
-
+const { Option } = Select;
+const { Title, Text } = Typography;
 
 export const Home = () => {
     const {loading, posts, advertisements, navigate} = useHome()
+
+    const [anuncios, setAnuncios] = useState([]);
+    const [totalAnuncios, setTotalAnuncios] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize] = useState(40);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [sortOrder, setSortOrder] = useState("price_asc");
+    const [filters, setFilters] = useState({
+        price: null,
+        artist: null,
+        rarity: null,
+        name: null,
+    });
+
+    useEffect(() => {
+        const loadAnuncios = async () => {
+            const paginatedAnuncios = await fetchAnuncios({
+                filters,
+                searchTerm,
+                sortOrder,
+                currentPage,
+                pageSize,
+            });
+            setAnuncios(paginatedAnuncios);
+        };
+
+        const loadTotalAnuncios = async () => {
+            const total = await fetchTotalAnuncios(filters);
+            setTotalAnuncios(total);
+        };
+
+        loadAnuncios();
+        loadTotalAnuncios();
+    }, [currentPage, searchTerm, sortOrder, filters]);
+
+    const handleSearch = value => {
+        setSearchTerm(value);
+        setCurrentPage(1); 
+    };
+
+    const handleSortOrderChange = value => {
+        setSortOrder(value);
+    };
+
+    const handleFilterChange = (filterName, value) => {
+        setFilters(prevFilters => ({
+            ...prevFilters,
+            [filterName]: value,
+        }));
+        setCurrentPage(1);
+    };
 
     return <Layout className={'min-h-[100vh]'}>
         <AppHeader/>
         <Content className={'px-[48px] mt-6 shadow-[#b6b6b6] shadow-xl'}>
             {loading ? <Row justify={"center"}><Spin/></Row> : <>
-                <Row justify={'end'} className='pb-3'>
-                    <Button size={'large'} type="primary" onClick={() => {
-                    }}>Acessar mercado de cartas</Button>
-                </Row>
-                <div
-                    className="flex items-center h-[50vh] overflow-x-auto overflow-clip space-x-3 mb-3 shadow-lg py-2">
-                    {advertisements.map((it, index) => (
-                        <Card
-                            key={index}
-                            className={'max-w-[400px]  content-center h-full flex-shrink-0  ml-2 mr-2'}
+                
+            <Row justify={'end'} className='pb-3'>
+                <Button size={'large'} type="primary" onClick={() => {
+                }}>Acessar mercado de cartas</Button>
+            </Row>
+
+            <Form layout="vertical" className="mb-4">
+                <Row gutter={[16, 16]} className="flex-wrap">
+                    <Col xs={24} sm={12} md={8} lg={4}>
+                        <Input
+                            placeholder="Pesquisar anúncios"
+                            enterButton
+                            size="large"
+                            onChange={e => handleSearch(e.target.value)}
+                            className="w-full"
+                        />
+                    </Col>
+                    <Col xs={24} sm={12} md={8} lg={4}>
+                        <Input placeholder="Preço" size="large" onChange={e => handleFilterChange('price', e.target.value)} className="w-full" />
+                    </Col>
+                    <Col xs={24} sm={12} md={8} lg={4}>
+                        <Input placeholder="Artista" size="large" onChange={e => handleFilterChange('artist', e.target.value)} className="w-full" />
+                    </Col>
+                    <Col xs={24} sm={12} md={8} lg={4}>
+                        <Input placeholder="Raridade" size="large" onChange={e => handleFilterChange('rarity', e.target.value)} className="w-full" />
+                    </Col>
+                    <Col xs={24} sm={12} md={8} lg={4}>
+                        <Input placeholder="Pokémon" size="large" onChange={e => handleFilterChange('name', e.target.value)} className="w-full" />
+                    </Col>
+                    <Col xs={24} sm={12} md={8} lg={4}>
+                        <Select
+                            defaultValue="price_asc"
+                            size="large"
+                            onChange={handleSortOrderChange}
+                            className="w-full"
                         >
-                            <Meta
-                                description={<div className='flex flex-col items-center'>
-                                    <p className='pb-3  text-center text-black'>{it.title}</p>
-                                    <img className='w-[75%] pl-2 pb-2' src={it.card.image}
-                                         alt=''/>
-                                    <p className='pb-3  text-center text-black'>R$ {it.price}</p>
-                                </div>}
-                            />
-                        </Card>
-                    ))}
+                            <Option value="price_asc">Menor preço</Option>
+                            <Option value="price_desc">Maior preço</Option>
+                            <Option value="title">Título (A-Z)</Option>
+                            <Option value="number_asc">Numeração</Option>
+                        </Select>
+                    </Col>
+                </Row>
+            </Form>
+            
+            {anuncios.length === 0 ? (
+                <div style={{ textAlign: 'center', marginTop: '50px' }}>
+                    <Title level={3}>Nenhum anúncio encontrado.</Title>
                 </div>
+            ) : (
+                <Row gutter={[16, 16]} style={{ marginTop: '24px' }}>
+                    {anuncios.map(anuncio => (
+                        <Col xs={24} sm={12} md={8} lg={6} xl={4} key={anuncio.id}>
+                            <Card
+                                cover={<img alt={anuncio.card_name} src={anuncio.card_image} />}
+                            >
+                                <Card.Meta
+                                    title={`${anuncio.title}`}
+                                    description={(
+                                         <div className="mt-2">
+                                            <div className="mt-2"><Text strong className="text-gray-600">Descrição: </Text><Text className="text-black">{anuncio.description}</Text></div>
+                                            <div className="mt-2"><Text strong className="text-gray-600">Preço: </Text><Text className="text-black">R$ {anuncio.price}</Text></div>
+                                            <div className="mt-1"><Text strong className="text-gray-600">Artista: </Text><Text className="text-black">{anuncio.card_artist}</Text></div>
+                                            <div className="mt-1"><Text strong className="text-gray-600">Raridade: </Text><Text className="text-black">{anuncio.card_rarity}</Text></div>
+                                            <div className="mt-1"><Text strong className="text-gray-600">Pokémon: </Text><Text className="text-black">{anuncio.card_name}</Text></div>
+                                        </div>
+                                    )}
+                                />
+                            </Card>
+                        </Col>
+                    ))}
+                </Row>
+            )}
+             <Row justify="center" className="mt-4">
+                <Pagination
+                    current={currentPage}
+                    pageSize={pageSize}
+                    total={totalAnuncios} 
+                    onChange={page => setCurrentPage(page)}
+                    showSizeChanger={false}
+                />
+            </Row>
+
+
                 <Row justify={'end'} className='pb-3'>
                     <Button size={'large'} type="primary" onClick={() => navigate('/community')}>Acessar Comunidade</Button>
                 </Row>
