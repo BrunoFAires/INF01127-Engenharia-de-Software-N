@@ -3,7 +3,7 @@ import {useHome} from "../hooks/useHome";
 import Meta from "antd/es/card/Meta";
 import {Avatar, Button, Card, Layout, Row, Spin, Col, Input, Select, Pagination, Typography, Form} from 'antd';
 import React, { useState, useEffect } from "react";
-import { fetchAnuncios, fetchTotalAnuncios } from '../service/adsService';
+import { fetchAds, fetchTotalAds } from '../service/adsService';
 
 const {Content} = Layout;
 const { Option } = Select;
@@ -12,8 +12,8 @@ const { Title, Text } = Typography;
 export const Home = () => {
     const {loading, posts, advertisements, navigate} = useHome()
 
-    const [anuncios, setAnuncios] = useState([]);
-    const [totalAnuncios, setTotalAnuncios] = useState(0);
+    const [ads, setAds] = useState([]);
+    const [totalAds, setTotalAds] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize] = useState(40);
     const [searchTerm, setSearchTerm] = useState("");
@@ -26,24 +26,24 @@ export const Home = () => {
     });
 
     useEffect(() => {
-        const loadAnuncios = async () => {
-            const paginatedAnuncios = await fetchAnuncios({
+        const loadAds = async () => {
+            const paginatedAds = await fetchAds({
                 filters,
                 searchTerm,
                 sortOrder,
                 currentPage,
                 pageSize,
             });
-            setAnuncios(paginatedAnuncios);
+            setAds(paginatedAds);
         };
 
-        const loadTotalAnuncios = async () => {
-            const total = await fetchTotalAnuncios(filters);
-            setTotalAnuncios(total);
+        const loadTotalAds = async () => {
+            const total = await fetchTotalAds(filters);
+            setTotalAds(total);
         };
 
-        loadAnuncios();
-        loadTotalAnuncios();
+        loadAds();
+        loadTotalAds();
     }, [currentPage, searchTerm, sortOrder, filters]);
 
     const handleSearch = value => {
@@ -112,26 +112,26 @@ export const Home = () => {
                 </Row>
             </Form>
             
-            {anuncios.length === 0 ? (
+            {ads.length === 0 ? (
                 <div style={{ textAlign: 'center', marginTop: '50px' }}>
                     <Title level={3}>Nenhum anúncio encontrado.</Title>
                 </div>
             ) : (
                 <Row gutter={[16, 16]} style={{ marginTop: '24px' }}>
-                    {anuncios.map(anuncio => (
-                        <Col xs={24} sm={12} md={8} lg={6} xl={4} key={anuncio.id}>
+                    {ads.map(ad => (
+                        <Col xs={24} sm={12} md={8} lg={6} xl={4} key={ad.id}>
                             <Card
-                                cover={<img alt={anuncio.card_name} src={anuncio.card_image} />}
+                                cover={<img alt={ad.card_name} src={ad.card_image} />}
                             >
                                 <Card.Meta
-                                    title={`${anuncio.title}`}
+                                    title={`${ad.title}`}
                                     description={(
                                          <div className="mt-2">
-                                            <div className="mt-2"><Text strong className="text-gray-600">Descrição: </Text><Text className="text-black">{anuncio.description}</Text></div>
-                                            <div className="mt-2"><Text strong className="text-gray-600">Preço: </Text><Text className="text-black">R$ {anuncio.price}</Text></div>
-                                            <div className="mt-1"><Text strong className="text-gray-600">Artista: </Text><Text className="text-black">{anuncio.card_artist}</Text></div>
-                                            <div className="mt-1"><Text strong className="text-gray-600">Raridade: </Text><Text className="text-black">{anuncio.card_rarity}</Text></div>
-                                            <div className="mt-1"><Text strong className="text-gray-600">Pokémon: </Text><Text className="text-black">{anuncio.card_name}</Text></div>
+                                            <div className="mt-2"><Text strong className="text-gray-600">Descrição: </Text><Text className="text-black">{ad.description}</Text></div>
+                                            <div className="mt-2"><Text strong className="text-gray-600">Preço: </Text><Text className="text-black">R$ {ad.price}</Text></div>
+                                            <div className="mt-1"><Text strong className="text-gray-600">Artista: </Text><Text className="text-black">{ad.card_artist}</Text></div>
+                                            <div className="mt-1"><Text strong className="text-gray-600">Raridade: </Text><Text className="text-black">{ad.card_rarity}</Text></div>
+                                            <div className="mt-1"><Text strong className="text-gray-600">Pokémon: </Text><Text className="text-black">{ad.card_name}</Text></div>
                                         </div>
                                     )}
                                 />
@@ -144,7 +144,7 @@ export const Home = () => {
                 <Pagination
                     current={currentPage}
                     pageSize={pageSize}
-                    total={totalAnuncios} 
+                    total={totalAds} 
                     onChange={page => setCurrentPage(page)}
                     showSizeChanger={false}
                 />

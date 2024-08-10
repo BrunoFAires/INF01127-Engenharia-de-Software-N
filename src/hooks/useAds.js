@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {findByName} from "../service/pokemonClient";
 import {Advertisements} from "../models/advertisements";
-import {insertAnuncio, updateAnuncio, deleteAnuncio, myAnuncios} from "../service/adsService";
+import {insertAd, updateAd, deleteAd, myAds} from "../service/adsService";
 import {useLocation, useNavigate} from "react-router-dom";
 import {Card} from "../models/card";
 import {message, Modal} from "antd";
@@ -16,33 +16,33 @@ export const useAds = () => {
     const [totalPages, setTotalPages] = useState(0);
     const [actualPage, setActualPage] = useState(1);
     const [isValidForm, setIsValidForm] = useState(false);
-    const [anuncios, setAnuncios] = useState([]);
+    const [ads, setAds] = useState([]);
     const [isAddAdModalOpen, setIsAddAdModalOpen] = useState(false);
     const {currentUser, loading: loadingUser} = useAuthHook()
-    const [anuncio, setAnuncio] = useState(new Advertisements(null, '', '', 1, 1, null, null, {}, currentUser, true));
+    const [ad, setAd] = useState(new Advertisements(null, '', '', 1, 1, null, null, {}, currentUser, true));
 
-    const isSelectedCard = (cardId) => anuncio.card && anuncio.card.card_id === cardId;
+    const isSelectedCard = (cardId) => ad.card && ad.card.card_id === cardId;
     const {state} = useLocation();
-    const anuncioToEdit = state?.anuncioToEdit;
+    const adToEdit = state?.adToEdit;
 
     useEffect(() => {
-        if (anuncioToEdit) {
-            const anuncioObj = new Advertisements();
-            anuncioObj.fromObject(anuncioToEdit);
-            setAnuncio(anuncioObj);
+        if (adToEdit) {
+            const adObj = new Advertisements();
+            adObj.fromObject(adToEdit);
+            setAd(adObj);
         }
-    }, [anuncioToEdit]);
+    }, [adToEdit]);
 
     useEffect(() => {
-        const validForm = anuncio.title && anuncio.description && anuncio.quantity > 0 && anuncio.price > 0;
+        const validForm = ad.title && ad.description && ad.quantity > 0 && ad.price > 0;
         setIsValidForm(validForm);
-    }, [anuncio]);
+    }, [ad]);
 
-    const resetAnuncio = () => {
+    const resetAd = () => {
         if (!currentUser) {
             return
         }
-        setAnuncio(new Advertisements(null, '', '', 1, 1, null, null, {}, currentUser, true));
+        setAd(new Advertisements(null, '', '', 1, 1, null, null, {}, currentUser, true));
     };
 
     const showModal = () => {
@@ -62,32 +62,32 @@ export const useAds = () => {
     };
 
     const handleChangeTitle = (data) => {
-        anuncio.setTitle(data.target.value);
+        ad.setTitle(data.target.value);
         setUpdate(!update);
     };
 
     const handleChangeDescription = (data) => {
-        anuncio.setDescription(data.target.value);
+        ad.setDescription(data.target.value);
         setUpdate(!update);
     };
 
     const handleChangeAdType = (value) => {
-        anuncio.setStatus(value);
+        ad.setStatus(value);
         setUpdate(!update);
     };
 
     const handleChangeSale = (value) => {
-        anuncio.setSale(value);
+        ad.setSale(value);
         setUpdate(!update);
     };
 
     const handleChangeQuantity = (value) => {
-        anuncio.setQuantity(value);
+        ad.setQuantity(value);
         setUpdate(!update);
     };
 
     const handleChangePrice = (value) => {
-        anuncio.setPrice(value);
+        ad.setPrice(value);
         setUpdate(!update);
     };
 
@@ -119,55 +119,55 @@ export const useAds = () => {
             selectedCard.type,
         );
 
-        anuncio.setCard(card);
+        ad.setCard(card);
         setUpdate(!update);
     };
 
     const handleRemoveCard = () => {
-        anuncio.setCard(null);
+        ad.setCard(null);
         setUpdate(!update);
     };
 
     const handleSubmit = async () => {
         try {
-            if (anuncio.id) {
-                await updateAnuncio(anuncio);
+            if (ad.id) {
+                await updateAd(ad);
             } else {
-                await insertAnuncio(anuncio);
+                await insertAd(ad);
             }
         } catch (error) {
-            console.error('Error submitting anuncio:', error);
+            console.error('Error submitting ads:', error);
             throw error;
         }
     };
 
 
     useEffect(() => {
-        fetchAnuncios();
+        fetchAds();
     }, [currentUser]);
 
-    const fetchAnuncios = async () => {
+    const fetchAds = async () => {
         if (!currentUser) {
             return
         }
         setLoading(true);
         try {
-            const response = await myAnuncios(currentUser);
-            setAnuncios(response);
+            const response = await myAds(currentUser);
+            setAds(response);
         } catch (error) {
-            console.error('Failed to fetch anuncios:', error);
+            console.error('Failed to fetch ads:', error);
         }
         setLoading(false);
     };
 
     const handleEdit = (ads) => {
-        anuncio.setId(ads.id);
-        anuncio.setTitle(ads.title);
-        anuncio.setDescription(ads.description);
-        anuncio.setSale(ads.sale);
-        anuncio.setQuantity(ads.quantity);
-        anuncio.setPrice(ads.price);
-        anuncio.setCard(ads.card);
+        ad.setId(ads.id);
+        ad.setTitle(ads.title);
+        ad.setDescription(ads.description);
+        ad.setSale(ads.sale);
+        ad.setQuantity(ads.quantity);
+        ad.setPrice(ads.price);
+        ad.setCard(ads.card);
         setIsAddAdModalOpen(true);
     };
 
@@ -176,9 +176,9 @@ export const useAds = () => {
             title: 'Tem certeza que deseja remover este anúncio?',
             onOk: async () => {
                 try {
-                    await deleteAnuncio(id);
+                    await deleteAd(id);
                     message.success('Anúncio removido com sucesso');
-                    fetchAnuncios();
+                    fetchAds();
                 } catch (error) {
                     message.error('Falha ao remover anúncio');
                 }
@@ -187,7 +187,7 @@ export const useAds = () => {
     };
 
     const showAddAdModal = () => {
-        resetAnuncio();
+        resetAd();
         setIsAddAdModalOpen(true);
     };
 
@@ -195,7 +195,7 @@ export const useAds = () => {
         try {
             await handleSubmit();
             message.success('Anúncio publicado com sucesso');
-            fetchAnuncios();
+            fetchAds();
             setIsAddAdModalOpen(false);
         } catch (error) {
             message.error('Falha ao publicar anúncio');
@@ -228,11 +228,11 @@ export const useAds = () => {
         handleAddCard,
         handleRemoveCard,
         handleSubmit,
-        anuncio,
-        resetAnuncio,
+        ad,
+        resetAd,
         isValidForm,
         showAddAdModal,
-        anuncios,
+        ads,
         handleEdit,
         handleRemove,
         isAddAdModalOpen,

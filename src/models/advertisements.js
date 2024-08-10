@@ -60,15 +60,15 @@ export class Advertisements {
         this.card = new Card(card.id, card.card_id, card.name, card.description, card.image, card.artist, card.rarity, card.type, this);
     }
 
-    fromObject(anuncio) {
-        this.id = anuncio.id;
-        this.title = anuncio.title;
-        this.description = anuncio.description;
-        this.quantity = anuncio.quantity;
-        this.status = anuncio.status;
-        this.createdAt = anuncio.created_at;
-        this.price = anuncio.price;
-        this.card = anuncio.card ? new Card(anuncio.card.id, anuncio.card.card_id, anuncio.card.name, anuncio.card.description, anuncio.card.image, anuncio.card.artist, anuncio.card.rarity, anuncio.card.type) : null;
-        this.seller = anuncio.seller;
+    fromObject(ad) {
+        this.id = ad.id;
+        this.title = ad.title;
+        this.description = ad.description;
+        this.quantity = ad.quantity;
+        this.status = ad.status;
+        this.createdAt = ad.created_at;
+        this.price = ad.price;
+        this.card = ad.card ? new Card(ad.card.id, ad.card.card_id, ad.card.name, ad.card.description, ad.card.image, ad.card.artist, ad.card.rarity, ad.card.type) : null;
+        this.seller = ad.seller;
     }
 }
