@@ -1,7 +1,8 @@
-import { Button, Card, Col, InputNumber, Row, Tag, Typography } from 'antd';
+import { Button, Card, Col, Collapse, InputNumber, Row, Tag, Typography } from 'antd';
 import { useState } from 'react';
 
 const { Title, Text } = Typography;
+const { Panel } = Collapse;
 
 const ContentSection = ({ title, orders, emptyText, onConfirm, onRate }) => {
     const [rating, setRating] = useState({});
@@ -33,76 +34,79 @@ const ContentSection = ({ title, orders, emptyText, onConfirm, onRate }) => {
                     orders.map((item) => (
                         item.order_user.map((userOrder) => (
                             <Col xs={24} sm={12} md={8} lg={6} xl={4} key={userOrder.id}>
-                                <Card
-                                    cover={<img alt="Seu Pedido" src={userOrder.advertisement_id?.card?.image} />}
-                                    actions={[
-                                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-                                            {onConfirm && !userOrder.finished && item.approved &&(
-                                                <Button type="primary" onClick={() => onConfirm(item.id)} style={{ marginBottom: '8px' }}>
-                                                    Confirmar recebimento
-                                                </Button>
-                                            )}
-                                            {onConfirm && !userOrder.finished && !item.approved &&(
-                                                <Tag color="blue" className="mt-2">
-                                                Aguardando troca ser aceita
-                                                </Tag>
-                                            )}
-                                            {onRate && userOrder.finished && !userOrder.evaluated && (
-                                                <>
-                                                    <InputNumber
-                                                        min={0}
-                                                        max={10}
-                                                        value={rating[userOrder.id]}
-                                                        onChange={(value) => handleRatingChange(value, userOrder.id)}
-                                                        onKeyPress={handleKeyPress}
-                                                    />
-                                                    <Button
-                                                        type="primary"
-                                                        onClick={() => onRate(userOrder.advertisement_id?.seller?.id, rating[userOrder.id], item.id)}
-                                                        style={{ marginTop: '8px' }}
-                                                    >
-                                                        Avaliar Vendedor
-                                                    </Button>
-                                                </>
-                                            )}
-                                        </div>
-                                    ]}
-                                >
-                                    <Card.Meta
-                                        title={`Pedido #${userOrder.id}`}
-                                        description={(
-                                            <div className="mt-1">
-                                                <Text strong className="text-gray-600">Vendido por: </Text>
-                                                <Text className="text-black"> {userOrder.advertisement_id?.seller?.name}</Text>
-                                                <div className="mt-1">
-                                                    <Text strong className="text-gray-600">Preço: </Text>
-                                                    <Text className="text-black">R$ {userOrder.advertisement_id?.price * userOrder.quantity}</Text>
+                                <Collapse>
+                                    <Panel header={`Pedido #${userOrder.id}`} key={userOrder.id}>
+                                        <Card
+                                            cover={<img alt="Seu Pedido" src={userOrder.advertisement_id?.card?.image} />}
+                                            actions={[
+                                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+                                                    {onConfirm && !userOrder.finished && item.approved && (
+                                                        <Button type="primary" onClick={() => onConfirm(item.id)} style={{ marginBottom: '8px' }}>
+                                                            Confirmar recebimento
+                                                        </Button>
+                                                    )}
+                                                    {onConfirm && !userOrder.finished && !item.approved && (
+                                                        <Tag color="blue" className="mt-2">
+                                                            Aguardando troca ser aceita
+                                                        </Tag>
+                                                    )}
+                                                    {onRate && userOrder.finished && !userOrder.evaluated && (
+                                                        <>
+                                                            <InputNumber
+                                                                min={0}
+                                                                max={10}
+                                                                value={rating[userOrder.id]}
+                                                                onChange={(value) => handleRatingChange(value, userOrder.id)}
+                                                                onKeyPress={handleKeyPress}
+                                                            />
+                                                            <Button
+                                                                type="primary"
+                                                                onClick={() => onRate(userOrder.advertisement_id?.seller?.id, rating[userOrder.id], item.id)}
+                                                                style={{ marginTop: '8px' }}
+                                                            >
+                                                                Avaliar Vendedor
+                                                            </Button>
+                                                        </>
+                                                    )}
                                                 </div>
-                                                <div className="mt-1">
-                                                    <Text strong className="text-gray-600">Quantidade: </Text>
-                                                    <Text className="text-black">{userOrder.quantity}</Text>
-                                                </div>
-                                                <div className="mt-1">
-                                                    <Text strong className="text-gray-600">Negócio: </Text>
-                                                    <Text className="text-black">{item.deal ? 'Troca' : 'Venda'}</Text>
-                                                </div>
-                                                <div className="mt-1">
-                                                    <Text strong className="text-gray-600">Status: </Text>
-                                                    <Text className="text-black">{item.approved ? 'Confirmado' : 'Pendente'}</Text>
-                                                </div>
-                                                <div className="mt-1">
-                                                    <Text strong className="text-gray-600">Entregue: </Text>
-                                                    <Text className="text-black">{userOrder.finished ? 'Sim' : 'Não'}</Text>
-                                                </div>
-                                                {userOrder.finished && userOrder.evaluated && (
-                                                    <Tag color="green" className="mt-2">
-                                                        Vendedor Avaliado
-                                                    </Tag>
+                                            ]}
+                                        >
+                                            <Card.Meta
+                                                description={(
+                                                    <div className="mt-1">
+                                                        <Text strong className="text-gray-600">{item.deal ? 'Troca com:' : 'Vendido por:'} </Text>
+                                                        <Text className="text-black"> {userOrder.advertisement_id?.seller?.name}</Text>
+                                                        <div className="mt-1">
+                                                            <Text strong className="text-gray-600">Preço: </Text>
+                                                            <Text className="text-black">R$ {userOrder.advertisement_id?.price * userOrder.quantity}</Text>
+                                                        </div>
+                                                        <div className="mt-1">
+                                                            <Text strong className="text-gray-600">Quantidade: </Text>
+                                                            <Text className="text-black">{userOrder.quantity}</Text>
+                                                        </div>
+                                                        <div className="mt-1">
+                                                            <Text strong className="text-gray-600">Negócio: </Text>
+                                                            <Text className="text-black">{item.deal ? 'Troca' : 'Venda'}</Text>
+                                                        </div>
+                                                        <div className="mt-1">
+                                                            <Text strong className="text-gray-600">Status: </Text>
+                                                            <Text className="text-black">{item.approved ? 'Confirmado' : 'Pendente'}</Text>
+                                                        </div>
+                                                        <div className="mt-1">
+                                                            <Text strong className="text-gray-600">Entregue: </Text>
+                                                            <Text className="text-black">{userOrder.finished ? 'Sim' : 'Não'}</Text>
+                                                        </div>
+                                                        {userOrder.finished && userOrder.evaluated && (
+                                                            <Tag color="green" className="mt-2">
+                                                                Vendedor Avaliado
+                                                            </Tag>
+                                                        )}
+                                                    </div>
                                                 )}
-                                            </div>
-                                        )}
-                                    />
-                                </Card>
+                                            />
+                                        </Card>
+                                    </Panel>
+                                </Collapse>
                             </Col>
                         ))
                     ))
