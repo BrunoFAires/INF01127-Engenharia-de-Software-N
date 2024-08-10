@@ -68,3 +68,52 @@ export const getAnuncios = async (i) => {
         throw error;
     }
 }
+
+export const fetchAnuncios = async ({ filters, searchTerm, sortOrder, currentPage, pageSize }) => {
+    const { data, error } = await supabase
+        .rpc('fetch_filtered_anuncios', {
+            filter_price: filters.price || null,
+            filter_artist: filters.artist || null,
+            filter_rarity: filters.rarity || null,
+            filter_pokemon: filters.name || null,
+            search_term: searchTerm || '',
+        });
+
+    if (error) {
+        return [];
+    }
+
+    let sortedData = data;
+    if (sortOrder === "number_asc") {
+        sortedData = sortedData.sort((a, b) => a.card_id - b.card_id);
+    } else if (sortOrder === "price_asc") {
+        sortedData = sortedData.sort((a, b) => a.price - b.price);
+    } else if (sortOrder === "price_desc") {
+        sortedData = sortedData.sort((a, b) => b.price - a.price);
+    } else if (sortOrder === "title") {
+        sortedData = sortedData.sort((a, b) => a.title.localeCompare(b.title));
+    }
+
+    const paginatedData = sortedData.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
+    return paginatedData;
+};
+
+export const fetchTotalAnuncios = async (filters) => {
+    let query = supabase
+        .from('advertisements')
+        .select('id', { count: 'exact' });
+
+    if (filters.price) query = query.gte('price', filters.price);
+    if (filters.artist) query = query.eq('card.artist', filters.artist);
+    if (filters.rarity) query = query.eq('card.rarity', filters.rarity);
+    if (filters.name) query = query.eq('card.name', filters.name);
+
+    const { count, error } = await query;
+
+    if (error) {
+        return 0;
+    }
+
+    return count;
+};
