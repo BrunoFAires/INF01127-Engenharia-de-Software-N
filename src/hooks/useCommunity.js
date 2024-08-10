@@ -36,7 +36,6 @@ export const useCommunity = () => {
     const loadMoreData = () => {
         let currentTotalPost = 0
         if(!searchByName){
-            console.log(actualPage)
             findPostByLikes(actualPage)
                 .then(result => {
                     currentTotalPost = posts.length + result.length
@@ -48,7 +47,6 @@ export const useCommunity = () => {
                 setHasMoreData(currentTotalPost < totalPosts)
             })
         }else{
-            console.log('Brn')
             findPostByCard(actualPage, searchValue)
                 .then(result => {
                     currentTotalPost = posts.length + result.length

@@ -1,4 +1,5 @@
 import { supabase } from "./supabaseClient";
+import {Advertisements} from "../models/advertisements";
 
 export const insertAnuncio = async (anuncio) => {
     await supabase.rpc('add_asd_with_card', {
@@ -43,6 +44,25 @@ export const deleteAnuncio = async (anuncioId) => {
         }
 
         return data;
+    } catch (error) {
+        console.error("Error in deleteAnuncio function: ", error);
+        throw error;
+    }
+}
+
+export const getAnuncios = async (i) => {
+    try {
+        const { data, error } = await supabase
+            .from('advertisements')
+            .select('*, card(*)')
+            .order('created_at', {ascending: false})
+            .range(i * 10, 9 + (i * 10))
+
+        if (error) {
+            throw 'Erro ao carregar os anúncios';
+        }
+
+        return data.map(it => {return new Advertisements(it.id, it.title, it.description, it.quantity, it.status, it.created_at, it.price, it.card, null, it.sale)})
     } catch (error) {
         console.error("Error in deleteAnuncio function: ", error);
         throw error;

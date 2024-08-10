@@ -13,6 +13,7 @@ import {useAuthHook} from "./hooks/useAuthHook";
 import {Community} from "./pages/Community";
 import {Post} from "./pages/Post";
 import {Profile} from "./pages/Profile";
+import {Sales} from "./pages/Sales";
 
 function App() {
     const {loading, currentUser} = useAuthHook();
@@ -72,6 +73,14 @@ function App() {
                 element={
                     <ProtectedRoute user={currentUser}>
                         <Profile/>
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/sales"
+                element={
+                    <ProtectedRoute user={currentUser}>
+                        <Sales/>
                     </ProtectedRoute>
                 }
             />

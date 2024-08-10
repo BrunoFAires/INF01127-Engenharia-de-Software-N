@@ -12,12 +12,17 @@ export const menu = [
     {
         label: 'Comunidade',
         route: '/community',
-        key: 'logout'
+        key: 'community'
     },
     {
         label: 'Meus Anúncios',
         route: '/my-ads',
         key: 'my-ads'
+    },
+    {
+        label: 'Vendas',
+        route: '/sales',
+        key: 'sales'
     },
     {
         label: 'Perfil',

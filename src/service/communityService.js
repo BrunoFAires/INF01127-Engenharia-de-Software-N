@@ -140,8 +140,6 @@ export const addComment = async (comment) => {
 }
 
 export const findPostByCard = async (i, cardName) => {
-    console.log(i)
-
     const posts = await supabase
         .from('post')
         .select('*, profile(*), card_post!inner(*, card!inner(*))')
@@ -150,7 +148,6 @@ export const findPostByCard = async (i, cardName) => {
     if (!posts.data || posts.data.lenght === 0) {
         return []
     }
-    console.log(posts.data)
 
     const postIds = posts.data.map(it => it.id);
     const currentUser = await getCurrentUser()
