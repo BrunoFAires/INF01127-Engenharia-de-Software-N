@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { Order_User } from '../models/order_user';
-import { CompletedOrders, ConfirmDelivery, PendingOrders, RatePlayers } from "../service/orderService";
+import { Order } from "../models/order";
+import { CompletedOrders2, ConfirmDelivery, PendingOrders2, RatePlayers } from "../service/orderService";
 import { useAuthHook } from "./useAuthHook";
-
 
 export const useOrders = () => {
     const [pendingOrders, setPendingOrders] = useState([]);
@@ -20,36 +19,33 @@ export const useOrders = () => {
     useEffect(() => {
         const fetchPendingOrders = async () => {
             if (loadingUser) {
-                console.log("loadingUser is true, returning");
                 return;
             }
 
             if (!currentUser) {
-                console.log("currentUser is not defined, returning");
                 return;
             }
 
             try {
                 const pendingOrders1 = [];
-                const { data, error } = await PendingOrders(currentUser);
+                const { data, error } = await PendingOrders2(currentUser);
                 if (error) {
                     console.error("Error fetching pending orders:", error);
                     throw error;
                 }
 
-                data.forEach(Order_UserResult => {
+                data.forEach(OrderResult => {
 
-                    const orderUser = new Order_User(
-                        Order_UserResult.id,
-                        Order_UserResult.order_id,
-                        currentUser,
-                        Order_UserResult.advertisement_id,
-                        Order_UserResult.finished,
-                        Order_UserResult.quantity,
-                        Order_UserResult.evaluated
+                    const orderVar = new Order(
+                        OrderResult.id,
+                        OrderResult.deal,
+                        OrderResult.created_at,
+                        OrderResult.finished_at,
+                        OrderResult.approved,
+                        OrderResult.order_user
                     );
-                    pendingOrders1.push(orderUser);
-                    orderIdRef.current.add(Order_UserResult.id);
+                    pendingOrders1.push(orderVar);
+                    orderIdRef.current.add(OrderResult.id);
                 });
                 setPendingOrders(pendingOrders1);
                 setLoading(false);
@@ -67,7 +63,6 @@ export const useOrders = () => {
     useEffect(() => {
         const fetchCompletedOrders = async () => {
             if (loadingUser) {
-                console.log("loadingUser is true, returning");
                 return;
             }
 
@@ -78,23 +73,22 @@ export const useOrders = () => {
 
             try {
                 const completedOrders = [];
-                const { data, error } = await CompletedOrders(currentUser);
+                const { data, error } = await CompletedOrders2(currentUser);
                 if (error) {
                     console.error("Error fetching pending orders:", error);
                     throw error;
                 }
 
-                data.forEach(Order_UserResult => {
-                    const orderUser = new Order_User(
-                        Order_UserResult.id,
-                        Order_UserResult.order_id,
-                        currentUser,
-                        Order_UserResult.advertisement_id,
-                        Order_UserResult.finished,
-                        Order_UserResult.quantity,
-                        Order_UserResult.evaluated
+                data.forEach(OrderResult => {
+                    const orderVar = new Order(
+                        OrderResult.id,
+                        OrderResult.deal,
+                        OrderResult.created_at,
+                        OrderResult.finished_at,
+                        OrderResult.approved,
+                        OrderResult.order_user
                     );
-                    completedOrders.push(orderUser);
+                    completedOrders.push(orderVar);
                 });
                 setCompletedOrders(completedOrders);
                 setLoading(false);
@@ -105,7 +99,7 @@ export const useOrders = () => {
         };
 
         fetchCompletedOrders();
-    }, [currentUser, loadingUser,updateCompletedOrders]);
+    }, [currentUser, loadingUser]);
 
     
 
@@ -116,19 +110,18 @@ export const useOrders = () => {
             const newPendingOrders = pendingOrders.filter(it => it.id !== orderId)
             setPendingOrders(newPendingOrders)
             setCompletedOrders([...completedOrders, order])
-            await ConfirmDelivery(orderId);
+            await ConfirmDelivery(orderId, currentUser.id);
         } catch (error) {
             console.error("Error confirming delivery:", error);
         }
     };
 
     const   ratePlayers = async (User, RatingGrade, orderId) => {
-        console.log("testando",User,RatingGrade,orderId)
         try {
-            await RatePlayers (User,RatingGrade, orderId);
+            //await RatePlayers (User,RatingGrade, orderId);
             const order = completedOrders.find(it => it.id === orderId)
             order.evaluatedOrder()
-            setEvaluatedOrders([...evaluatedOrders, order])
+            await RatePlayers (User,RatingGrade, orderId, currentUser);
         } catch (error) {
             console.error("Error rating players", error);
         }}
@@ -141,6 +134,7 @@ export const useOrders = () => {
         error,
         confirmDelivery,
         ratePlayers,
+        currentUser,
         orderId: orderIdRef.current
     };
 };

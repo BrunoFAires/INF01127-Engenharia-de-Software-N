@@ -11,7 +11,7 @@ export const menu = [
     },
     {
         label: 'Meus Pedidos',
-        route: '/order',
+        route: '/orders',
         key: 'order'
     },
     {

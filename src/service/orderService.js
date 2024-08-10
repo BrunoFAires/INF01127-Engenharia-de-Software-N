@@ -17,7 +17,7 @@ export const CompletedOrders = async (user) => {
         .eq('finished', true);
 }
 
-export const RatePlayers = async (user, Rate, idOrder) => {
+export const RatePlayers = async (user, Rate, idOrder, currentUser) => {
     const { data, error } = await supabase
         .from('profile')
         .select('*')
@@ -43,36 +43,68 @@ export const RatePlayers = async (user, Rate, idOrder) => {
             console.error('Error updating profile:', insertError);
         throw insertError;
         }
-
-   
-        const { error : insertError2 } = await supabase
+        
+        const { data :data2, error: error2 } = await supabase
+        .from('order_user')
+        .select('*')
+        .eq('order_id', idOrder)
+        .eq('user_id', currentUser.id)
+        .single(); 
+        if (error2) {
+            throw new Error(`Erro ao buscar order_user: ${error.message}`);
+        }
+    if (data2) {
+       
+        const { error: updateError } = await supabase
             .from('order_user')
             .update({ evaluated: true })
-            .eq('id',idOrder );
-        if (insertError2) throw insertError2;
+            .eq('id', data2.id);
+            if (updateError) {
+                throw new Error(`Erro ao atualizar order_user: ${updateError.message}`);
+            }
+    }
 
 };
-export const ConfirmDelivery = async (orderUserId) => {
+export const ConfirmDelivery = async (orderId, User) => {
     
-    const { error: error1 } = await supabase
-        .from('order_user')
-        .update({ finished: true })
-        .eq('id', orderUserId);
-    if (error1) throw error1;
-
-
-    const { data: orderUser, error: error2 } = await supabase
-        .from('order_user')
-        .select('order_id')
-        .eq('id', orderUserId)
-        .single();
-    if (error2) throw error2;
-
-
-    const now = new Date().toISOString();
-    const { error: error3 } = await supabase
-        .from('order')
-        .update({ finished_at: now })
-        .eq('id', orderUser.order_id);
-    if (error3) throw error3;
+    const { data, error } = await supabase
+            .from('order_user')
+            .select('*')
+            .eq('order_id', orderId)
+            .eq('user_id', User)
+            .single();  
+            if (error) {
+                throw new Error(`Erro ao buscar order_user: ${error.message}`);
+            }
+        if (data) {
+           
+            const { error: updateError } = await supabase
+                .from('order_user')
+                .update({ finished: true })
+                .eq('id', data.id);
+                if (updateError) {
+                    throw new Error(`Erro ao atualizar order_user: ${updateError.message}`);
+                }
+        }
 };
+
+
+
+export const PendingOrders2 = async (User) => {
+    
+    return supabase
+    .from('order')
+    .select(`*,order_user!inner(*,advertisement_id (*,card(*),seller(*)))`)
+    .eq('order_user.finished', false)
+    .eq('order_user.user_id', User.id);
+};
+
+export const CompletedOrders2 = async (User) => {
+    
+    return supabase
+    .from('order')
+    .select(`*,order_user!inner(*,advertisement_id (*,card(*),seller(*)))`)
+    .eq('order_user.finished', true)
+    .eq('order_user.user_id', User.id);
+};
+

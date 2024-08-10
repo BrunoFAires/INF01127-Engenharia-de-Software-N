@@ -7,11 +7,20 @@ const ContentSection = ({ title, orders, emptyText, onConfirm, onRate }) => {
     const [rating, setRating] = useState({});
 
     const handleRatingChange = (value, orderId) => {
-        setRating(prevRatings => ({
-            ...prevRatings,
-            [orderId]: value
-        }));
+        if (!isNaN(value)) {
+            setRating(prevRatings => ({
+                ...prevRatings,
+                [orderId]: value
+            }));
+        }
     };
+
+    const handleKeyPress = (e) => {
+        if (!/[0-9]/.test(e.key)) {
+            e.preventDefault();
+        }
+    };
+
     return (
         <>
             <Title level={3}>{title}</Title>
@@ -22,64 +31,80 @@ const ContentSection = ({ title, orders, emptyText, onConfirm, onRate }) => {
                     </Col>
                 ) : (
                     orders.map((item) => (
-                        <Col xs={24} sm={12} md={8} lg={6} xl={4} key={item.id}>
-                            <Card
-                                cover={<img alt="Seu Pedido" src={item.advertisement_id?.card?.image} />}
-                                actions={[
-                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-                                        {onConfirm && !item.finished && (
-                                            <Button type="primary" onClick={() => onConfirm(item.id)} style={{ marginBottom: '8px' }}>
-                                                Confirmar recebimento
-                                            </Button>
-                                        )}
-                                        {onRate && item.finished && !item.evaluated && (
-                                            <>
-                                                <InputNumber
-                                                    min={0}
-                                                    max={10}
-                                                    value={rating[item.id]}
-                                                    onChange={(value) => handleRatingChange(value, item.id)}
-                                                />
-                                                <Button
-                                                    type="primary"
-                                                    onClick={() => onRate(item.advertisement_id?.seller?.id, rating[item.id], item.id)}
-                                                    style={{ marginTop: '8px' }}
-                                                >
-                                                    Avaliar Vendedor
+                        item.order_user.map((userOrder) => (
+                            <Col xs={24} sm={12} md={8} lg={6} xl={4} key={userOrder.id}>
+                                <Card
+                                    cover={<img alt="Seu Pedido" src={userOrder.advertisement_id?.card?.image} />}
+                                    actions={[
+                                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+                                            {onConfirm && !userOrder.finished && item.approved &&(
+                                                <Button type="primary" onClick={() => onConfirm(item.id)} style={{ marginBottom: '8px' }}>
+                                                    Confirmar recebimento
                                                 </Button>
-                                            </>
-                                        )}
-                                    </div>
-                                ]}
-                            >
-                                <Card.Meta
-                                    title={`Pedido #${item.order_id}`}
-                                    description={(
-                                        <div className="mt-1">
-                                           <Text strong className="text-gray-600">Vendido por: </Text>
-                                           <Text className="text-black"> {item.advertisement_id.seller.name}</Text>
-                                            <div className="mt-1">
-                                                <Text strong className="text-gray-600">Preço: </Text>
-                                                <Text className="text-black">R$ {item.advertisement_id?.price * item.quantity}</Text>
-                                            </div>
-                                            <div className="mt-1">
-                                                <Text strong className="text-gray-600">Quantidade: </Text>
-                                                <Text className="text-black">{item.quantity}</Text>
-                                            </div>
-                                            <div className="mt-1">
-                                                <Text strong className="text-gray-600">Entregue: </Text>
-                                                <Text className="text-black">{item.finished ? 'Sim' : 'Não'}</Text>
-                                            </div>
-                                            {item.finished && item.evaluated && (
-                                                <Tag color="green" className="mt-2">
-                                                    Vendedor Avaliado
+                                            )}
+                                            {onConfirm && !userOrder.finished && !item.approved &&(
+                                                <Tag color="blue" className="mt-2">
+                                                Aguardando troca ser aceita
                                                 </Tag>
                                             )}
+                                            {onRate && userOrder.finished && !userOrder.evaluated && (
+                                                <>
+                                                    <InputNumber
+                                                        min={0}
+                                                        max={10}
+                                                        value={rating[userOrder.id]}
+                                                        onChange={(value) => handleRatingChange(value, userOrder.id)}
+                                                        onKeyPress={handleKeyPress}
+                                                    />
+                                                    <Button
+                                                        type="primary"
+                                                        onClick={() => onRate(userOrder.advertisement_id?.seller?.id, rating[userOrder.id], item.id)}
+                                                        style={{ marginTop: '8px' }}
+                                                    >
+                                                        Avaliar Vendedor
+                                                    </Button>
+                                                </>
+                                            )}
                                         </div>
-                                    )}
-                                />
-                            </Card>
-                        </Col>
+                                    ]}
+                                >
+                                    <Card.Meta
+                                        title={`Pedido #${userOrder.id}`}
+                                        description={(
+                                            <div className="mt-1">
+                                                <Text strong className="text-gray-600">Vendido por: </Text>
+                                                <Text className="text-black"> {userOrder.advertisement_id?.seller?.name}</Text>
+                                                <div className="mt-1">
+                                                    <Text strong className="text-gray-600">Preço: </Text>
+                                                    <Text className="text-black">R$ {userOrder.advertisement_id?.price * userOrder.quantity}</Text>
+                                                </div>
+                                                <div className="mt-1">
+                                                    <Text strong className="text-gray-600">Quantidade: </Text>
+                                                    <Text className="text-black">{userOrder.quantity}</Text>
+                                                </div>
+                                                <div className="mt-1">
+                                                    <Text strong className="text-gray-600">Negócio: </Text>
+                                                    <Text className="text-black">{item.deal ? 'Troca' : 'Venda'}</Text>
+                                                </div>
+                                                <div className="mt-1">
+                                                    <Text strong className="text-gray-600">Status: </Text>
+                                                    <Text className="text-black">{item.approved ? 'Confirmado' : 'Pendente'}</Text>
+                                                </div>
+                                                <div className="mt-1">
+                                                    <Text strong className="text-gray-600">Entregue: </Text>
+                                                    <Text className="text-black">{userOrder.finished ? 'Sim' : 'Não'}</Text>
+                                                </div>
+                                                {userOrder.finished && userOrder.evaluated && (
+                                                    <Tag color="green" className="mt-2">
+                                                        Vendedor Avaliado
+                                                    </Tag>
+                                                )}
+                                            </div>
+                                        )}
+                                    />
+                                </Card>
+                            </Col>
+                        ))
                     ))
                 )}
             </Row>

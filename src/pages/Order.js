@@ -8,7 +8,7 @@ const { Title, Text } = Typography;
 const { Content } = Layout;
 
 export const Order = () => {
-  const { pendingOrders, completedOrders, loading, error, confirmDelivery, ratePlayers } = useOrders();
+  const { pendingOrders, completedOrders, loading, error, confirmDelivery, ratePlayers, currentUser } = useOrders();
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
 
@@ -18,6 +18,7 @@ export const Order = () => {
   const [selectedAd_Id, setSelectedAd_Id] = useState(null); 
 
   const showConfirmModal = (orderId) => {
+
     setSelectedOrder(orderId);
     setIsConfirmModalOpen(true);
   };
@@ -45,7 +46,7 @@ export const Order = () => {
 
   const handleRateConfirmModalOk = async () => {
     try {
-      await ratePlayers(selectedSeller, selectedRating,selectedAd_Id );
+      await ratePlayers(selectedSeller, selectedRating,selectedAd_Id, currentUser );
       message.success('Avaliação enviada com sucesso');
       setIsRateConfirmModalOpen(false);
     } catch (error) {
@@ -72,12 +73,12 @@ export const Order = () => {
               emptyText="Nenhum pedido pendente"
               onConfirm={showConfirmModal}
             />
-            <ContentSection
+            { <ContentSection
               title="Pedidos Finalizados"
               orders={completedOrders}
               emptyText="Nenhum pedido finalizado"
               onRate={showRateConfirmModal}
-            />
+            /> }
           </>
         )}
         <Modal
