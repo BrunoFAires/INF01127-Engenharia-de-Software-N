@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {findPostByLikes} from "../service/communityService";
 import {message} from "antd";
-import {getAnuncios} from "../service/adsService";
+import {getAds} from "../service/adsService";
 import {useNavigate} from "react-router-dom";
 
 export const useHome = () => {
@@ -21,7 +21,7 @@ export const useHome = () => {
 
     const loadAdvertisements = async () => {
         try {
-            const advertisements = await getAnuncios(0)
+            const advertisements = await getAds(0)
             setAdvertisements(advertisements)
         } catch (e) {
             message.error(e)

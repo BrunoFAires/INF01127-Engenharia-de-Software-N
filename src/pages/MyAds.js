@@ -23,7 +23,7 @@ const {Content} = Layout;
 const {Option} = Select;
 const {TextArea} = Input;
 
-export const MeusAnuncios = () => {
+export const MyAds = () => {
     const {
         handleChangeTitle,
         searchCardTitle,
@@ -42,9 +42,9 @@ export const MeusAnuncios = () => {
         actualPage,
         totalPages,
         handleAddCard,
-        anuncio,
+        ad,
         showAddAdModal,
-        anuncios,
+        ads,
         handleEdit,
         handleRemove,
         isAddAdModalOpen,
@@ -69,35 +69,35 @@ export const MeusAnuncios = () => {
                                 Adicionar Anúncio
                             </Button>
                         </Row>
-                        {anuncios.length === 0 ? (
+                        {ads.length === 0 ? (
                             <div style={{textAlign: 'center', marginTop: '50px'}}>
                                 <Title level={3}>Você não tem nenhum anúncio publicado.</Title>
                             </div>
                         ) : (
                             <Row gutter={[16, 16]} style={{marginTop: '24px'}}>
-                                {anuncios.map(anuncio => (
-                                    <Col xs={24} sm={12} md={8} lg={6} xl={4} key={anuncio.id}>
+                                {ads.map(ad => (
+                                    <Col xs={24} sm={12} md={8} lg={6} xl={4} key={ad.id}>
                                         <Card
-                                            cover={<img alt={anuncio.title} src={anuncio.card.image}/>}
+                                            cover={<img alt={ad.title} src={ad.card.image}/>}
                                             actions={[
-                                                <EditOutlined key="edit" onClick={() => handleEdit(anuncio)}/>,
-                                                <DeleteOutlined key="delete" onClick={() => handleRemove(anuncio.id)}/>,
+                                                <EditOutlined key="edit" onClick={() => handleEdit(ad)}/>,
+                                                <DeleteOutlined key="delete" onClick={() => handleRemove(ad.id)}/>,
                                             ]}
                                         >
                                             <Card.Meta
-                                                title={anuncio.title}
+                                                title={ad.title}
                                                 description={(
                                                     <div class="mt-2">
-                                                        <Text>{anuncio.description}</Text>
+                                                        <Text>{ad.description}</Text>
                                                         <div class="mt-2"><Text strong
                                                                                 class="text-gray-600">Preço: </Text><Text
-                                                            class="text-black">R$ {anuncio.price}</Text></div>
+                                                            class="text-black">R$ {ad.price}</Text></div>
                                                         <div class="mt-1"><Text strong
                                                                                 class="text-gray-600">Quantidade: </Text><Text
-                                                            class="text-black">{anuncio.quantity}</Text></div>
+                                                            class="text-black">{ad.quantity}</Text></div>
                                                         <div class="mt-1"><Text strong
                                                                                 class="text-gray-600">Status: </Text><Text
-                                                            class={`${anuncio.status === 1 ? 'text-green-500' : 'text-red-500'}`}>{anuncio.status === 1 ? 'Ativo' : 'Inativo'}</Text>
+                                                            class={`${ad.status === 1 ? 'text-green-500' : 'text-red-500'}`}>{ad.status === 1 ? 'Ativo' : 'Inativo'}</Text>
                                                         </div>
                                                     </div>
                                                 )}
@@ -116,37 +116,37 @@ export const MeusAnuncios = () => {
                         >
                             <Form layout="vertical">
                                 <Form.Item label="Título">
-                                    <Input value={anuncio.title} onChange={handleChangeTitle} size={'large'}/>
+                                    <Input value={ad.title} onChange={handleChangeTitle} size={'large'}/>
                                 </Form.Item>
                                 <Form.Item label="Descrição">
-                                    <TextArea value={anuncio.description} onChange={handleChangeDescription}
+                                    <TextArea value={ad.description} onChange={handleChangeDescription}
                                               size={'large'}
                                               autoSize={{minRows: 3, maxRows: 3}}/>
                                 </Form.Item>
                                 <Form.Item label="Tipo de Anúncio">
-                                    <Select value={anuncio.sale} onChange={handleChangeSale} size={'large'}
+                                    <Select value={ad.sale} onChange={handleChangeSale} size={'large'}
                                             style={{width: '100%'}}>
                                         <Option value={true}>Venda</Option>
                                         <Option value={false}>Troca</Option>
                                     </Select>
                                 </Form.Item>
                                 <Form.Item label="Quantidade">
-                                    <InputNumber value={anuncio.quantity} onChange={handleChangeQuantity} size={'large'}
+                                    <InputNumber value={ad.quantity} onChange={handleChangeQuantity} size={'large'}
                                                  style={{width: '100%'}}/>
                                 </Form.Item>
                                 <Form.Item label="Preço">
-                                    <InputNumber value={anuncio.price} onChange={handleChangePrice} size={'large'}
+                                    <InputNumber value={ad.price} onChange={handleChangePrice} size={'large'}
                                                  style={{width: '100%'}}/>
                                 </Form.Item>
                                 <Row justify={'end'}>
                                     <Button onClick={showModal} size={'large'} type="primary">Adicionar Carta</Button>
                                 </Row>
                                 <Row className={'space-x-3 space-y-3 flex flex-row justify-center'} md={12}>
-                                    {anuncio.card && anuncio.card.card_id && (
+                                    {ad.card && ad.card.card_id && (
                                         <Card
-                                            key={anuncio.card.card_id}
+                                            key={ad.card.card_id}
                                             style={{width: 240}}
-                                            cover={<img alt="example" src={anuncio.card.image}/>}
+                                            cover={<img alt="example" src={ad.card.image}/>}
                                         />
                                     )}
                                 </Row>

@@ -1,56 +1,56 @@
 import { supabase } from "./supabaseClient";
 import {Advertisements} from "../models/advertisements";
 
-export const insertAnuncio = async (anuncio) => {
+export const insertAd = async (ad) => {
     await supabase.rpc('add_asd_with_card', {
-        anuncio: anuncio.toSupabaseInstance(),
-        card: anuncio.card.toSupabaseInstance()
+        anuncio: ad.toSupabaseInstance(),
+        card: ad.card.toSupabaseInstance()
     });
 }
 
-export const updateAnuncio = async (anuncio) => {
+export const updateAd = async (ad) => {
     await supabase.rpc('add_asd_with_card', {
-        anuncio: anuncio.toSupabaseInstance(),
-        card: anuncio.card.toSupabaseInstance()
+        anuncio: ad.toSupabaseInstance(),
+        card: ad.card.toSupabaseInstance()
     });
 }
 
-export const myAnuncios = async (user) => {
+export const myAds = async (user) => {
     try {
         const { data, error } = await supabase.from('advertisements').select('*, card(*)').eq('seller', user.id);
 
         if (error) {
-            console.error("Error fetching anuncios: ", error);
+            console.error("Error fetching ads: ", error);
             throw error;
         }
 
         return data;
     } catch (error) {
-        console.error("Error in myAnuncios function: ", error);
+        console.error("Error in myAds function: ", error);
         throw error;
     }
 }
 
-export const deleteAnuncio = async (anuncioId) => {
+export const deleteAd = async (adId) => {
     try {
         const { data, error } = await supabase
             .from('advertisements')
             .update({ status: 0 })
-            .eq('id', anuncioId);
+            .eq('id', adId);
 
         if (error) {
-            console.error("Error deleting anuncio: ", error);
+            console.error("Error deleting ad: ", error);
             throw error;
         }
 
         return data;
     } catch (error) {
-        console.error("Error in deleteAnuncio function: ", error);
+        console.error("Error in deleteAd function: ", error);
         throw error;
     }
 }
 
-export const getAnuncios = async (i) => {
+export const getAds = async (i) => {
     try {
         const { data, error } = await supabase
             .from('advertisements')
@@ -59,17 +59,17 @@ export const getAnuncios = async (i) => {
             .range(i * 10, 9 + (i * 10))
 
         if (error) {
-            throw 'Erro ao carregar os anúncios';
+            throw 'Error in load ads';
         }
 
         return data.map(it => {return new Advertisements(it.id, it.title, it.description, it.quantity, it.status, it.created_at, it.price, it.card, null, it.sale)})
     } catch (error) {
-        console.error("Error in deleteAnuncio function: ", error);
+        console.error("Error in getAds function: ", error);
         throw error;
     }
 }
 
-export const fetchAnuncios = async ({ filters, searchTerm, sortOrder, currentPage, pageSize }) => {
+export const fetchAds = async ({ filters, searchTerm, sortOrder, currentPage, pageSize }) => {
     const { data, error } = await supabase
         .rpc('fetch_filtered_anuncios', {
             filter_price: filters.price || null,
@@ -99,7 +99,7 @@ export const fetchAnuncios = async ({ filters, searchTerm, sortOrder, currentPag
     return paginatedData;
 };
 
-export const fetchTotalAnuncios = async (filters) => {
+export const fetchTotalAds = async (filters) => {
     let query = supabase
         .from('advertisements')
         .select('id', { count: 'exact' });
