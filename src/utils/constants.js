@@ -10,6 +10,11 @@ export const menu = [
         key: 'decks'
     },
     {
+        label: 'Meus Pedidos',
+        route: '/orders',
+        key: 'order'
+    },
+    {
         label: 'Comunidade',
         route: '/community',
         key: 'community'
