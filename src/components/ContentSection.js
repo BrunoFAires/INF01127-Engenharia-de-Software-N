@@ -1,10 +1,10 @@
-import { Button, Card, Col, Collapse, InputNumber, Row, Tag, Typography } from 'antd';
-import { useState } from 'react';
+import {Button, Card, Col, Collapse, InputNumber, Row, Tag, Typography} from 'antd';
+import {useState} from 'react';
 
-const { Title, Text } = Typography;
-const { Panel } = Collapse;
+const {Title, Text} = Typography;
+const {Panel} = Collapse;
 
-const ContentSection = ({ title, orders, emptyText, onConfirm, onRate }) => {
+const ContentSection = ({title, orders, emptyText, onConfirm, onRate}) => {
     const [rating, setRating] = useState({});
 
     const handleRatingChange = (value, orderId) => {
@@ -24,24 +24,30 @@ const ContentSection = ({ title, orders, emptyText, onConfirm, onRate }) => {
 
     return (
         <>
-            <Title level={3}>{title}</Title>
-            <Row gutter={[16, 16]} style={{ marginTop: '24px' }}>
+            <Row gutter={[16, 16]} style={{marginTop: '24px'}}>
                 {orders.length === 0 ? (
                     <Col span={24}>
                         <Text>{emptyText}</Text>
                     </Col>
-                ) : (
-                    orders.map((item) => (
-                        item.order_user.map((userOrder) => (
-                            <Col xs={24} sm={12} md={8} lg={6} xl={4} key={userOrder.id}>
-                                <Collapse>
-                                    <Panel header={`Pedido #${userOrder.id}`} key={userOrder.id}>
+                ) : <Collapse className='w-full'>
+                    <Panel header={title} key='finishedOrders' className='w-full'>
+                        <Row>
+                            {orders.map((item) => (
+                                item.order_user.map((userOrder) => (
+                                    <Col xs={24} sm={12} md={8} lg={6} xl={4} key={userOrder.id} className='ml-3'>
                                         <Card
-                                            cover={<img alt="Seu Pedido" src={userOrder.advertisement_id?.card?.image} />}
+                                            cover={<img alt="Seu Pedido"
+                                                        src={userOrder.advertisement_id?.card?.image}/>}
                                             actions={[
-                                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+                                                <div style={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    alignItems: 'center',
+                                                    width: '100%'
+                                                }}>
                                                     {onConfirm && !userOrder.finished && item.approved && (
-                                                        <Button type="primary" onClick={() => onConfirm(item.id)} style={{ marginBottom: '8px' }}>
+                                                        <Button type="primary" onClick={() => onConfirm(item.id)}
+                                                                style={{marginBottom: '8px'}}>
                                                             Confirmar recebimento
                                                         </Button>
                                                     )}
@@ -62,7 +68,7 @@ const ContentSection = ({ title, orders, emptyText, onConfirm, onRate }) => {
                                                             <Button
                                                                 type="primary"
                                                                 onClick={() => onRate(userOrder.advertisement_id?.seller?.id, rating[userOrder.id], item.id)}
-                                                                style={{ marginTop: '8px' }}
+                                                                style={{marginTop: '8px'}}
                                                             >
                                                                 Avaliar Vendedor
                                                             </Button>
@@ -74,11 +80,14 @@ const ContentSection = ({ title, orders, emptyText, onConfirm, onRate }) => {
                                             <Card.Meta
                                                 description={(
                                                     <div className="mt-1">
-                                                        <Text strong className="text-gray-600">{item.deal ? 'Troca com:' : 'Vendido por:'} </Text>
-                                                        <Text className="text-black"> {userOrder.advertisement_id?.seller?.name}</Text>
+                                                        <Text strong
+                                                              className="text-gray-600">{item.deal ? 'Troca com:' : 'Vendido por:'} </Text>
+                                                        <Text
+                                                            className="text-black"> {userOrder.advertisement_id?.seller?.name}</Text>
                                                         <div className="mt-1">
                                                             <Text strong className="text-gray-600">Preço: </Text>
-                                                            <Text className="text-black">R$ {userOrder.advertisement_id?.price * userOrder.quantity}</Text>
+                                                            <Text
+                                                                className="text-black">R$ {userOrder.advertisement_id?.price * userOrder.quantity}</Text>
                                                         </div>
                                                         <div className="mt-1">
                                                             <Text strong className="text-gray-600">Quantidade: </Text>
@@ -86,15 +95,18 @@ const ContentSection = ({ title, orders, emptyText, onConfirm, onRate }) => {
                                                         </div>
                                                         <div className="mt-1">
                                                             <Text strong className="text-gray-600">Negócio: </Text>
-                                                            <Text className="text-black">{item.deal ? 'Troca' : 'Venda'}</Text>
+                                                            <Text
+                                                                className="text-black">{item.deal ? 'Troca' : 'Venda'}</Text>
                                                         </div>
                                                         <div className="mt-1">
                                                             <Text strong className="text-gray-600">Status: </Text>
-                                                            <Text className="text-black">{item.approved ? 'Confirmado' : 'Pendente'}</Text>
+                                                            <Text
+                                                                className="text-black">{item.approved ? 'Confirmado' : 'Pendente'}</Text>
                                                         </div>
                                                         <div className="mt-1">
                                                             <Text strong className="text-gray-600">Entregue: </Text>
-                                                            <Text className="text-black">{userOrder.finished ? 'Sim' : 'Não'}</Text>
+                                                            <Text
+                                                                className="text-black">{userOrder.finished ? 'Sim' : 'Não'}</Text>
                                                         </div>
                                                         {userOrder.finished && userOrder.evaluated && (
                                                             <Tag color="green" className="mt-2">
@@ -105,12 +117,11 @@ const ContentSection = ({ title, orders, emptyText, onConfirm, onRate }) => {
                                                 )}
                                             />
                                         </Card>
-                                    </Panel>
-                                </Collapse>
-                            </Col>
-                        ))
-                    ))
-                )}
+                                    </Col>
+                                ))))}
+                        </Row>
+                    </Panel>
+                </Collapse>}
             </Row>
         </>
     );
