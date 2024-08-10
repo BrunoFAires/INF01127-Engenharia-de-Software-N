@@ -144,7 +144,7 @@ export const useAds = () => {
 
     useEffect(() => {
         fetchAnuncios();
-    }, []);
+    }, [currentUser]);
 
     const fetchAnuncios = async () => {
         if (!currentUser) {
