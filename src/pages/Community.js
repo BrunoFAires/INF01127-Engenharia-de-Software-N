@@ -1,11 +1,12 @@
-import {Avatar, Button, Card, Col, Layout, List, Modal, Row, Skeleton} from 'antd';
+import {Avatar, Button, Card, Col, Input, Layout, List, Modal, Popover, Row, Skeleton} from 'antd';
 import {AppHeader} from "../components/header";
 import React from "react";
-import {CommentOutlined, DislikeOutlined, LikeOutlined} from "@ant-design/icons";
+import {CommentOutlined, DislikeOutlined, FilterFilled, FilterOutlined, LikeOutlined} from "@ant-design/icons";
 import TextArea from "antd/es/input/TextArea";
 import {useCommunity} from "../hooks/useCommunity";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Meta from "antd/es/card/Meta";
+import Search from "antd/es/input/Search";
 
 
 const {Content} = Layout;
@@ -33,7 +34,8 @@ export const Community = () => {
         showDecksModal,
         handleCancelDeckSelection,
         decks,
-        selectedDeck
+        selectedDeck,
+        handleSearchCard
     } = useCommunity()
 
 
@@ -49,6 +51,25 @@ export const Community = () => {
             },
         };
     */
+
+    const content = (
+        <div>
+            <p>Content</p>
+            <p>Content</p>
+        </div>
+    );
+
+    const suffix = (
+        <Popover content={content} title="Title" trigger="click">
+            <FilterOutlined
+                style={{
+                    fontSize: 16,
+                    color: '#1677ff',
+                }}
+            />
+        </Popover>
+    );
+
 
     return <Layout className={'min-h-[100vh]'}>
         <AppHeader/>
@@ -84,6 +105,9 @@ export const Community = () => {
         <Content className={'px-[48px] mt-6 shadow-[#b6b6b6] shadow-xl'}>
 
             <Col className='flex flex-col space-y-3 items-center'>
+                <Row className='w-1/2 flex flex-row justify-between'>
+                    <Search  onSearch={handleSearchCard} placeholder='Pesquise pelo nome da carta' />
+                </Row>
                 <Row className='w-1/2'>
                     <TextArea value={post.text} onChange={handleChangePostText} size={'large'}
                               placeholder={'Digite o que você está pensando...'}

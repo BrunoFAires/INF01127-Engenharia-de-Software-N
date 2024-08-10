@@ -138,3 +138,50 @@ export const addComment = async (comment) => {
         })
 
 }
+
+export const findPostByCard = async (i, cardName) => {
+    console.log(i)
+
+    const posts = await supabase
+        .from('post')
+        .select('*, profile(*), card_post!inner(*, card!inner(*))')
+        .ilike('card_post.card.name', cardName)
+
+    if (!posts.data || posts.data.lenght === 0) {
+        return []
+    }
+    console.log(posts.data)
+
+    const postIds = posts.data.map(it => it.id);
+    const currentUser = await getCurrentUser()
+
+    const likedPosts = await supabase.rpc('get_liked_post', {post_ids: postIds, current_user_id: currentUser.id})
+
+    return posts.data.map(it => {
+        const liked = likedPosts.data && !!likedPosts.data.some(l => l.isLike && l.postId === it.id)
+        const disliked = likedPosts.data && !!likedPosts.data.some(l => !l.isLike && l.postId === it.id)
+        const cardPosts = []
+
+        const post = new Post(it.id, it.text, it.imagePath, it.likes, it.dislikes, it.comments, liked, disliked,
+            new User(it.profile.id, '', it.profile.name, it.profile.surname, it.profile.admin, it.profile.seller))
+
+        it.card_post.forEach(it => {
+            const cadPost = new CardPost(it.id, it.card?.card_id, it.card?.name, it.card?.description, it.card?.image, it.card?.artist, it.card?.rarity, it.card?.type, post)
+            cardPosts.push(cadPost)
+        })
+
+        post.setCardPost(cardPosts)
+
+        return post
+    })
+}
+
+export const countTotalPostsByCardName = async (cardName) => {
+    const total = await supabase
+        .from('post')
+        .select('*, card_post(*, card(*))', {count: 'exact', head: true})
+        .ilike('card_post.card.name', cardName)
+        .single()
+
+    return total.count
+}

@@ -1,7 +1,14 @@
 import {useEffect, useState} from "react";
 import {Post} from "../models/post";
 import {useAuthHook} from "./useAuthHook";
-import {addNewPost, countTotalPosts, deletePost, findPostByLikes, reactPost} from "../service/communityService";
+import {
+    addNewPost,
+    countTotalPosts, countTotalPostsByCardName,
+    deletePost,
+    findPostByCard,
+    findPostByLikes,
+    reactPost
+} from "../service/communityService";
 import {useNavigate} from "react-router-dom";
 import {message} from "antd";
 import {myDecks} from "../service/deckService";
@@ -21,21 +28,38 @@ export const useCommunity = () => {
     const [showDecksModal, setShowDecksModal] = useState(false)
     const [decks, setDecks] = useState([])
     const [selectedDeck, setSelectedDeck] = useState()
+    const [searchByName, setSearchByName] = useState(false)
+    const [searchValue, setSearchValue] = useState('')
+    const [a, setA] = useState(false)
     const navigate = useNavigate()
 
     const loadMoreData = () => {
-        if (!totalPosts)
-            return
         let currentTotalPost = 0
-        findPostByLikes(actualPage)
-            .then(result => {
-                currentTotalPost = posts.length + result.length
-                setPosts([...posts, ...result])
-            }).finally(_ => {
-            setLoading(false)
-            setActualPage(actualPage + 1)
-            setHasMoreData(currentTotalPost < totalPosts)
-        })
+        if(!searchByName){
+            console.log(actualPage)
+            findPostByLikes(actualPage)
+                .then(result => {
+                    currentTotalPost = posts.length + result.length
+                    setPosts([...posts, ...result])
+                    if(result.length > 0)
+                        setActualPage(actualPage + 1)
+                }).finally(_ => {
+                setLoading(false)
+                setHasMoreData(currentTotalPost < totalPosts)
+            })
+        }else{
+            console.log('Brn')
+            findPostByCard(actualPage, searchValue)
+                .then(result => {
+                    currentTotalPost = posts.length + result.length
+                    setPosts([...posts, ...result])
+                    if(result.length > 0)
+                        setActualPage(actualPage + 1)
+                }).finally(_ => {
+                setLoading(false)
+                setHasMoreData(currentTotalPost < totalPosts)
+            })
+        }
     }
 
     useEffect(() => {
@@ -47,7 +71,11 @@ export const useCommunity = () => {
 
     useEffect(() => {
         loadMoreData()
-    }, [totalPosts]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [totalPosts]);
+
+    useEffect(() => {
+        loadMoreData()
+    }, [a]);
 
     useEffect(() => {
         post.setUser(currentUser)
@@ -136,6 +164,17 @@ export const useCommunity = () => {
         setSelectedDeck(null)
     }
 
+    const handleSearchCard = (value) => {
+        countTotalPostsByCardName(value).then(total => {
+            setActualPage(0)
+            setTotalPosts(total)
+            setSearchByName(true)
+            setSearchValue(value)
+            setPosts([])
+            setA(!a)
+        })
+    }
+
     return {
         loading,
         posts,
@@ -159,6 +198,7 @@ export const useCommunity = () => {
         handleCancelDeckSelection,
         update,
         decks,
-        selectedDeck
+        selectedDeck,
+        handleSearchCard
     }
 }
