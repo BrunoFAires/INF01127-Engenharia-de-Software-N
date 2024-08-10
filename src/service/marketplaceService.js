@@ -2,6 +2,7 @@ import { supabase } from "./supabaseClient";
 import { getCurrentUser } from "./authService";
 import { Advertisement } from "../models/advertisement";
 import { Card } from "../models/card";
+import { message } from "antd";
 
 export const fetchByAdvertisementId = async (id) => {
     try {
@@ -11,47 +12,24 @@ export const fetchByAdvertisementId = async (id) => {
             .eq('id', id)
             .single();
 
-        if (advertisementError) {
-            throw advertisementError;
-        }
-
         if (!advertisementData) {
             throw new Error('Anúncio não encontrado');
         }
 
         return advertisementData;
     } catch (error) {
-        return null;
+        message.error(error.message);
     }
 };
 
-export const purchase = async (order, quantity) => {
-    try {
-        const user = await getCurrentUser();
-
-        const { data, error } = await supabase.rpc('create_order', {
-            is_deal: false, // Assuming a purchase deal
-            buyer_uuid: user.id,
-            advertisement_id: order.id,
-            seller_uuid: order.seller.id,
-            buyer_advertisement_id: null,
-            purchase_quantity: quantity,
-            trade_quantity: 0
-        });
-
-        if (error) throw error;
-        
-    } catch (error) {
-    }
-};
-
-export const fetchByUserId = async () => {
+export const fetchAdvertisementByUserId = async () => {
     try {
         const user = await getCurrentUser();
         
         const { data: advertisementsData, error: advertisementsError } = await supabase
             .from('advertisements')
             .select('*, card(*)')
+            .eq('status', 1)
             .eq('seller', user.id);
 
         if (advertisementsError) {
@@ -79,29 +57,22 @@ export const fetchByUserId = async () => {
             user,
             ad.sale
         ));   
-    } catch (error) {
-        console.error('Erro ao carregar anúncios do usuário', error);
+    } catch {
         return [];
     }
 };
 
-export const trade = async (order, selectedTrade, tradeQuantity, total) => {
-    try {
-        const user = await getCurrentUser();
-
-        const { data, error } = await supabase.rpc('create_order', {
-            is_deal: true,
+export const createOrder = async (advertisement, purchaseQuantity, user, selectedTrade, tradeQuantity) => {
+    
+        const { error } = await supabase.rpc('create_order', {
+            is_deal: !advertisement.sale,
             buyer_uuid: user.id,
-            advertisement_id: order.id,
-            seller_uuid: order.seller.id,
-            buyer_advertisement_id: selectedTrade.id,
-            purchase_quantity: total,
-            trade_quantity: tradeQuantity
+            advertisement_id: advertisement.id,
+            seller_uuid: advertisement.seller.id,
+            buyer_advertisement_id: selectedTrade ? selectedTrade.id : 0,
+            purchase_quantity: purchaseQuantity,            
+            trade_quantity: tradeQuantity ? tradeQuantity : 0
         });
 
-        if (error) throw error;
-
-    } catch (error) {
-        console.error('Erro ao realizar a troca:', error);
-    }
+        if (error) throw 'Erro ao realizar solicitação';
 };

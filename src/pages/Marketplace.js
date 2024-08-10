@@ -8,13 +8,14 @@ const { Content } = Layout;
 
 export const Marketplace = () => {
     const {
-        order,
+        advertisement,
         loading,
+        loadingUser,
         isModalVisible,
         isTradeModalVisible,
         userAdvertisements,
-        showModal,
-        showTradeModal,
+        handleShowModal,
+        handleShowTradeModal,
         handlePurchase,
         handleTrade,
         handleCancel,
@@ -35,30 +36,31 @@ export const Marketplace = () => {
         <Layout className='min-h-[100vh]'>
             <AppHeader />
             <Content className='px-[48px] mt-6'>
-                {loading ? (
+                {loading || loadingUser ? (
                     <Spin size="large" />
                 ) : (
-                    order ? (
-                        <Card title={order.title} bordered={false}>
+                    advertisement ? (
+                        <Content title={<span className="text-[2rem] font-bold">{advertisement.title}</span>} bordered={false}>
                             <Row className='flex flex-col md:flex-row'>
                                 <Col sspan={24} md={12} className='flex items-center justify-around'>
-                                    <img src={order.card.image} alt="Card" className='w-full h-auto max-w-[300px] mb-4 md:mb-0' />
+                                    <img src={advertisement.card.image} alt="Card" className='w-full h-auto max-w-[300px] mb-4 md:mb-0' />
                                 </Col>
                                 <Col span={24} md={12} className='gutter-row'>
                                     <div className='space-x-3 space-y-3 justify-center'>
-                                        <p className="mx-4">{order.description}</p>
-                                        <p className="py-8 my-4">{`Vendedor: ${order.seller.name}`}</p>
-                                        <p className="my-4">{`Disponível em estoque: ${order.quantity}`}</p>
+                                        <p className="mx-4">{`Descrição: ${advertisement.description}`}</p>
+                                        <p className="py-8 my-4">{`Vendedor: ${advertisement.seller.name}`}</p>
+                                        <p className="my-4">{`Disponível em estoque: ${advertisement.quantity}`}</p>
 
-                                        {!order?.sale ? (
+                                        {advertisement?.sale ? (
                                             <>
-                                                <p>{`Preço: ${order.price}`}</p>
+                                                <p>{`Preço: ${advertisement.price}`}</p>
                                             </>) : (<></>)}
                                     </div>
                                 </Col>
                             </Row>
-
-                            {!order?.sale ? (
+                            
+                            {advertisement?.sale ? (
+                                advertisement.status === 1 &&
                                 <Row className='flex flex-col md:flex-row mt-3 justify-around w-full p-4'>
                                     <Col span={24} md={12} className='gutter-row'>
                                         <div className='flow mx-12 '>
@@ -70,10 +72,11 @@ export const Marketplace = () => {
                                         </div>
                                     </Col>
                                     <Col span={24} md={12} className='gutter-row mt-4 flex justify-center md:mt-0 md:justify-start'>
-                                        <Button type="primary" onClick={showModal}>Comprar</Button>
+                                        <Button type="primary" onClick={handleShowModal}>Comprar</Button>
                                     </Col>
                                 </Row>
                             ) : (
+                                advertisement.status === 1 &&
                                 <Row className='flex flex-col md:flex-row mt-3 justify-around w-full p-4'>
                                     <Col span={24} md={12} className='gutter-row'>
                                         <div className='flow mx-12 '>
@@ -85,11 +88,11 @@ export const Marketplace = () => {
                                         </div>
                                     </Col>
                                     <Col span={24} md={12} className='gutter-row mt-4 flex justify-center md:mt-0 md:justify-start'>
-                                        <Button type="primary" onClick={showTradeModal}>Trocar</Button>
+                                        <Button type="primary" onClick={handleShowTradeModal}>Trocar</Button>
                                     </Col>
                                 </Row>
                             )}
-                        </Card>
+                        </Content>
                     ) : (
                         <p>Anúncio não encontrado.</p>
                     )
@@ -114,9 +117,9 @@ export const Marketplace = () => {
                             type="primary"
                             icon={<LeftOutlined />}
                             onClick={handlePrev}
-                            className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10"
+                            className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10"
                         />
-                        <Carousel dotPosition="bottom" ref={carouselRef}>
+                        <Carousel className='w-full h-auto justify-center' dotPosition="bottom" ref={carouselRef}>
                             {userAdvertisements.map(ad => (
                                 <div key={ad.id} >
                                     <Card
@@ -136,8 +139,8 @@ export const Marketplace = () => {
                                             </Col>
                                             <Col span={24} md={12} className='gutter-row '>
                                                 <div className='space-x-3 space-y-3 justify-center'>
-                                                    <p className="mx-4">{order.description}</p>
-                                                    <p className="my-4">{`Disponível em estoque: ${order.quantity}`}</p>
+                                                    <p className="mx-4">{ad.description}</p>
+                                                    <p className="my-4">{`Disponível em estoque: ${ad.quantity}`}</p>
                                                 </div>
                                             </Col>
                                             <Row className='flex flex-col md:flex-row mt-3 justify-around w-full p-4'>
@@ -160,7 +163,7 @@ export const Marketplace = () => {
                             type="primary"
                             icon={<RightOutlined />}
                             onClick={handleNext}
-                            style={{ position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)', zIndex: 1 }}
+                            className="absolute right-2 top-1/2 transform -translate-y-1/2 z-10"
                         />
                     </div>
                 </Modal>

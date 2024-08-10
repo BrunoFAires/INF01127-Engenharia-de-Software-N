@@ -1,65 +1,75 @@
 import { useEffect, useState, useRef } from 'react';
-import { fetchByAdvertisementId, purchase, fetchByUserId, trade } from '../service/marketplaceService';
-import { useParams } from 'react-router-dom';
+import { fetchByAdvertisementId, fetchAdvertisementByUserId, createOrder } from '../service/marketplaceService';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Advertisement } from '../models/advertisement';
+import { message } from 'antd';
+import { useAuthHook } from './useAuthHook';
 
 const useMarketplace = () => {
     const {id} = useParams();
-    const [order] = useState(new Advertisement(null, null, null, null, null, null, null, null, null, null));
+    const [advertisement] = useState(new Advertisement(null, null, null, null, null, null, null, null, null, null));
     const [loading, setLoading] = useState(true);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isTradeModalVisible, setIsTradeModalVisible] = useState(false);
     const [userAdvertisements, setUserAdvertisements] = useState([]);
     const [selectedTrade, setSelectedTrade] = useState(null);
     const [tradeQuantities, setTradeQuantities] = useState({});
+    const [update, setUpdate] = useState(false);
     const [total, setTotal] = useState(1);
     const carouselRef = useRef(null);
+    const navigate = useNavigate();
+    const {currentUser, loading:loadingUser} = useAuthHook();
 
-    const fetchOrder = async () => {
+    const fetchAdvertisement = async () => {
         try {
             const result = await fetchByAdvertisementId(id);
-            order.fromObject(result);
-        } catch (error) {
-        } finally {
+            advertisement.fromObject(result);
+            setUpdate(!update);
+        } catch(e) {
+            navigate('/');
+        }
+            finally {
             setLoading(false);
         }
     };
 
     useEffect(() => {
         if (id) {
-            fetchOrder();
+            fetchAdvertisement();
         }
     }, [id]);
 
-    const showModal = () => {
+    const handleShowModal = () => {
         setIsModalVisible(true);
     };
 
-    const showTradeModal = async () => {
+    const handleShowTradeModal = async () => {
         try {
-            const result = await fetchByUserId();
+            const result = await fetchAdvertisementByUserId();
             setUserAdvertisements(result);
             // Reset tradeQuantities
             const initialQuantities = result.reduce((acc, ad) => {
-                acc[ad.id] = 1; // Inicializa a quantidade com 1
+                acc[ad.id] = ad.quantity; // Inicializa a quantidade com 1
                 return acc;
             }, {});
             setTradeQuantities(initialQuantities);
         } catch (error) {
+            message.error(error);
         }
         setIsTradeModalVisible(true);
     };
 
     const handlePurchase = async () => {
         setIsModalVisible(false);
-        await purchase(order, total); // Chama o serviço para realizar a compra com a quantidade
+        console.log(currentUser);
+        await createOrder(advertisement, total, currentUser);
         //TODO: NAVIGATE PARA TELA DO EDUARDO
     };
 
     const handleTrade = async () => {
         setIsTradeModalVisible(false);
-        await trade(order, selectedTrade, tradeQuantities[selectedTrade.id], total);
-        // Lógica para realizar a troca
+        await createOrder(advertisement, total, currentUser, selectedTrade, tradeQuantities[selectedTrade.id]);
+        //TODO: NAVIGATE PARA TELA DO EDUARDO
     };
 
     const handleCancel = () => {
@@ -74,8 +84,7 @@ const useMarketplace = () => {
     };
 
     const handleIncrement = () => {
-        console.log(order);
-        if (total < order.quantity) {
+        if (total < advertisement.quantity) {
             setTotal(total + 1);
         }
     };
@@ -103,13 +112,14 @@ const useMarketplace = () => {
     };
 
     return { 
-        order, 
-        loading, 
+        advertisement, 
+        loading,
+        loadingUser, 
         isModalVisible, 
         isTradeModalVisible,
         userAdvertisements,
-        showModal, 
-        showTradeModal,
+        handleShowModal, 
+        handleShowTradeModal,
         handlePurchase, 
         handleTrade,
         handleCancel, 
