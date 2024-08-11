@@ -25,7 +25,7 @@ export class Advertisements {
             created_at: this.created_at,
             price: this.price,
             card: this.card,
-            seller: this.seller,
+            seller: this.seller.id,
             sale: this.sale
         };
     }
