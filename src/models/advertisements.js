@@ -22,10 +22,11 @@ export class Advertisements {
             description: this.description,
             quantity: this.quantity,
             status: this.status,
-            created_at: this.createdAt,
+            created_at: this.created_at,
             price: this.price,
-            seller: this.seller ? this.seller.id : null,
-            sale: this.sale,
+            card: this.card,
+            seller: this.seller,
+            sale: this.sale
         };
     }
 
@@ -61,15 +62,31 @@ export class Advertisements {
         this.card = new Card(card.id, card.card_id, card.name, card.description, card.image, card.artist, card.rarity, card.type, this);
     }
 
-    fromObject(ad) {
-        this.id = ad.id;
-        this.title = ad.title;
-        this.description = ad.description;
-        this.quantity = ad.quantity;
-        this.status = ad.status;
-        this.createdAt = ad.created_at;
-        this.price = ad.price;
-        this.card = ad.card ? new Card(ad.card.id, ad.card.card_id, ad.card.name, ad.card.description, ad.card.image, ad.card.artist, ad.card.rarity, ad.card.type) : null;
-        this.seller = ad.seller;
+    fromObject(order){
+        this.id = order.id;
+        this.title = order.title;
+        this.description = order.description;
+        this.quantity = order.quantity;
+        this.status = order.status;
+        this.created_at = order.created_at;
+        this.price = order.price;
+        this.card = new Card(
+            order.card.id,
+            order.card.card_id,
+            order.card.name,
+            order.card.description,
+            order.card.image,
+            order.card.artist,
+            order.card.rarity,
+            order.card.type
+        )
+        this.seller = new Profile(
+            order.profile.id,
+            order.profile.name,
+            order.profile.surname,
+            order.profile.admin,
+            order.profile.seller,
+        );
+        this.sale = order.sale;
     }
 }

@@ -1,7 +1,6 @@
 import {Button, Card, Col, Collapse, InputNumber, Row, Tag, Typography} from 'antd';
-import {useState} from 'react';
 
-const {Title, Text} = Typography;
+const {Text} = Typography;
 const {Panel} = Collapse;
 
 const ContentSection = ({title, orders, emptyText, onConfirm, onRate, sale, deal, currentUser, updateOffer, rating, handleRatingChange, handleKeyPress}) => {

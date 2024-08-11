@@ -1,5 +1,4 @@
 import {useEffect, useRef, useState} from 'react';
-import {useNavigate} from "react-router-dom";
 import {Order} from "../models/order";
 import {CompletedOrders2, ConfirmDelivery, PendingOrders2, RatePlayers} from "../service/orderService";
 import {useAuthHook} from "./useAuthHook";
@@ -8,7 +7,7 @@ import {message} from "antd";
 export const useOrders = () => {
     const [pendingOrders, setPendingOrders] = useState([]);
     const [completedOrders, setCompletedOrders] = useState([]);
-    const [evaluatedOrders, setEvaluatedOrders] = useState([]);
+    const [evaluatedOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const {loading: loadingUser, currentUser} = useAuthHook();
@@ -62,7 +61,7 @@ export const useOrders = () => {
         };
 
         fetchPendingOrders();
-    }, [currentUser]);
+    }, [currentUser]);// eslint-disable-line react-hooks/exhaustive-deps
 
 
     useEffect(() => {

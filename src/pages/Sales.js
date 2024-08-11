@@ -6,7 +6,7 @@ import {useSales} from "../hooks/useSales";
 import ContentSection from "../components/ContentSection";
 
 export const Sales = () => {
-    const {loading, sales, deals, currentUser, handleUpdateOffer} = useSales()
+    const {sales, deals, currentUser, handleUpdateOffer} = useSales()
     return <Layout className={'min-h-[100vh]'}>
         <AppHeader/>
         <Content className={'px-[48px] mt-6 shadow-[#b6b6b6] shadow-xl'}>

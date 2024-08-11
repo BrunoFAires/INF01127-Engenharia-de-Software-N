@@ -1,13 +1,13 @@
-import { useEffect, useState, useRef } from 'react';
-import { fetchByAdvertisementId, fetchAdvertisementByUserId, createOrder } from '../service/marketplaceService';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Advertisement } from '../models/advertisement';
-import { message } from 'antd';
-import { useAuthHook } from './useAuthHook';
+import {useEffect, useRef, useState} from 'react';
+import {createOrder, fetchAdvertisementByUserId, fetchByAdvertisementId} from '../service/marketplaceService';
+import {useNavigate, useParams} from 'react-router-dom';
+import {message} from 'antd';
+import {useAuthHook} from './useAuthHook';
+import {Advertisements} from "../models/advertisements";
 
 const useMarketplace = () => {
     const {id} = useParams();
-    const [advertisement] = useState(new Advertisement(null, null, null, null, null, null, null, null, null, null));
+    const [advertisement] = useState(new Advertisements(null, null, null, null, null, null, null, null, null, null));
     const [loading, setLoading] = useState(true);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isTradeModalVisible, setIsTradeModalVisible] = useState(false);
@@ -37,7 +37,7 @@ const useMarketplace = () => {
         if (id) {
             fetchAdvertisement();
         }
-    }, [id]);
+    }, [id]);// eslint-disable-line react-hooks/exhaustive-deps
 
     const handleShowModal = () => {
         setIsModalVisible(true);

@@ -10,7 +10,7 @@ const { Option } = Select;
 const { Title, Text } = Typography;
 
 export const Home = () => {
-    const {loading, posts, advertisements, navigate} = useHome()
+    const {loading, posts, navigate} = useHome()
 
     const [ads, setAds] = useState([]);
     const [totalAds, setTotalAds] = useState(0);
@@ -44,7 +44,7 @@ export const Home = () => {
 
         loadAds();
         loadTotalAds();
-    }, [currentPage, searchTerm, sortOrder, filters]);
+    }, [currentPage, searchTerm, sortOrder, filters]);// eslint-disable-line react-hooks/exhaustive-deps
 
     const handleSearch = value => {
         setSearchTerm(value);

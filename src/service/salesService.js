@@ -12,6 +12,7 @@ export const mySales = async (user) => {
     const {error, data} = result
 
     if (error) {
+        // eslint-disable-next-line no-throw-literal
         throw 'Erro ao buscar as vendas'
     }
 
@@ -39,6 +40,7 @@ export const pendingDeals = async (user) => {
     const {error, data} = orderIdsResult
 
     if (error) {
+        // eslint-disable-next-line no-throw-literal
         throw 'Erro ao buscar as vendas'
     }
 
@@ -50,6 +52,7 @@ export const pendingDeals = async (user) => {
     const {error: ordersError, data: ordersData} = orders
 
     if (ordersError) {
+        // eslint-disable-next-line no-throw-literal
         throw 'Erro ao buscar as vendas'
     }
 
@@ -75,6 +78,7 @@ export const updateOffer = async (orderId, value) => {
     const {error} = result
 
     if (error) {
+        // eslint-disable-next-line no-throw-literal
         throw 'Ocorreu um problema ao processar a solicitação.'
     }
 }

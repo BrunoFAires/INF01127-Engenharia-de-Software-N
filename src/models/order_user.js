@@ -1,5 +1,4 @@
 import {Advertisements} from "./advertisements";
-import {User} from "./user";
 import {Profile} from "./profile";
 
 export class Order_User {

@@ -1,10 +1,10 @@
-import {Layout, message, Modal, Skeleton, Typography} from 'antd';
-import React, {useState} from 'react';
+import {Layout, Modal, Skeleton, Typography} from 'antd';
+import React from 'react';
 import ContentSection from '../components/ContentSection';
 import {AppHeader} from '../components/header';
 import {useOrders} from '../hooks/useOrder';
 
-const {Title, Text} = Typography;
+const {Title} = Typography;
 const {Content} = Layout;
 
 export const Order = () => {

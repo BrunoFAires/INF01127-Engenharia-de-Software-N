@@ -1,7 +1,7 @@
-import {Avatar, Button, Card, Col, Input, Layout, List, Modal, Popover, Row, Skeleton} from 'antd';
+import {Avatar, Button, Card, Col, Layout, List, Modal, Row, Skeleton} from 'antd';
 import {AppHeader} from "../components/header";
 import React from "react";
-import {CommentOutlined, DislikeOutlined, FilterFilled, FilterOutlined, LikeOutlined} from "@ant-design/icons";
+import {CommentOutlined, DislikeOutlined, LikeOutlined} from "@ant-design/icons";
 import TextArea from "antd/es/input/TextArea";
 import {useCommunity} from "../hooks/useCommunity";
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -37,39 +37,6 @@ export const Community = () => {
         selectedDeck,
         handleSearchCard
     } = useCommunity()
-
-
-    /*
-        const props = {
-            accept: "image/png, image/jpeg",
-            multiple: false,
-            maxCount: 1,
-            onChange({file, fileList}) {
-                if (file.status !== 'uploading') {
-                    console.log(file, fileList);
-                }
-            },
-        };
-    */
-
-    const content = (
-        <div>
-            <p>Content</p>
-            <p>Content</p>
-        </div>
-    );
-
-    const suffix = (
-        <Popover content={content} title="Title" trigger="click">
-            <FilterOutlined
-                style={{
-                    fontSize: 16,
-                    color: '#1677ff',
-                }}
-            />
-        </Popover>
-    );
-
 
     return <Layout className={'min-h-[100vh]'}>
         <AppHeader/>

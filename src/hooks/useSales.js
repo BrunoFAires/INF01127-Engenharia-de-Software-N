@@ -39,7 +39,7 @@ export const useSales = () => {
                 setLoading(false)
             })
         })
-    }, [currentUser]);
+    }, [currentUser]);// eslint-disable-line react-hooks/exhaustive-deps
 
     const handleUpdateOffer = (orderId, value) => {
         try {

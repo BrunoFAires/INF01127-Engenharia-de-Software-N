@@ -59,6 +59,7 @@ export const getAds = async (i) => {
             .range(i * 10, 9 + (i * 10))
 
         if (error) {
+            // eslint-disable-next-line no-throw-literal
             throw 'Error in load ads';
         }
 

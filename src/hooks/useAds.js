@@ -1,8 +1,8 @@
 import {useEffect, useState} from "react";
 import {findByName} from "../service/pokemonClient";
 import {Advertisements} from "../models/advertisements";
-import {insertAd, updateAd, deleteAd, myAds} from "../service/adsService";
-import {useLocation, useNavigate} from "react-router-dom";
+import {deleteAd, insertAd, myAds, updateAd} from "../service/adsService";
+import {useLocation} from "react-router-dom";
 import {Card} from "../models/card";
 import {message, Modal} from "antd";
 import {useAuthHook} from "./useAuthHook";
@@ -105,7 +105,7 @@ export const useAds = () => {
         if (searchCardTitle) {
             searchCard();
         }
-    }, [actualPage]);
+    }, [actualPage]);// eslint-disable-line react-hooks/exhaustive-deps
 
     const handleAddCard = (selectedCard) => {
         const card = new Card(
@@ -144,7 +144,7 @@ export const useAds = () => {
 
     useEffect(() => {
         fetchAds();
-    }, [currentUser]);
+    }, [currentUser]);// eslint-disable-line react-hooks/exhaustive-deps
 
     const fetchAds = async () => {
         if (!currentUser) {

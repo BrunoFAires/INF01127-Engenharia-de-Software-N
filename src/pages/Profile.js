@@ -1,4 +1,4 @@
-import {Button, Card, Checkbox, Col, Input, Layout, Row, Select, Spin} from 'antd';
+import {Button, Col, Input, Layout, Row, Select, Spin} from 'antd';
 import {AppHeader} from "../components/header";
 import React from "react";
 import {useProfile} from "../hooks/useProfile";

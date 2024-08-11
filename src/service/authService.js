@@ -24,10 +24,12 @@ export const updateProfile = async (user, isProfileTypeChanged) => {
             .single()
         const {error, count} = result
         if (error) {
+            // eslint-disable-next-line no-throw-literal
             throw 'Ocorreu um erro ao processar a solicitação'
         }
 
         if(count > 0){
+            // eslint-disable-next-line no-throw-literal
             throw 'Você ainda possui anuncios ativos.\n Exclua-os antes de tentar mudar o tipo do seu perfil.'
         }
 
@@ -39,6 +41,7 @@ export const updateProfile = async (user, isProfileTypeChanged) => {
         .eq('id', user.id)
     const {error} = result
     if (error) {
+        // eslint-disable-next-line no-throw-literal
         throw 'Ocorreu um erro ao processar a solicitação'
     }
 
@@ -65,6 +68,7 @@ export const getCurrentUser = async () => {
     const {error, data} = resultProfile
 
     if (error) {
+        // eslint-disable-next-line no-throw-literal
         throw 'Erro ao buscar o perfil.'
     }
 

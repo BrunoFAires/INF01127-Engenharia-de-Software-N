@@ -7,7 +7,6 @@ export const useProfile = () => {
     const {currentUser, loading} = useAuthHook()
     const [update, setUpdate] = useState(false)
     const [enableButton, setEnableButton] = useState(false)
-    const [isProfileTypeChanged, setIsProfileTypeChanged] = useState(false)
     const [isSeller, setIsSeller] = useState(currentUser?.profile.seller)
 
     const handleChangeName = (data) => {
@@ -32,7 +31,6 @@ export const useProfile = () => {
         currentUser.profile.setSeller(isSeller)
         setUpdate(!update)
         setEnableButton(true)
-        setIsProfileTypeChanged(true)
 
     }
 

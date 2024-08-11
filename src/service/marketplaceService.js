@@ -1,12 +1,12 @@
-import { supabase } from "./supabaseClient";
-import { getCurrentUser } from "./authService";
-import { Advertisement } from "../models/advertisement";
-import { Card } from "../models/card";
-import { message } from "antd";
+import {supabase} from "./supabaseClient";
+import {getCurrentUser} from "./authService";
+import {Advertisements} from "../models/advertisements";
+import {Card} from "../models/card";
+import {message} from "antd";
 
 export const fetchByAdvertisementId = async (id) => {
     try {
-        const { data: advertisementData, error: advertisementError } = await supabase
+        const { data: advertisementData } = await supabase
             .from('advertisements')
             .select('*, profile(*), card(*)')
             .eq('id', id)
@@ -36,7 +36,7 @@ export const fetchAdvertisementByUserId = async () => {
             throw advertisementsError;
         }
 
-        return advertisementsData.map(ad => new Advertisement(
+        return advertisementsData.map(ad => new Advertisements(
             ad.id,
             ad.title,
             ad.description,
@@ -74,5 +74,6 @@ export const createOrder = async (advertisement, purchaseQuantity, user, selecte
             trade_quantity: tradeQuantity ? tradeQuantity : 0
         });
 
+    // eslint-disable-next-line no-throw-literal
         if (error) throw 'Erro ao realizar solicitação';
 };

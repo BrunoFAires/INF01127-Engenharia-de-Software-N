@@ -30,7 +30,7 @@ export const useCommunity = () => {
     const [selectedDeck, setSelectedDeck] = useState()
     const [searchByName, setSearchByName] = useState(false)
     const [searchValue, setSearchValue] = useState('')
-    const [a, setA] = useState(false)
+    const [forceLoadMoreData, setForceLoadMoreData] = useState(false)
     const navigate = useNavigate()
 
     const loadMoreData = () => {
@@ -69,11 +69,11 @@ export const useCommunity = () => {
 
     useEffect(() => {
         loadMoreData()
-    }, [totalPosts]);
+    }, [totalPosts]);// eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         loadMoreData()
-    }, [a]);
+    }, [forceLoadMoreData]);// eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         post.setUser(currentUser)
@@ -169,7 +169,7 @@ export const useCommunity = () => {
             setSearchByName(true)
             setSearchValue(value)
             setPosts([])
-            setA(!a)
+            setForceLoadMoreData(!forceLoadMoreData)
         })
     }
 
