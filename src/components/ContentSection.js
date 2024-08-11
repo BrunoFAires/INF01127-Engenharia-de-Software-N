@@ -53,7 +53,7 @@ const ContentSection = ({title, orders, emptyText, onConfirm, onRate, sale, deal
                                                     Aguardando troca ser aceita
                                                 </Tag>
                                             )}
-                                            {((onRate && userOrder.finished && !userOrder.evaluated) || (sale && userOrder.approved)) && (
+                                            {((onRate && item.approved && userOrder.finished && !userOrder.evaluated) || (sale && userOrder.approved)) && (
                                                 <>
                                                     <InputNumber
                                                         min={0}
@@ -115,12 +115,12 @@ const ContentSection = ({title, orders, emptyText, onConfirm, onRate, sale, deal
                                                 {!deal && <div className="mt-1">
                                                     <Text strong className="text-gray-600">Status: </Text>
                                                     <Text
-                                                        className="text-black">{item.approved && item.finished_at ? 'Confirmado' : deal ? 'Finalizado' : 'Pendente'}</Text>
+                                                        className="text-black">{item.approved && item.finished_at ? 'Confirmado' : deal || item.deal ? 'Recusado' : 'Pendente'}</Text>
                                                 </div>}
                                                 {!deal && <div className="mt-1">
                                                     <Text strong className="text-gray-600">Entregue: </Text>
                                                     <Text
-                                                        className="text-black">{userOrder.finished ? 'Sim' : 'Não'}</Text>
+                                                        className="text-black">{userOrder.finished && item.approved ? 'Sim' : 'Não'}</Text>
                                                 </div>}
                                                 {sale && !deal && <div className="mt-1">
                                                     <Text strong className="text-gray-600">Troca aceita: </Text>
