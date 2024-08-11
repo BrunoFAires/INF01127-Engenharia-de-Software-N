@@ -17,7 +17,6 @@ export const Marketplace = () => {
         handleShowModal,
         handleShowTradeModal,
         handlePurchase,
-        handleTrade,
         handleCancel,
         total,
         handleDecrement,
@@ -29,7 +28,8 @@ export const Marketplace = () => {
         setSelectedTrade,
         carouselRef,
         handlePrev,
-        handleNext
+        handleNext,
+        handleTradeModalOk
     } = useMarketplace();
 
     return (
@@ -108,7 +108,7 @@ export const Marketplace = () => {
                 <Modal
                     title="Escolha para Trocar"
                     open={isTradeModalVisible}
-                    onOk={handleTrade}
+                    onOk={handleTradeModalOk}
                     onCancel={handleCancel}
                 >
                     <p>Selecione um anúncio e uma quantidade para troca:</p>

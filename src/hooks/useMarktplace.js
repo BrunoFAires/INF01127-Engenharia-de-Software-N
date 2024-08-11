@@ -46,13 +46,18 @@ const useMarketplace = () => {
     const handleShowTradeModal = async () => {
         try {
             const result = await fetchAdvertisementByUserId();
+            if (result.length === 0) {
+                message.warning('Você não tem anúncios disponíveis para troca.');
+                return;
+            }
             setUserAdvertisements(result);
             // Reset tradeQuantities
-            const initialQuantities = result.reduce((acc, ad) => {
-                acc[ad.id] = ad.quantity; // Inicializa a quantidade com 1
-                return acc;
-            }, {});
+            const initialQuantities = {};
+            result.forEach(ad => {
+                initialQuantities[ad.id] = 1;
+            });
             setTradeQuantities(initialQuantities);
+            setIsTradeModalVisible(true);
         } catch (error) {
             message.error(error);
         }
@@ -111,6 +116,14 @@ const useMarketplace = () => {
         carouselRef.current.next();
     };
 
+    const handleTradeModalOk = () => {
+        if (!selectedTrade) {
+            message.warning('Selecione um anúncio e uma quantidade de cartas.');
+        } else {
+            handleTrade();
+        }
+    };
+
     return { 
         advertisement, 
         loading,
@@ -120,8 +133,7 @@ const useMarketplace = () => {
         userAdvertisements,
         handleShowModal, 
         handleShowTradeModal,
-        handlePurchase, 
-        handleTrade,
+        handlePurchase,
         handleCancel, 
         total, 
         handleDecrement, 
@@ -133,7 +145,8 @@ const useMarketplace = () => {
         setSelectedTrade,
         carouselRef,
         handlePrev,
-        handleNext
+        handleNext,
+        handleTradeModalOk
     };
 };
 
