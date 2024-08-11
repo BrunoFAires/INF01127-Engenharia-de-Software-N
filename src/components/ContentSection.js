@@ -4,24 +4,7 @@ import {useState} from 'react';
 const {Title, Text} = Typography;
 const {Panel} = Collapse;
 
-const ContentSection = ({title, orders, emptyText, onConfirm, onRate}) => {
-    const [rating, setRating] = useState({});
-
-    const handleRatingChange = (value, orderId) => {
-        if (!isNaN(value)) {
-            setRating(prevRatings => ({
-                ...prevRatings,
-                [orderId]: value
-            }));
-        }
-    };
-
-    const handleKeyPress = (e) => {
-        if (!/[0-9]/.test(e.key)) {
-            e.preventDefault();
-        }
-    };
-
+const ContentSection = ({title, orders, emptyText, onConfirm, onRate, rating, handleRatingChange, handleKeyPress}) => {
     return (
         <>
             <Row gutter={[16, 16]} style={{marginTop: '24px'}}>
