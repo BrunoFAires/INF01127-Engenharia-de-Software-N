@@ -15,6 +15,7 @@ import {Post} from "./pages/Post";
 import {Profile} from "./pages/Profile";
 import {Sales} from "./pages/Sales";
 import { Order } from "./pages/Order";
+import { Marketplace } from './pages/Marketplace';
 
 function App() {
     const {loading, currentUser} = useAuthHook();
@@ -42,6 +43,14 @@ function App() {
                 element={
                     <ProtectedRoute user={currentUser}>
                         <Deck currentUser={currentUser}/>
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/marketplace/:id"
+                element={
+                    <ProtectedRoute user={currentUser}>
+                        <Marketplace/>
                     </ProtectedRoute>
                 }
             />

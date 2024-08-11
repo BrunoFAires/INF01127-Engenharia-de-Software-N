@@ -38,5 +38,5 @@ export const menu = [
         label: 'Sair',
         route: '/logout',
         key: 'logout'
-    }
+    },
 ]
