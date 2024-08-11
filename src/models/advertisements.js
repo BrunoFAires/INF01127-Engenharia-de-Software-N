@@ -1,4 +1,5 @@
 import { Card } from "./card";
+import {Profile} from "./profile";
 
 export class Advertisements {
     constructor(id, title, description, quantity, status, createdAt, price, card, seller, sale) {
@@ -10,7 +11,7 @@ export class Advertisements {
         this.createdAt = createdAt;
         this.price = price;
         this.card = card ? new Card(card.id, card.card_id, card.name, card.description, card.image, card.artist, card.rarity, card.type, this) : null;
-        this.seller = seller;
+        this.seller = new Profile(seller?.id, seller?.name, seller?.surname, seller?.admin, seller?.seller, seller?.evaluations, seller?.ratings);
         this.sale = sale;
     }
 
