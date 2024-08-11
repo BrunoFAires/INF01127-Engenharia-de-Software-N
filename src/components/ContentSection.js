@@ -101,7 +101,7 @@ const ContentSection = ({title, orders, emptyText, onConfirm, onRate, sale, deal
                                                         {!deal && <div className="mt-1">
                                                             <Text strong className="text-gray-600">Status: </Text>
                                                             <Text
-                                                                className="text-black">{item.approved && item.finished_at ? 'Confirmado' : deal || item.deal ? 'Recusado' : 'Pendente'}</Text>
+                                                                className="text-black">{item.approved && item.finished_at ? 'Confirmado' : deal || (item.deal && !item.approved) ? 'Recusado' : 'Pendente'}</Text>
                                                         </div>}
                                                         {!deal && <div className="mt-1">
                                                             <Text strong className="text-gray-600">Entregue: </Text>
