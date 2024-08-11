@@ -63,13 +63,13 @@ const useMarketplace = () => {
         setIsModalVisible(false);
         console.log(currentUser);
         await createOrder(advertisement, total, currentUser);
-        //TODO: NAVIGATE PARA TELA DO EDUARDO
+        navigate('/orders')
     };
 
     const handleTrade = async () => {
         setIsTradeModalVisible(false);
         await createOrder(advertisement, total, currentUser, selectedTrade, tradeQuantities[selectedTrade.id]);
-        //TODO: NAVIGATE PARA TELA DO EDUARDO
+        navigate('/orders')
     };
 
     const handleCancel = () => {

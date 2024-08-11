@@ -5,6 +5,11 @@ export const menu = [
         key: 'home'
     },
     {
+        label: 'Comunidade',
+        route: '/community',
+        key: 'community'
+    },
+    {
         label: 'Meus Baralhos',
         route: '/decks',
         key: 'decks'
@@ -15,19 +20,14 @@ export const menu = [
         key: 'order'
     },
     {
-        label: 'Comunidade',
-        route: '/community',
-        key: 'community'
+        label: 'Minhas Vendas',
+        route: '/sales',
+        key: 'sales'
     },
     {
         label: 'Meus Anúncios',
         route: '/my-ads',
         key: 'my-ads'
-    },
-    {
-        label: 'Vendas',
-        route: '/sales',
-        key: 'sales'
     },
     {
         label: 'Perfil',

@@ -35,6 +35,7 @@ export const pendingDeals = async (user) => {
         .select('id, order_user!inner(user_id)')
         .eq('deal', true)
         .eq('order_user.approved', false)
+        .neq('approved', false)
         .eq('order_user.user_id', user.id);
 
     const {error, data} = orderIdsResult

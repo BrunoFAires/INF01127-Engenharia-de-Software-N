@@ -43,7 +43,6 @@ const ContentSection = ({title, orders, emptyText, onConfirm, onRate, sale, deal
                                                             <InputNumber
                                                                 min={0}
                                                                 max={10}
-                                                                value={rating[userOrder.id]}
                                                                 onChange={(value) => handleRatingChange(value, userOrder.id)}
                                                                 onKeyPress={handleKeyPress}
                                                             />
@@ -107,7 +106,7 @@ const ContentSection = ({title, orders, emptyText, onConfirm, onRate, sale, deal
                                                             <Text
                                                                 className="text-black">{userOrder.finished && item.approved ? 'Sim' : 'Não'}</Text>
                                                         </div>}
-                                                        {sale && !deal && <div className="mt-1">
+                                                        {sale && deal && <div className="mt-1">
                                                             <Text strong className="text-gray-600">Troca aceita: </Text>
                                                             <Text
                                                                 className="text-black">{userOrder.approved ? 'Sim' : 'Não'}</Text>
