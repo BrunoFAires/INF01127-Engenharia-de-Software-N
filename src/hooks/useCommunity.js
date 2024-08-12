@@ -145,7 +145,7 @@ export const useCommunity = () => {
     const handleSelectDeckToPublish = () => {
         myDecks(currentUser).then(result => {
             result.data.forEach(deckResult => {
-                const deck = new Deck(deckResult.id, deckResult.title, deckResult.description, deckResult.rating, currentUser, deckResult.card_deck)
+                const deck = new Deck(deckResult.id, deckResult.title, deckResult.description, currentUser, deckResult.card_deck)
                 decks.push(deck)
             })
         }).finally(() => {

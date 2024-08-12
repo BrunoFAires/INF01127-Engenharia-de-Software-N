@@ -10,7 +10,7 @@ export const useDeck = ({user}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [searchCardTitle, setSearchCardTitle] = useState();
     const [apiResponse, setApiResponse] = useState();
-    const [deck] = useState(new Deck(null, null, null, 0, user, []));
+    const [deck] = useState(new Deck(null, null, null, user, []));
     const [loading, setLoading] = useState(false);
     const [totalPages, setTotalPages] = useState();
     const [actualPage, setActualPage] = useState(1);
@@ -24,7 +24,7 @@ export const useDeck = ({user}) => {
 
     useEffect(() => {
         if (currentUser)
-            deck.setUser(currentUser)
+            deck.user = currentUser
     }, [currentUser]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const fetchDeck = async () => {

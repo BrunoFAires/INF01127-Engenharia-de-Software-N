@@ -4,16 +4,14 @@ export class Deck {
     #id;
     #title;
     #description;
-    #rating;
     #user;
     #cards;
 
-    constructor(id, title, description, rating, user, cards) {
+    constructor(id, title, description, user, cards) {
         this.#id = id;
         this.#title = title;
         this.#description = description;
         this.#user = user;
-        this.#rating = rating;
         this.#cards = cards.map(it => new CardDeck(it.card.id, it.card.card_id, it.card.name, it.card.description, it.card.image, it.card.artist, it.card.rarity, it.card.type, this));
     }
 
@@ -41,14 +39,6 @@ export class Deck {
         this.#description = value;
     }
 
-    get rating() {
-        return this.#rating;
-    }
-
-    set rating(value) {
-        this.#rating = value;
-    }
-
     get user() {
         return this.#user;
     }
@@ -63,18 +53,6 @@ export class Deck {
 
     set cards(value) {
         this.#cards = value;
-    }
-
-    cardsLength() {
-        return this.#cards.length;
-    }
-
-    getUser() {
-        return this.#user
-    }
-
-    setUser(user) {
-        this.#user = user
     }
 
     toSupabaseInstance() {
@@ -123,7 +101,6 @@ export class Deck {
         this.#title = deck.title;
         this.#description = deck.description;
         this.#user = deck.user;
-        this.#rating = deck.rating;
         this.#cards = deck.card_deck.map(it => new CardDeck(it.card.id, it.card.card_id, it.card.name, it.card.description, it.card.image, it.card.artist, it.card.rarity, it.card.type, this));
     }
 }
