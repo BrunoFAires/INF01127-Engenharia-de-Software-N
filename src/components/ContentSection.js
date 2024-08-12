@@ -76,6 +76,11 @@ const ContentSection = ({ title, orders, emptyText, onConfirm, onRate }) => {
                                                                     Avaliar Vendedor
                                                                 </Button>
                                                             </>
+                                                        )}{userOrder.finished && !item.deal && (
+                                                            <Component
+                                                            Orders={item}
+                                                            
+                                                            />
                                                         )}
                                                         <Component
                                                         Orders={item}
