@@ -17,6 +17,8 @@ export const CompletedOrders = async (user) => {
         .eq('finished', true);
 }
 
+
+
 export const RatePlayers = async (user, Rate, idOrder, currentUser) => {
     const { data, error } = await supabase
         .from('profile')

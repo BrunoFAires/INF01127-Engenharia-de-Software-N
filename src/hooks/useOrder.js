@@ -13,8 +13,7 @@ export const useOrders = () => {
     const { loading: loadingUser, currentUser } = useAuthHook();
     const navigate = useNavigate();
     const orderIdRef = useRef(new Set());
-    const [updateCompletedOrders, setUpdateCompletedOrders] = useState(false);
-    const [updatePendingOrders, setUpdatePendingOrders] = useState(false);
+    
 
     useEffect(() => {
         const fetchPendingOrders = async () => {
@@ -54,7 +53,7 @@ export const useOrders = () => {
                 setLoading(false);
             }
         };
-
+        
         fetchPendingOrders();
     }, [currentUser]);
 
@@ -96,8 +95,7 @@ export const useOrders = () => {
                 setError(error.message);
                 setLoading(false);
             }
-        };
-
+        }
         fetchCompletedOrders();
     }, [currentUser, loadingUser]);
 
