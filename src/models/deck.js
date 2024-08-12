@@ -60,7 +60,6 @@ export class Deck {
             id: this.#id,
             title: this.#title,
             description: this.#description,
-            rating: this.#rating,
             user_id: this.#user.id
         };
     }
