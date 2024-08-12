@@ -149,6 +149,13 @@ export const Home = () => {
                                                 <div className="mt-1"><Text strong
                                                                             className="text-gray-600">Pokémon: </Text><Text
                                                     className="text-black">{ad.card.name}</Text></div>
+                                                <div className="mt-1"><Text strong
+                                                                            className="text-gray-600">Tipo: </Text><Text
+                                                    className="text-black">{ad?.sale ? 'Venda' : 'Troca'}</Text></div>
+                                                <div className="mt-1"><Text strong
+                                                                            class="text-gray-600">Status: </Text><Text
+                                                    class={`${ad.status === 1 ? 'text-green-500' : 'text-red-500'}`}>{ad.status === 1 ? 'Ativo' : 'Inativo'}</Text>
+                                                </div>
                                             </div>
                                         )}
                                     />

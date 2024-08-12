@@ -28,7 +28,7 @@ export const updateProfile = async (user, isProfileTypeChanged) => {
             throw 'Ocorreu um erro ao processar a solicitação'
         }
 
-        if(count > 0){
+        if (count > 0) {
             // eslint-disable-next-line no-throw-literal
             throw 'Você ainda possui anuncios ativos.\n Exclua-os antes de tentar mudar o tipo do seu perfil.'
         }
@@ -50,7 +50,14 @@ export const updateProfile = async (user, isProfileTypeChanged) => {
 }
 
 export const signIn = async (password, email) => {
-    return await supabase.auth.signInWithPassword({password: password, email: email})
+    const result = await supabase.auth.signInWithPassword({password: password, email: email})
+    const {data, error} = result
+
+    if (error) {
+        throw 'Credenciais incorretas. Tente novamente ou cadastre-se.'
+    }
+
+    return data?.user;
 }
 
 export const getCurrentUser = async () => {
