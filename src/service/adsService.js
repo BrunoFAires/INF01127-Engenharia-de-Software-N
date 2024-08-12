@@ -98,7 +98,6 @@ export const fetchAds = async ({filters, searchTerm, sortOrder, currentPage, pag
     }
 
     const paginatedData = sortedData.slice((currentPage - 1) * pageSize, currentPage * pageSize);
-    console.log(paginatedData)
 
     return paginatedData.map(it => new Advertisements(it.anuncio_id, it.title, it.description, it.quantity, it.status, it.created_at, it.price, {
             artist: it.card_artist,

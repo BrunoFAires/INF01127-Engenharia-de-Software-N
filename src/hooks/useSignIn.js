@@ -1,6 +1,7 @@
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
 import {signIn} from "../service/authService";
+import {message} from "antd";
 
 export const useSignIn = () => {
     const [loading, setLoading] = useState(false)
@@ -10,12 +11,12 @@ export const useSignIn = () => {
         try {
             setLoading(true)
             const response = await signIn(data.password, data.email)
-            if (response?.data?.user) {
+            if (response) {
                 navigate('/')
             }
             setLoading(false)
         } catch (e) {
-            console.log(e)
+            message.error(e)
             setLoading(false)
         }
     };

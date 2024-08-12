@@ -39,6 +39,7 @@ export const pendingDeals = async (user) => {
         .is('finished_at', null)
         .eq('order_user.user_id', user.id);
 
+
     const {error, data} = orderIdsResult
 
     if (error) {
