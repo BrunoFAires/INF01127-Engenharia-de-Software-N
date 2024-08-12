@@ -19,7 +19,7 @@ export const usePost = () => {
     useEffect(() => {
         findPostById(postId).then(post => {
             setPost(post)
-            comment.setPost(post)
+            comment.post = post
             commentsByPost(post).then(comments => {
                 setComments(comments)
             }).finally(_ => setLoading(false))
@@ -27,12 +27,12 @@ export const usePost = () => {
     }, [postId]); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
-        comment.setProfile(currentUser?.profile)
+        comment.profile = currentUser?.profile
         setUpdate(!update)
     }, [currentUser]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleChangeCommentText = (event) => {
-        comment.setText(event.target.value)
+        comment.text = event.target.value
         setUpdate(!update)
     }
 
@@ -42,8 +42,8 @@ export const usePost = () => {
             const newComment = new Comment(newCommentId, comment.text, 0, Date.now(), comment.profile, comment.post)
             setComments([...comments, newComment])
             post.addComment()
-            comment.setText('')
-            comment.setId(null)
+            comment.text = ''
+            comment.id = null
             setUpdate(!update)
             message.success('Comentário adicionado com sucesso')
         } catch (e) {

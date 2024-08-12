@@ -66,7 +66,6 @@ const useMarketplace = () => {
 
     const handlePurchase = async () => {
         setIsModalVisible(false);
-        console.log(currentUser);
         await createOrder(advertisement, total, currentUser);
         navigate('/orders')
     };
@@ -124,19 +123,19 @@ const useMarketplace = () => {
         }
     };
 
-    return { 
-        advertisement, 
+    return {
+        advertisement,
         loading,
-        loadingUser, 
-        isModalVisible, 
+        loadingUser,
+        isModalVisible,
         isTradeModalVisible,
         userAdvertisements,
-        handleShowModal, 
+        handleShowModal,
         handleShowTradeModal,
         handlePurchase,
-        handleCancel, 
-        total, 
-        handleDecrement, 
+        handleCancel,
+        total,
+        handleDecrement,
         handleIncrement,
         tradeQuantities,
         handleTradeDecrement,

@@ -30,6 +30,7 @@ export const Deck = ({currentUser}) => {
         isValidForm
     } = useDeck({currentUser})
 
+
     return <Layout className={'min-h-[100vh]'}>
         <AppHeader/>
         <Content className={'px-[48px]'}>

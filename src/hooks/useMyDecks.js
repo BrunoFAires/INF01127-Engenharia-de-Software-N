@@ -14,7 +14,7 @@ export const useMyDecks = () => {
     const [loading, setLoading] = useState(true)
 
     const handleOnEdit = (deck) => {
-        navigate('/deck', {state: {deckToEdit: deck}})
+        navigate(`/deck/${deck.id}`)
     }
 
 

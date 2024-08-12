@@ -24,6 +24,8 @@ export const Post = () => {
         handleDeleteComment
     } = usePost()
 
+    console.log(post)
+
     const totalLikes = <div><LikeOutlined className={`${post?.liked ? 'text-[#08c]' : ''}`}
                                           key="ellipsis" onClick={() => {
         handleLikePost(post)
@@ -100,6 +102,7 @@ export const Post = () => {
                             />
                         </Card>
                     })}
+                    <div className='mb-5'></div>
                 </Col></>}
         </Content>
     </Layout>
