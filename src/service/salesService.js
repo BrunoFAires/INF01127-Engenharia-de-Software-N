@@ -32,11 +32,12 @@ export const mySales = async (user) => {
 export const pendingDeals = async (user) => {
     const orderIdsResult = await supabase
         .from('order')
-        .select('id, order_user!inner(user_id)')
+        .select('*, order_user!inner(user_id)')
         .eq('deal', true)
         .eq('order_user.approved', false)
-        .neq('approved', false)
+        .is('finished_at', null)
         .eq('order_user.user_id', user.id);
+
 
     const {error, data} = orderIdsResult
 

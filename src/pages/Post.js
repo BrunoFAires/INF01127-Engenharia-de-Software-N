@@ -100,6 +100,7 @@ export const Post = () => {
                             />
                         </Card>
                     })}
+                    <div className='mb-5'></div>
                 </Col></>}
         </Content>
     </Layout>
