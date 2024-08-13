@@ -82,10 +82,6 @@ const ContentSection = ({ title, orders, emptyText, onConfirm, onRate }) => {
                                                             
                                                             />
                                                         )}
-                                                        <Component
-                                                        Orders={item}
-                                                        
-                                                        />
                                                     </div>
                                                 ]}
                                             >
