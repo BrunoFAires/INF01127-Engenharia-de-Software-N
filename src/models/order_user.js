@@ -14,7 +14,8 @@ export class Order_User {
         this.#id = id;
         this.#order_id = order_id;
         this.#profile = new Profile(user?.id, user?.name, user?.surname, user?.admin, user?.seller, user?.evaluations, user?.ratings);
-        this.#advertisement = new Advertisements(advertisement?.id, advertisement?.title, advertisement?.description, advertisement?.quantity, advertisement?.status, advertisement?.created_at, advertisement?.price, advertisement?.card, advertisement?.profile, advertisement?.sale);
+        this.#advertisement = new Advertisements(advertisement?.id, advertisement?.title, advertisement?.description, advertisement?.quantity, advertisement?.status,
+        advertisement?.created_at, advertisement?.price, advertisement?.card, advertisement?.profile, advertisement?.sale);
         this.#finished = finished;
         this.#quantity = quantity;
         this.#evaluated = evaluated;
