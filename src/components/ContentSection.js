@@ -1,9 +1,24 @@
 import {Button, Card, Col, Collapse, InputNumber, Row, Tag, Typography} from 'antd';
+import CompradorPDF from "./CompradorPDF";
+import VendedorPDF from "./VendedorPDF";
 
 const {Text} = Typography;
 const {Panel} = Collapse;
 
-const ContentSection = ({title, orders, emptyText, onConfirm, onRate, sale, deal, currentUser, updateOffer, rating, handleRatingChange, handleKeyPress}) => {
+const ContentSection = ({
+                            title,
+                            orders,
+                            emptyText,
+                            onConfirm,
+                            onRate,
+                            sale,
+                            deal,
+                            currentUser,
+                            updateOffer,
+                            rating,
+                            handleRatingChange,
+                            handleKeyPress
+                        }) => {
 
     return (
         <>
@@ -19,7 +34,9 @@ const ContentSection = ({title, orders, emptyText, onConfirm, onRate, sale, deal
                                 item.order_user.map((userOrder) => (
                                     <>
                                         <Col xs={24} sm={12} md={8} lg={6} xl={4} key={userOrder.id} className='ml-3'>
-                                            {deal && (userOrder.profile.id === currentUser.id ? <p className='text-center'>Oferta</p> : <p className='text-center'>Solicitação</p>)}
+                                            {deal && (userOrder.profile.id === currentUser.id ?
+                                                <p className='text-center'>Oferta</p> :
+                                                <p className='text-center'>Solicitação</p>)}
                                             <Card
                                                 cover={<img alt="Seu Pedido"
                                                             src={userOrder.advertisement?.card?.image}/>}
@@ -31,7 +48,8 @@ const ContentSection = ({title, orders, emptyText, onConfirm, onRate, sale, deal
                                                         width: '100%'
                                                     }}>
                                                         {onConfirm && !userOrder.finished && item.approved && (
-                                                            <Button type="primary" onClick={() => onConfirm(userOrder.id)}
+                                                            <Button type="primary"
+                                                                    onClick={() => onConfirm(userOrder.id)}
                                                                     style={{marginBottom: '8px'}}>
                                                                 Confirmar recebimento
                                                             </Button>
@@ -57,7 +75,13 @@ const ContentSection = ({title, orders, emptyText, onConfirm, onRate, sale, deal
                                                                     {sale ? 'Avaliar comprador' : 'Avaliar Vendedor'}
                                                                 </Button>
                                                             </>
-                                                        )}
+                                                        )}{userOrder.finished && !item.deal && !sale ?
+                                                        <CompradorPDF
+                                                            Orders={item}
+
+                                                        /> : userOrder.finished && !item.deal &&
+                                                        <VendedorPDF Orders={item}/>
+                                                    }
                                                         {(deal && !userOrder.approved) && (
                                                             <Row className={'flex flex-row justify-evenly w-full'}>
                                                                 <Button
@@ -91,7 +115,8 @@ const ContentSection = ({title, orders, emptyText, onConfirm, onRate, sale, deal
                                                                     className="text-black">R$ {userOrder.advertisement?.price * userOrder.quantity}</Text>
                                                             </div>
                                                             <div className="mt-1">
-                                                                <Text strong className="text-gray-600">Quantidade: </Text>
+                                                                <Text strong
+                                                                      className="text-gray-600">Quantidade: </Text>
                                                                 <Text className="text-black">{userOrder.quantity}</Text>
                                                             </div>
                                                             <div className="mt-1">
@@ -110,7 +135,8 @@ const ContentSection = ({title, orders, emptyText, onConfirm, onRate, sale, deal
                                                                     className="text-black">{userOrder.finished && item.approved ? 'Sim' : 'Não'}</Text>
                                                             </div>}
                                                             {sale && deal && <div className="mt-1">
-                                                                <Text strong className="text-gray-600">Troca aceita: </Text>
+                                                                <Text strong className="text-gray-600">Troca
+                                                                    aceita: </Text>
                                                                 <Text
                                                                     className="text-black">{userOrder.approved ? 'Sim' : 'Não'}</Text>
                                                             </div>}

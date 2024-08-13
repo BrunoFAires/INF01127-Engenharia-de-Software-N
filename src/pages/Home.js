@@ -68,11 +68,6 @@ export const Home = () => {
         <Content className={'px-[48px] mt-6 shadow-[#b6b6b6] shadow-xl'}>
             {loading ? <Row justify={"center"}><Spin/></Row> : <>
 
-                <Row justify={'end'} className='pb-3'>
-                    <Button size={'large'} type="primary" onClick={() => {
-                    }}>Acessar mercado de cartas</Button>
-                </Row>
-
                 <Form layout="vertical" className="mb-4">
                     <Row gutter={[16, 16]} className="flex-wrap">
                         <Col xs={24} sm={12} md={8} lg={4}>
