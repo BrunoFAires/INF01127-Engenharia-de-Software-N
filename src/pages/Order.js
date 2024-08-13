@@ -9,21 +9,8 @@ const {Content} = Layout;
 
 export const Order = () => {
     const {
-        pendingOrders,
-        completedOrders,
-        loading,
-        error,
-        rating,
-        handleRatingChange,
-        handleKeyPress,
-        showConfirmModal,
-        showRateConfirmModal,
-        isConfirmModalOpen,
-        handleConfirmModalOk,
-        handleRateConfirmModalCancel,
-        isRateConfirmModalOpen,
-        handleRateConfirmModalOk,
-        handleConfirmModalCancel
+        pendingOrders, completedOrders, loading, error, rating, handleRatingChange, handleKeyPress,
+        showConfirmModal, showRateConfirmModal, isConfirmModalOpen, handleConfirmModalOk, handleRateConfirmModalCancel, isRateConfirmModalOpen, handleRateConfirmModalOk, handleConfirmModalCancel
     } = useOrders();
 
     return (
@@ -76,5 +63,7 @@ export const Order = () => {
         </Layout>
     );
 };
+
+
 
 export default Order;

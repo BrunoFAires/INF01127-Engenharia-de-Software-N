@@ -10,7 +10,6 @@ export class Order_User {
     #quantity;
     #evaluated;
     #approved;
-
     constructor(id, order_id, user, advertisement, finished, quantity, evaluated, approved) {
         this.#id = id;
         this.#order_id = order_id;
@@ -21,7 +20,6 @@ export class Order_User {
         this.#evaluated = evaluated;
         this.#approved = approved;
     }
-
     get id() {
         return this.#id;
     }
@@ -49,7 +47,6 @@ export class Order_User {
     get advertisement() {
         return this.#advertisement;
     }
-
     set advertisement(value) {
         this.#advertisement = new Advertisements(value?.id, value?.title, value?.description, value?.quantity, value?.status, value?.created_at, value?.price, value?.card, value?.profile, value?.sale);
     }
@@ -94,3 +91,6 @@ export class Order_User {
         this.#evaluated = true;
     }
 }
+
+
+
