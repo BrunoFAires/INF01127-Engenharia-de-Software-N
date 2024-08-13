@@ -25,3 +25,9 @@ export const deleteDeck = async (deck) => {
     }
     return supabase.from('deck').delete().eq('user_id', deck.user.id).eq('id', deck.id);
 }
+
+export const getDeckById = (id) => {
+    return supabase.
+    from('deck')
+    .select('*, card_deck(card(*))').eq('id', id).single()
+}

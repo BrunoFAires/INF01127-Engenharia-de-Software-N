@@ -1,8 +1,8 @@
 import {useEffect, useState} from "react";
 import {findByName} from "../service/pokemonClient";
 import {Deck} from "../models/deck";
-import {insertDeck, updateDeck} from "../service/deckService";
-import {useLocation, useNavigate} from "react-router-dom";
+import {getDeckById, insertDeck, updateDeck} from "../service/deckService";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {CardDeck} from "../models/cardDeck";
 import {useAuthHook} from "./useAuthHook";
 
@@ -10,7 +10,7 @@ export const useDeck = ({user}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [searchCardTitle, setSearchCardTitle] = useState();
     const [apiResponse, setApiResponse] = useState();
-    const [deck] = useState(new Deck(null, null, null, 0, user, []));
+    const [deck] = useState(new Deck(null, null, null, user, []));
     const [loading, setLoading] = useState(false);
     const [totalPages, setTotalPages] = useState();
     const [actualPage, setActualPage] = useState(1);
@@ -19,20 +19,22 @@ export const useDeck = ({user}) => {
     const [cardsToRemove, setCardsToRemove] = useState([])
     const pageItems = 10;
     const navigate = useNavigate()
-    const {state} = useLocation();
-    const deckToEdit = state?.deckToEdit
     const {currentUser} = useAuthHook()
+    let {id} = useParams();
 
     useEffect(() => {
         if (currentUser)
-            deck.setUser(currentUser)
+            deck.user = currentUser
     }, [currentUser]); // eslint-disable-line react-hooks/exhaustive-deps
 
+    const fetchDeck = async () => {
+        const resultDeck = await getDeckById(id)
+        deck.fromObject(resultDeck.data)
+    }
+
     useEffect(() => {
-        if (deckToEdit) {
-            deck.fromObject(deckToEdit)
-        }
-    }, [deckToEdit]); // eslint-disable-line react-hooks/exhaustive-deps
+        fetchDeck().then()
+    }, []);
 
 
     useEffect(() => {
@@ -60,12 +62,12 @@ export const useDeck = ({user}) => {
     };
 
     const handleChangeTitle = (data) => {
-        deck.setTitle(data.target.value);
+        deck.title = data.target.value;
         setUpdate(!update);
     };
 
     const handleChangeDescription = (data) => {
-        deck.setDescription(data.target.value);
+        deck.description = data.target.value;
         setUpdate(!update);
     };
 

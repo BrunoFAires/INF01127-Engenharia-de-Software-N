@@ -47,6 +47,14 @@ function App() {
                 }
             />
             <Route
+                path="/deck/:id"
+                element={
+                    <ProtectedRoute user={currentUser}>
+                        <Deck currentUser={currentUser}/>
+                    </ProtectedRoute>
+                }
+            />
+            <Route
                 path="/marketplace/:id"
                 element={
                     <ProtectedRoute user={currentUser}>

@@ -30,6 +30,7 @@ export const mySales = async (user) => {
 
 
 export const pendingDeals = async (user) => {
+    console.log(user.id)
     const orderIdsResult = await supabase
         .from('order')
         .select('*, order_user!inner(user_id)')
@@ -57,6 +58,8 @@ export const pendingDeals = async (user) => {
         // eslint-disable-next-line no-throw-literal
         throw 'Erro ao buscar as vendas'
     }
+
+    console.log(orders)
 
 
     return ordersData.map(OrderResult => {

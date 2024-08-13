@@ -14,7 +14,7 @@ export const useMyDecks = () => {
     const [loading, setLoading] = useState(true)
 
     const handleOnEdit = (deck) => {
-        navigate('/deck', {state: {deckToEdit: deck}})
+        navigate(`/deck/${deck.id}`)
     }
 
 
@@ -41,7 +41,7 @@ export const useMyDecks = () => {
             return
         myDecks(currentUser).then(it => {
             it.data.forEach(deckResult => {
-                const deck = new Deck(deckResult.id, deckResult.title, deckResult.description, deckResult.rating, currentUser, deckResult.card_deck)
+                const deck = new Deck(deckResult.id, deckResult.title, deckResult.description, currentUser, deckResult.card_deck)
                 decks.push(deck)
             })
 

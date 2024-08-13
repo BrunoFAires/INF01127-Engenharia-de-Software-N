@@ -106,7 +106,7 @@ export const fetchAds = async ({filters, searchTerm, sortOrder, currentPage, pag
             rarity: it.card_rarity,
             type: it.card_type,
             id: it.card_id,
-            image: it.card_image
+            image: it.card_image,
         }, null, it.sale)
     )
 };

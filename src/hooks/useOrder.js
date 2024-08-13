@@ -15,7 +15,6 @@ export const useOrders = () => {
     const [rating, setRating] = useState({});
     const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
     const [selectedOrder, setSelectedOrder] = useState(null);
-
     const [isRateConfirmModalOpen, setIsRateConfirmModalOpen] = useState(false);
     const [selectedRating, setSelectedRating] = useState(null);
     const [selectedSeller, setSelectedSeller] = useState(null);

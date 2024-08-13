@@ -62,32 +62,32 @@ export const useAds = () => {
     };
 
     const handleChangeTitle = (data) => {
-        ad.setTitle(data.target.value);
+        ad.title = data.target.value;
         setUpdate(!update);
     };
 
     const handleChangeDescription = (data) => {
-        ad.setDescription(data.target.value);
+        ad.description = data.target.value;
         setUpdate(!update);
     };
 
     const handleChangeAdType = (value) => {
-        ad.setStatus(value);
+        ad.status = value;
         setUpdate(!update);
     };
 
     const handleChangeSale = (value) => {
-        ad.setSale(value);
+        ad.sale = value;
         setUpdate(!update);
     };
 
     const handleChangeQuantity = (value) => {
-        ad.setQuantity(value);
+        ad.quantity = value;
         setUpdate(!update);
     };
 
     const handleChangePrice = (value) => {
-        ad.setPrice(value);
+        ad.price = value;
         setUpdate(!update);
     };
 
@@ -119,12 +119,12 @@ export const useAds = () => {
             selectedCard.type,
         );
 
-        ad.setCard(card);
+        ad.card = card;
         setUpdate(!update);
     };
 
     const handleRemoveCard = () => {
-        ad.setCard(null);
+        ad.card  = null;
         setUpdate(!update);
     };
 
@@ -161,13 +161,13 @@ export const useAds = () => {
     };
 
     const handleEdit = (ads) => {
-        ad.setId(ads.id);
-        ad.setTitle(ads.title);
-        ad.setDescription(ads.description);
-        ad.setSale(ads.sale);
-        ad.setQuantity(ads.quantity);
-        ad.setPrice(ads.price);
-        ad.setCard(ads.card);
+        ad.id = ads.id;
+        ad.title = ads.title;
+        ad.description = ads.description;
+        ad.sale = ads.sale;
+        ad.quantity = ads.quantity;
+        ad.price = ads.price;
+        ad.card = ads.card;
         setIsAddAdModalOpen(true);
     };
 
