@@ -21,7 +21,7 @@ export const updateProfile = async (user, isProfileTypeChanged) => {
             .from('advertisements')
             .select('*', {count: 'exact', head: true})
             .eq('seller', user.id)
-            .single()
+
         const {error, count} = result
         if (error) {
             // eslint-disable-next-line no-throw-literal
